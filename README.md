@@ -1,1 +1,1 @@
-# payu
+# Laravel PayU plugin 

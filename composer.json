@@ -1,0 +1,33 @@
+{
+    "name": "xgrz/payu",
+    "description": "PayU payments with Laravel",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "payu"
+    ],
+    "autoload": {
+        "psr-4": {
+            "xGrz\\PayU\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "xGrz\\PayU\\PayUServiceProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "Grzegorz Byśkiniewicz",
+            "email": "grzesiek.byskiniewicz@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": "^8.1",
+        "laravel/framework": "^10.0"
+    }
+}
