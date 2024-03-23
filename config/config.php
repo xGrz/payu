@@ -9,6 +9,13 @@ return [
         'payout' => 180
     ],
 
+    'routing' => [
+        'notification' => [
+            'route_name' => 'payu.notification',
+            'endpoint_name' => 'payu-payment-notification'
+        ],
+    ],
+
     // Do not pass any credential here. Please use your .env file to add keys and values
     'api' => [
         'shopId' => env('PAYU_SHOP_ID', null),
