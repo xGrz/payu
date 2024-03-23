@@ -3,7 +3,7 @@
 namespace xGrz\PayU\Services;
 
 use Illuminate\Support\Facades\Log;
-use xGrz\PayU\Support\Facades\Config;
+use xGrz\PayU\Facades\Config;
 
 class LoggerService
 {
