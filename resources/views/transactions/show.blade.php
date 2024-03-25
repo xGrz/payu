@@ -5,9 +5,9 @@
 
     @include('payu::transactions.partials.transaction_details')
 
-{{--    <div class="pt-4 text-right">--}}
-{{--        <x-payu::buttonlink href="{{route('payu.refunds.create', $transaction->id)}}">Make a refund</x-payu::buttonlink>--}}
-{{--    </div>--}}
+    <div class="pt-4 text-right">
+        <x-payu::buttonlink href="{{route('payu.refunds.create', $transaction->id)}}">Create refund</x-payu::buttonlink>
+    </div>
     @include('payu::transactions.partials.transaction_refunds')
 
 @endsection

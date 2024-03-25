@@ -14,7 +14,7 @@ class RefundController extends Controller
     public function create(Transaction $transaction)
     {
         return view('payu::refunds.create', [
-            'title' => 'Make a refund',
+            'title' => 'Create refund',
             'transaction' => $transaction,
             'products' => $transaction->payload['products'],
             'transactionAmount' => $transaction->payload['totalAmount'] / 100,

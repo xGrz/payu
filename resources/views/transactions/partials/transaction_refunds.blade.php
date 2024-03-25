@@ -22,17 +22,17 @@
                     <td>{{ $refund->refund_id }}</td>
                     <td>{{ $refund->ext_refund_id }}</td>
                     <td>{{ $refund->bank_description }}</td>
-                    <td class="{{ $refund->status->color() }}">{{ $refund->status->name }}</td>
+                    <td class="{{ $refund->status->getColor() }}">{{ $refund->status->name }}</td>
                     <td class="text-right">{{ $refund->amount }} {{ $refund->currency_code }}</td>
                     <td class="text-right">{{ $refund->created_at }}</td>
-                    <td>
+                    <td class="text-right">
                         @if($refund->status->isDeletable())
                             <form action="{{ route('payu.refunds.destroy', $refund->id) }}" method="POST"
                                   id="delete_refund_{{$refund->id}}">
                                 @csrf @method('DELETE')
                             </form>
-                            <button class="text-red-500" form="delete_refund_{{$refund->id}}" type="submit">Delete
-                            </button>
+                            <x-payu::button class="text-red-500" form="delete_refund_{{$refund->id}}" size="small" color="danger" type="submit">Delete
+                            </x-payu::button>
                         @endif
                     </td>
                 </tr>
