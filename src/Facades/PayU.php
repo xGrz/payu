@@ -7,6 +7,7 @@ use xGrz\PayU\Api\Actions\CancelOrder;
 use xGrz\PayU\Api\Actions\ShopBalance;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;
 use xGrz\PayU\Api\Responses\ShopBalanceResponse;
+use xGrz\PayU\Models\Payout;
 use xGrz\PayU\Models\Transaction;
 
 class PayU
@@ -49,6 +50,17 @@ class PayU
             return ShopBalance::callApi();
         } catch (PayUGeneralException $e) {
             return null;
+        }
+    }
+
+    public static function payout(int|float $amount)
+    {
+        if (!Config::getShopId()) return false;
+
+        try {
+            return (bool)Payout::create(['amount' => $amount]);
+        } catch (\Exception $e) {
+            return false;
         }
     }
 }

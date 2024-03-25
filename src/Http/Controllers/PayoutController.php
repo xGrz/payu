@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use xGrz\PayU\Facades\PayU;
+use xGrz\PayU\Http\Requests\PayoutRequest;
 use xGrz\PayU\Models\Payout;
 
 class PayoutController extends Controller
@@ -21,15 +22,13 @@ class PayoutController extends Controller
     }
 
 
-    public function store(ShopPayoutRequest $request): RedirectResponse
+    public function store(PayoutRequest $request): RedirectResponse
     {
-        // TODO Tutaj skończyłem.
-        $payoutAmountInCents = $request->validated('payoutAmount') * 100;
-
-        $payout = PayoutRequest::callApi($payoutAmountInCents);
-        Payout::create($payout->toArray());
-
-        return to_route('payu.payouts.index');
+        $payout = PayU::payout($request->validated('payoutAmount'));
+        return to_route('payu.payouts.index')->with(
+            $payout ? 'success' : 'error',
+            $payout ? 'Payout has been initialized' : 'Payout not initialed'
+        );
     }
 
 

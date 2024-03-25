@@ -11,7 +11,7 @@ return new class extends Migration {
     {
         Schema::create('payu_payouts', function (Blueprint $table) {
             $table->id();
-            $table->string('payout_id');
+            $table->string('payout_id')->nullable();
             $table->unsignedTinyInteger('status')->default(PayoutStatus::INIT);
             $table->unsignedInteger('amount')->default(0);
             $table->timestamps();

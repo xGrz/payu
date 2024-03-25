@@ -4,13 +4,14 @@ namespace xGrz\PayU\Enums;
 
 use xGrz\PayU\Interfaces\WithActions;
 use xGrz\PayU\Interfaces\WithColors;
+use xGrz\PayU\Traits\WithActionsDetect;
 use xGrz\PayU\Traits\WithLabels;
 use xGrz\PayU\Traits\WithStatusNames;
 
 enum PaymentStatus: int implements WithActions, WithColors
 {
 
-    use WithStatusNames, WithLabels;
+    use WithStatusNames, WithLabels, WithActionsDetect;
 
     case INITIALIZED = 0;
     case NEW = 1;
@@ -28,11 +29,6 @@ enum PaymentStatus: int implements WithActions, WithColors
             self::COMPLETED => ['refund'],
             default => []
         };
-    }
-
-    public function actionAvailable(string $actionName): bool
-    {
-        return in_array(strtolower($actionName), self::actions());
     }
 
     public function getColor(): string

@@ -1,6 +1,5 @@
 <?php
 
-
 return [
     'use_sandbox' => true,
 
@@ -14,6 +13,15 @@ return [
             'route_name' => 'payu.notification',
             'endpoint_name' => 'payu-payment-notification'
         ],
+    ],
+
+    'expose_admin_panel' => [
+        'expose' => true,
+        'prefix' => 'payu',
+        'url' => 'payu',
+        'paymentController' => xGrz\PayU\Http\Controllers\PaymentController::class,
+        'refundController' => xGrz\PayU\Http\Controllers\RefundController::class,
+        'payoutController' => xGrz\PayU\Http\Controllers\PayoutController::class,
     ],
 
     // Do not pass any credential here. Please use your .env file to add keys and values

@@ -36,13 +36,14 @@
         <span class="block text-gray-500 mt-2">Payouts not found</span>
     @else
         Payout listing
-        <x-payu::paper>
+        <x-payu::paper class="bg-white">
             <table class="w-full">
                 <thead>
                 <tr>
                     <th class="text-left">Payout ordered at</th>
                     <th class="text-right">Amount</th>
                     <th class="text-right">Status</th>
+                    <th class="text-right"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -50,7 +51,17 @@
                     <tr>
                         <td>{{ $payout->created_at }}</td>
                         <td class="text-right">{{ Number::currency($payout->amount, 'PLN', 'pl') }}</td>
-                        <td class="text-right {{ $payout->status->color() }}">{{ $payout->status->name }}</td>
+                        <td class="text-right">
+                            <x-payu::status :status="$payout->status"/>
+                        </td>
+                        <td class="text-right">
+                            @if($payout->status->actionAvailable('delete'))
+                                <form action="{{route('payu.payouts.destroy', $payout->id)}}" method="POST" id="payout_{{$payout->id}}">
+                                    @csrf @method('DELETE')
+                                </form>
+                                <x-payu::button type="submit" color="danger" form="payout_{{$payout->id}}" size="small">Delete</x-payu::button>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>

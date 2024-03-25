@@ -34,6 +34,7 @@ Route::name('payu.')
             ->group(function () {
                 Route::get('', [PayoutController::class, 'index'])->name('index');
                 Route::post('', [PayoutController::class, 'store'])->name('store');
+                Route::delete('', [PayoutController::class, 'destroy'])->name('destroy');
             });
 
     });
