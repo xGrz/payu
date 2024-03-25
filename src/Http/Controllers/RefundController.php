@@ -11,6 +11,14 @@ use xGrz\PayU\Models\Transaction;
 class RefundController extends Controller
 {
 
+    public function index()
+    {
+        return view('payu::refunds.index', [
+            'title' => 'Refunds',
+            'refunds' => Refund::with(['transaction'])->latest()->get()
+        ]);
+    }
+
     public function create(Transaction $transaction)
     {
         return view('payu::refunds.create', [
@@ -38,11 +46,11 @@ class RefundController extends Controller
 
     public function destroy(Refund $refund)
     {
-        if (!$refund->status->isDeletable()) {
-            return back()->with('error', 'Sorry, refund request has been already sent.');
-        }
-        $refund->delete();
-        return back()->with('success', 'Refund successfully canceled');
+        $canceled = PayU::cancelRefund($refund);
+
+        return $canceled
+            ? back()->with('success', 'Refund successfully canceled')
+            : back()->with('error', 'Sorry, refund request has been already sent.');
     }
 
 }

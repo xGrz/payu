@@ -24,6 +24,7 @@ Route::name('payu.')
         Route::name('refunds.')
             ->prefix('payu-refunds')
             ->group(function () {
+                Route::get('', [RefundController::class, 'index'])->name('index');
                 Route::get('{transaction}', [RefundController::class, 'create'])->name('create');
                 Route::post('{transaction}/create', [RefundController::class, 'store'])->name('store');
                 Route::delete('{refund}', [RefundController::class, 'destroy'])->name('destroy');

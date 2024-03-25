@@ -8,6 +8,7 @@ use xGrz\PayU\Api\Actions\ShopBalance;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;
 use xGrz\PayU\Api\Responses\ShopBalanceResponse;
 use xGrz\PayU\Models\Payout;
+use xGrz\PayU\Models\Refund;
 use xGrz\PayU\Models\Transaction;
 
 class PayU
@@ -42,6 +43,12 @@ class PayU
             'currency_code' => $currencyCode
         ]);
         return true;
+    }
+
+    public static function cancelRefund(Refund $refund): bool
+    {
+        if (!$refund->status->isDeletable()) return false;
+        return (bool) $refund->delete();
     }
 
     public static function balance(): ?ShopBalanceResponse
