@@ -4,7 +4,9 @@ namespace xGrz\PayU\Facades;
 
 use xGrz\PayU\Api\Actions\AcceptPayment;
 use xGrz\PayU\Api\Actions\CancelOrder;
+use xGrz\PayU\Api\Actions\ShopBalance;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;
+use xGrz\PayU\Api\Responses\ShopBalanceResponse;
 use xGrz\PayU\Models\Transaction;
 
 class PayU
@@ -39,5 +41,14 @@ class PayU
             'currency_code' => $currencyCode
         ]);
         return true;
+    }
+
+    public static function balance(): ?ShopBalanceResponse
+    {
+        try {
+            return ShopBalance::callApi();
+        } catch (PayUGeneralException $e) {
+            return null;
+        }
     }
 }

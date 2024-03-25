@@ -14,8 +14,11 @@ class PaymentController extends Controller
 
     public function index()
     {
+
         return view('payu::transactions.index', [
-            'transactions' => Transaction::orderBy('created_at', 'desc')->get()
+            'title' => 'Transactions',
+            'transactions' => Transaction::orderBy('created_at', 'desc')->get(),
+            'balance' => PayU::balance()->asObject()
         ]);
     }
 
@@ -25,7 +28,6 @@ class PaymentController extends Controller
         return CreatePaymentAction::callApi($t);
 
     }
-
 
     public function show(Transaction $transaction)
     {
@@ -37,16 +39,20 @@ class PaymentController extends Controller
 
     public function accept(Transaction $transaction)
     {
-        PayU::accept($transaction);
-        // TODO: add flash message
-        return back();
+        $accepted = PayU::accept($transaction);
+        return back()->with(
+            $accepted ? 'success' : 'error',
+            $accepted ? 'Payment successfully accepted' : 'Payment not accepted'
+        );
     }
 
     public function reject(Transaction $transaction)
     {
-        PayU::reject($transaction);
-        // TODO: add flash message
-        return back();
+        $rejected = PayU::reject($transaction);
+        return back()->with(
+            $rejected ? 'success' : 'error',
+            $rejected ? 'Payment successfully rejected' : 'Payment was not rejected'
+        );
     }
 
 }

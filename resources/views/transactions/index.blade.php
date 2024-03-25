@@ -5,7 +5,7 @@
     @if(!empty($shop))
         <div class="flex justify-end">
             <div class="bg-green-700 px-3 py-1 shrink rounded-l-md shadow-md text-white text-center">
-                <small>Shop balance:</small><br/>
+                <small>ShopBalance balance:</small><br/>
                 {{ $shop->humanAmount->balance }}
             </div>
             <a
@@ -19,6 +19,9 @@
 @endsection
 
 @section('content')
+    @if($balance)
+        @include('payu::balance.balance')
+    @endif
     <div class="mb-2" xmlns:x-payu="http://www.w3.org/1999/html">
         <form action="{{route('payu.payments.store')}}" method="POST" id="createTransaction">
             @csrf
