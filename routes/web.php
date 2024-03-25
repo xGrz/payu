@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use xGrz\PayU\Http\Controllers\PaymentController;
+use xGrz\PayU\Http\Controllers\PayoutController;
 use xGrz\PayU\Http\Controllers\RefundController;
 
 Route::name('payu.')
@@ -26,6 +27,13 @@ Route::name('payu.')
                 Route::get('{transaction}', [RefundController::class, 'create'])->name('create');
                 Route::post('{transaction}/create', [RefundController::class, 'store'])->name('store');
                 Route::delete('{refund}', [RefundController::class, 'destroy'])->name('destroy');
+            });
+
+        Route::name('payouts.')
+            ->prefix('payu-payouts')
+            ->group(function () {
+                Route::get('', [PayoutController::class, 'index'])->name('index');
+                Route::post('', [PayoutController::class, 'store'])->name('store');
             });
 
     });

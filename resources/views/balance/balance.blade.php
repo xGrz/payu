@@ -18,7 +18,7 @@
     <x-payu::paper class="bg-gray-200 col-span-2 lg:col-span-1">
         <h2 class="text-sm leading-tight text-gray-500">Options</h2>
         <div class="text-center  leading-none">
-            <x-payu::link href="" color="primary">
+            <x-payu::link href="{{ route('payu.payouts.index') }}" color="primary">
                 Create payout
             </x-payu::link>
         </div>

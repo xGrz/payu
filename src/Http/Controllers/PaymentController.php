@@ -18,7 +18,7 @@ class PaymentController extends Controller
         return view('payu::transactions.index', [
             'title' => 'Transactions',
             'transactions' => Transaction::orderBy('created_at', 'desc')->get(),
-            'balance' => PayU::balance()->asObject()
+            'balance' => PayU::balance()?->asObject()
         ]);
     }
 
