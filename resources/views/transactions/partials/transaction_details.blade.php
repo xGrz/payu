@@ -16,7 +16,7 @@
         </tr>
         <tr>
             <td>Status</td>
-            <td class="{{ $transaction->status->getColor() }}">{{ $transaction->status->name }}</td>
+            <td><x-payu::status :status="$transaction->status" class="text-lg py-1 px-2"/></td>
         </tr>
         <tr>
             <td>PayMethod</td>

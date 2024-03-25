@@ -48,7 +48,7 @@
             @foreach($transactions as $transaction)
                 <tr class="hover:bg-gray-100">
                     <td>
-                        @if($transaction->status === PaymentStatus::INIT)
+                        @if($transaction->status === PaymentStatus::INITIALIZED)
                             <span class="text-gray-300">{{ $transaction->payload['description']  }}</span>
                         @else
                             <x-payu::link
@@ -61,8 +61,8 @@
                     <td class="text-right">
                         {{ Number::currency($transaction->payload['totalAmount'] / 100, $transaction->payload['currencyCode'], 'pl') }}
                     </td>
-                    <td class="text-center {{ $transaction->status->getColor() }}">
-                        {{ $transaction->status->name }}
+                    <td>
+                        <x-payu::status :status="$transaction->status" class="text-sm mx-2"/>
                     </td>
                     <td class="text-center">
                         <x-payu::link href="{!! $transaction->link !!}" target="new">

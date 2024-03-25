@@ -4,14 +4,15 @@ namespace xGrz\PayU\Enums;
 
 use xGrz\PayU\Interfaces\WithActions;
 use xGrz\PayU\Interfaces\WithColors;
+use xGrz\PayU\Traits\WithLabels;
 use xGrz\PayU\Traits\WithStatusNames;
 
 enum PaymentStatus: int implements WithActions, WithColors
 {
 
-    use WithStatusNames;
+    use WithStatusNames, WithLabels;
 
-    case INIT = 0;
+    case INITIALIZED = 0;
     case NEW = 1;
     case PENDING = 2;
     case WAITING_FOR_CONFIRMATION = 3;
@@ -22,7 +23,7 @@ enum PaymentStatus: int implements WithActions, WithColors
     public function actions(): array
     {
         return match ($this) {
-            self::PENDING, self::INIT => ['delete'],
+            self::PENDING, self::INITIALIZED => ['delete'],
             self::WAITING_FOR_CONFIRMATION => ['accept', 'reject'],
             self::COMPLETED => ['refund'],
             default => []
@@ -37,7 +38,7 @@ enum PaymentStatus: int implements WithActions, WithColors
     public function getColor(): string
     {
         return match ($this) {
-            self::INIT, self::NEW => 'grey',
+            self::INITIALIZED, self::NEW => 'gray',
             self::PENDING => 'info',
             self::WAITING_FOR_CONFIRMATION => 'warning',
             self::COMPLETED => 'success',
@@ -45,4 +46,5 @@ enum PaymentStatus: int implements WithActions, WithColors
             default => ''
         };
     }
+
 }

@@ -33,7 +33,7 @@
     @include('payu::transactions.partials.transaction_refunds')
 
     <div class="py-5">
-        <hr style="background: red;"/>
+        <hr/>
     </div>
 
 

@@ -4,11 +4,12 @@ namespace xGrz\PayU\Enums;
 
 
 use xGrz\PayU\Interfaces\WithColors;
+use xGrz\PayU\Traits\WithLabels;
 use xGrz\PayU\Traits\WithStatusNames;
 
 enum RefundStatus: int implements WithColors
 {
-    use WithStatusNames;
+    use WithStatusNames, WithLabels;
 
     case INITIALIZED = 0;
     case SENT = 1;

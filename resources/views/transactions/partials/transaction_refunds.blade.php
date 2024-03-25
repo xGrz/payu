@@ -1,4 +1,3 @@
-
 @if ($transaction->refunds->count())
     Refunds:
     <x-payu::paper>
@@ -22,7 +21,9 @@
                     <td>{{ $refund->refund_id }}</td>
                     <td>{{ $refund->ext_refund_id }}</td>
                     <td>{{ $refund->bank_description }}</td>
-                    <td class="{{ $refund->status->getColor() }}">{{ $refund->status->name }}</td>
+                    <td>
+                        <x-payu::status :status="$refund->status"/>
+                    </td>
                     <td class="text-right">{{ $refund->amount }} {{ $refund->currency_code }}</td>
                     <td class="text-right">{{ $refund->created_at }}</td>
                     <td class="text-right">
@@ -31,7 +32,8 @@
                                   id="delete_refund_{{$refund->id}}">
                                 @csrf @method('DELETE')
                             </form>
-                            <x-payu::button class="text-red-500" form="delete_refund_{{$refund->id}}" size="small" color="danger" type="submit">Delete
+                            <x-payu::button class="text-red-500" form="delete_refund_{{$refund->id}}" size="small"
+                                            color="danger" type="submit">Delete
                             </x-payu::button>
                         @endif
                     </td>
@@ -44,7 +46,7 @@
         Refunds are dispatched to operator every 30 minutes. Once refund is sent you cannot revoke it.
     </div>
 @else
-    <div>
-    No refunds to transaction
+    <div class="text-gray-500">
+        Refunds not found
     </div>
 @endif

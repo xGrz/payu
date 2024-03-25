@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->unsignedInteger('amount')->nullable();
             $table->unsignedInteger('refunded')->nullable();
             $table->json('payload');
-            $table->unsignedTinyInteger('status')->default(PaymentStatus::INIT);
+            $table->unsignedTinyInteger('status')->default(PaymentStatus::INITIALIZED);
             $table->string('method_id')->nullable();
             $table->nullableMorphs('payuable');
             $table->timestamps();

@@ -24,13 +24,16 @@ class RefundController extends Controller
 
     public function store(StoreRefundRequest $request, Transaction $transaction)
     {
-        PayU::refund(
+        $refunded = PayU::refund(
             $transaction,
             $request->validated('amount'),
             $request->validated('description'),
             $request->validated('bankDescription', null)
         );
-        return redirect()->back();
+        return back()->with(
+            $refunded ? 'success' : 'error',
+            $refunded ? 'Refund created' : 'Cannot create refund'
+        );
     }
 
     public function destroy(Refund $refund)
