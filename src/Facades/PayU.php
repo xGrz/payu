@@ -28,4 +28,13 @@ class PayU
             return false;
         }
     }
+
+    public static function refund(Transaction $transaction, int|float $amount, string $description = null, string $backDescription = null, string $currencyCode = 'PLN') {
+        $transaction->refunds()->create([
+            'amount' => $amount,
+            'description' => $description,
+            'bank_description' => $backDescription,
+            'currency_code' => $currencyCode
+        ]);
+    }
 }
