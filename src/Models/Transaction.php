@@ -5,6 +5,7 @@ namespace xGrz\PayU\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use xGrz\PayU\Enums\PaymentStatus;
 
 class Transaction extends Model
@@ -25,14 +26,14 @@ class Transaction extends Model
 //        return $this->belongsTo(PayMethod::class, 'method_id');
 //    }
 //
-//    public function refunds(): HasMany
-//    {
-//        return $this->hasMany(PayURefund::class, 'transaction_id')->latest();
-//    }
-//
-//    public function refunded(): int
-//    {
-//        return $this->refunds()->sum('payu_refunds.amount') / 100 ?? 0;
-//    }
+    public function refunds(): HasMany
+    {
+        return $this->hasMany(Refund::class, 'transaction_id')->latest();
+    }
+
+    public function refunded(): int
+    {
+        return $this->refunds()->sum('payu_refunds.amount') / 100 ?? 0;
+    }
 
 }
