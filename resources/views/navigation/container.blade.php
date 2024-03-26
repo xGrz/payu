@@ -1,5 +1,5 @@
 <div class="container px-1 mx-auto">
-    <div class="flex">
+    <div class="flex mb-1">
         <h1 class="text-3xl pt-4 text-slate-300 font-semibold grow">xGrz/PayU | {{ $title ?? 'Page title' }}</h1>
         <nav class="flex">
             <x-payu::nav-item routeName="payu.payments.index" label="Transactions">
