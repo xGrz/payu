@@ -19,6 +19,7 @@
 @endsection
 
 @section('content')
+    {{ $transactions->links('payu::pagination.results') }}
     <x-payu::paper class="bg-slate-800">
         <x-payu::table.title title="Transactions listing">
             <form action="{{route('payu.payments.store')}}" method="POST" id="createTransaction">
