@@ -24,7 +24,7 @@ enum PaymentStatus: int implements WithActions, WithColors
     public function actions(): array
     {
         return match ($this) {
-            self::PENDING, self::INITIALIZED => ['delete'],
+            self::PENDING, self::INITIALIZED => ['pay', 'delete'],
             self::WAITING_FOR_CONFIRMATION => ['accept', 'reject'],
             self::COMPLETED => ['refund'],
             default => []

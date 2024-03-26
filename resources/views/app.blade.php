@@ -14,8 +14,11 @@
 @include('payu::status.status')
 @include('payu::navigation.container')
 
-<main class="container px-4 mx-auto">
+<main class="container px-4 mx-auto mb-2">
     @yield('content')
 </main>
+<footer class="px-2 py-4">
+    xGrz/payu plugin for Laravel
+</footer>
 </body>
 </html>

@@ -19,38 +19,37 @@
 @endsection
 
 @section('content')
-    @if($balance)
-        @include('payu::balance.balance')
-    @endif
-    <div class="mb-2" xmlns:x-payu="http://www.w3.org/1999/html">
-        <form action="{{route('payu.payments.store')}}" method="POST" id="createTransaction">
-            @csrf
-        </form>
-        <x-payu::button type="submit" form="createTransaction" color="success">
-            Create fake payment
-        </x-payu::button>
-        <x-payu::buttonlink href="https://merch-prod.snd.payu.com/user/login?lang=pl" target="new" color="warning">
-            PayU-Panel
-        </x-payu::buttonlink>
-    </div>
+    {{--    @if($balance)--}}
+    {{--        @include('payu::balance.balance')--}}
+    {{--    @endif--}}
+    <x-payu::paper class="bg-slate-800">
+        <x-payu::table.title title="Transactions listing">
+            <form action="{{route('payu.payments.store')}}" method="POST" id="createTransaction">
+                @csrf
+            </form>
+            <x-payu::button type="submit" form="createTransaction" color="success">
+                Create fake payment
+            </x-payu::button>
+            <x-payu::buttonlink href="https://merch-prod.snd.payu.com/user/login?lang=pl" target="new" color="warning">
+                PayU-Panel
+            </x-payu::buttonlink>
+        </x-payu::table.title>
 
-    <x-payu::paper>
-        <table class="w-full">
-            <thead>
-            <tr>
-                <th>Description</th>
-                <th>Value</th>
-                <th>Status</th>
-                <th>Link</th>
-                <th class="text-right">Created</th>
-                <th class="text-right">Updated</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
+        <x-payu::table>
+            <x-payu::table.thead class="text-left text-white leading-8">
+                <x-payu::table.row>
+                    <x-payu::table.header>Description</x-payu::table.header>
+                    <x-payu::table.header>Value</x-payu::table.header>
+                    <x-payu::table.header>Status</x-payu::table.header>
+                    <x-payu::table.header class="text-right">Created</x-payu::table.header>
+                    <x-payu::table.header class="text-right">Updated</x-payu::table.header>
+                    <x-payu::table.header>Actions</x-payu::table.header>
+                </x-payu::table.row>
+            </x-payu::table.thead>
+            <tbody class="leading-8">
             @foreach($transactions as $transaction)
-                <tr class="hover:bg-gray-100">
-                    <td>
+                <x-payu::table.row class="hover:bg-gray-100">
+                    <x-payu::table.cell>
                         @if($transaction->status === PaymentStatus::INITIALIZED)
                             <span class="text-gray-300">{{ $transaction->payload['description']  }}</span>
                         @else
@@ -60,42 +59,35 @@
                                 {{ $transaction->payload['description']  }}
                             </x-payu::link>
                         @endif
-                    </td>
-                    <td class="text-right">
+                    </x-payu::table.cell>
+                    <x-payu::table.cell class="text-right">
                         {{ Number::currency($transaction->payload['totalAmount'] / 100, $transaction->payload['currencyCode'], 'pl') }}
-                    </td>
-                    <td>
+                    </x-payu::table.cell>
+                    <x-payu::table.cell>
                         <x-payu::status :status="$transaction->status" class="text-sm mx-2"/>
-                    </td>
-                    <td class="text-center">
-                        <x-payu::link href="{!! $transaction->link !!}" target="new">
-                            @if(!$transaction->payMethod?->name)
-                                Payment link
-                            @else
-                                <img
-                                    src="{{ $transaction->payMethod->image }}"
-                                    alt="{{ $transaction->payMethod->name }}"
-                                    style="max-height: 30px; max-width: 60px;"
-                                />
-                            @endif
-                        </x-payu::link>
-                    </td>
-                    <td class="text-right">{{ $transaction->created_at }}</td>
-                    <td class="text-right">{{ $transaction->created_at == $transaction->updated_at ? '' : $transaction->updated_at}}</td>
-                    <td>
+                    </x-payu::table.cell>
+                    <x-payu::table.cell class="text-right">{{ $transaction->created_at }}</x-payu::table.cell>
+                    <x-payu::table.cell
+                        class="text-right">{{ $transaction->created_at == $transaction->updated_at ? '' : $transaction->updated_at}}</x-payu::table.cell>
+                    <x-payu::table.cell>
+                        @if($transaction->status->actionAvailable('pay'))
+                            <x-payu::buttonlink href="{!! $transaction->link !!}" target="new" size="small">
+                                Pay
+                            </x-payu::buttonlink>
+                        @endif
                         @if($transaction->status->actionAvailable('delete'))
                             <form action="{{route('payu.payments.destroy', $transaction->id)}}" method="POST"
                                   id="delete_{{$transaction->id}}">
                                 @csrf @method('DELETE')
                             </form>
-                            <button type="submit" form="delete_{{$transaction->id}}" class="text-red-800">delete
-                            </button>
+                            <x-payu::button type="submit" form="delete_{{$transaction->id}}" size="small" color="danger">Delete
+                            </x-payu::button>
                         @endif
-                    </td>
-                </tr>
+                    </x-payu::table.cell>
+                </x-payu::table.row>
             @endforeach
             </tbody>
-        </table>
+        </x-payu::table>
     </x-payu::paper>
 @endsection
 
