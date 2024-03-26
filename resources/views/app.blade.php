@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="bg-slate-900 text-slate-400">
+<html lang="en" class="bg-slate-900 text-slate-400 h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -7,18 +7,22 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Laravel-App-Settings</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="//unpkg.com/alpinejs" defer></script>
+{{--    <script src="//unpkg.com/alpinejs" defer></script>--}}
 </head>
-<body class="mx-auto">
+<body class="flex flex-col min-h-full">
 
-@include('payu::status.status')
-@include('payu::navigation.container')
+    @include('payu::navigation.container')
 
-<main class="container px-4 mx-auto mb-2">
-    @yield('content')
-</main>
-<footer class="px-2 py-4">
-    xGrz/payu plugin for Laravel
-</footer>
+    <main class="container px-4 mx-auto mb-2 grow">
+        @include('payu::status.status')
+        @yield('content')
+    </main>
+
+    <footer class="px-4 py-6 mt-8 bg-slate-950 grow-0">
+        <div class="container mx-auto">
+            xGrz/payu plugin for Laravel
+        </div>
+    </footer>
+
 </body>
 </html>

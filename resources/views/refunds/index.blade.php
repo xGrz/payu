@@ -1,34 +1,34 @@
 @extends('payu::app')
 
 @section('content')
-    <x-payu::paper class="bg-white">
-        <table class="w-full">
-            <thead>
-            <tr>
-                <th class="text-left">Transaction</th>
-                <th class="text-left">Description</th>
-                <th class="text-left">Bank description</th>
-                <th class="text-right">Amount</th>
-                <th class="text-right">Status</th>
-            </tr>
-            </thead>
+    <x-payu::paper class="bg-slate-800">
+        <x-payu::table class="w-full">
+            <x-payu::table.thead>
+            <x-payu::table.row>
+                <x-payu::table.header class="text-left">Transaction</x-payu::table.header>
+                <x-payu::table.header class="text-left">Description</x-payu::table.header>
+                <x-payu::table.header class="text-left">Bank description</x-payu::table.header>
+                <x-payu::table.header class="text-right">Amount</x-payu::table.header>
+                <x-payu::table.header class="text-right">Status</x-payu::table.header>
+            </x-payu::table.row>
+            </x-payu::table.thead>
             <tbody>
             @foreach($refunds as $refund)
-                <tr>
-                    <td>
+                <x-payu::table.row>
+                    <x-payu::table.cell>
                         <x-payu::link href="{{route('payu.payments.show', $refund->transaction->id)}}">
                             {{$refund->transaction->payload['description']}}
                         </x-payu::link>
-                    </td>
-                    <td>{{$refund->description}}</td>
-                    <td>{{$refund->bankDescription}}</td>
-                    <td class="text-right">{{$refund->amount}}</td>
-                    <td class="text-right">
+                    </x-payu::table.cell>
+                    <x-payu::table.cell>{{$refund->description}}</x-payu::table.cell>
+                    <x-payu::table.cell>{{$refund->bankDescription}}</x-payu::table.cell>
+                    <x-payu::table.cell class="text-right">{{$refund->amount}}</x-payu::table.cell>
+                    <x-payu::table.cell class="text-right">
                         <x-payu::status :status="$refund->status"/>
-                    </td>
-                </tr>
+                    </x-payu::table.cell>
+                </x-payu::table.row>
             @endforeach
             </tbody>
-        </table>
+        </x-payu::table>
     </x-payu::paper>
 @endsection
