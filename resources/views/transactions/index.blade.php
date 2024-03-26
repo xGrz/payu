@@ -27,7 +27,7 @@
             @csrf
         </form>
         <x-payu::button type="submit" form="createTransaction" color="success">
-            New payment
+            Create fake payment
         </x-payu::button>
         <x-payu::buttonlink href="https://merch-prod.snd.payu.com/user/login?lang=pl" target="new" color="warning">
             PayU-Panel
