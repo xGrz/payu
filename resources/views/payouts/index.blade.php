@@ -8,26 +8,27 @@
 @endsection
 
 @section('content')
-    <div class="grid grid-cols-6 gap-2">
-        <x-payu::paper class="col-span-6 sm:col-span-3 md:col-span-4 bg-white">
-            <table class="w-full">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <x-payu::paper class="bg-slate-800">
+            <x-payu::table.title title="PayU account balance"/>
+            <x-payu::table>
                 <tbody>
                 <tr>
-                    <th class="text-left">Balance</th>
-                    <td class="text-right">{{ $balance->humanAmount->balance}}</td>
+                    <td>Balance</td>
+                    <td>{{ $balance->humanAmount->balance}}</td>
                 </tr>
                 <tr>
-                    <th class="text-left">Reserve for refunds</th>
-                    <td class="text-right">{{ $balance->humanAmount->reserved}}</td>
+                    <td>Reserved</td>
+                    <td>{{ $balance->humanAmount->reserved}}</td>
                 </tr>
                 <tr>
-                    <th class="text-left">Available</th>
-                    <td class="text-right">{{ $balance->humanAmount->available}}</td>
+                    <td>Available</td>
+                    <td>{{ $balance->humanAmount->available}}</td>
                 </tr>
                 </tbody>
-            </table>
+            </x-payu::table>
         </x-payu::paper>
-        <x-payu::paper class="bg-white col-span-6 sm:col-span-3 md:col-span-2">
+        <x-payu::paper class="bg-slate-800">
             @include('payu::payouts.payout-form')
         </x-payu::paper>
     </div>
@@ -35,37 +36,40 @@
     @empty($payouts->toArray())
         <span class="block text-gray-500 mt-2">Payouts not found</span>
     @else
-        Payout listing
-        <x-payu::paper class="bg-white">
-            <table class="w-full">
-                <thead>
-                <tr>
-                    <th class="text-left">Payout ordered at</th>
-                    <th class="text-right">Amount</th>
-                    <th class="text-right">Status</th>
-                    <th class="text-right"></th>
-                </tr>
-                </thead>
+        <x-payu::paper class="bg-slate-800 mt-4">
+            <x-payu::table.title title="Payout listing"/>
+            <x-payu::table class="w-full">
+                <x-payu::table.thead>
+                    <x-payu::table.row>
+                        <x-payu::table.header class="text-left">Payout ordered at</x-payu::table.header>
+                        <x-payu::table.header class="text-right">Amount</x-payu::table.header>
+                        <x-payu::table.header class="text-right">Status</x-payu::table.header>
+                        <x-payu::table.header class="text-right"></x-payu::table.header>
+                    </x-payu::table.row>
+                </x-payu::table.thead>
                 <tbody>
                 @foreach($payouts as $payout)
-                    <tr>
-                        <td>{{ $payout->created_at }}</td>
-                        <td class="text-right">{{ Number::currency($payout->amount, 'PLN', 'pl') }}</td>
-                        <td class="text-right">
+                    <x-payu::table.row>
+                        <x-payu::table.cell>{{ $payout->created_at }}</x-payu::table.cell>
+                        <x-payu::table.cell class="text-right">{{ Number::currency($payout->amount, 'PLN', 'pl') }}</x-payu::table.cell>
+                        <x-payu::table.cell class="text-right">
                             <x-payu::status :status="$payout->status"/>
-                        </td>
-                        <td class="text-right">
+                        </x-payu::table.cell>
+                        <x-payu::table.cell class="text-right">
                             @if($payout->status->actionAvailable('delete'))
-                                <form action="{{route('payu.payouts.destroy', $payout->id)}}" method="POST" id="payout_{{$payout->id}}">
+                                <form action="{{route('payu.payouts.destroy', $payout->id)}}" method="POST"
+                                      id="payout_{{$payout->id}}">
                                     @csrf @method('DELETE')
                                 </form>
-                                <x-payu::button type="submit" color="danger" form="payout_{{$payout->id}}" size="small">Delete</x-payu::button>
+                                <x-payu::button type="submit" color="danger" form="payout_{{$payout->id}}" size="small">
+                                    Delete
+                                </x-payu::button>
                             @endif
-                        </td>
-                    </tr>
+                        </x-payu::table.cell>
+                    </x-payu::table.row>
                 @endforeach
                 </tbody>
-            </table>
+            </x-payu::table>
         </x-payu::paper>
     @endif
 

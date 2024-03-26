@@ -19,9 +19,6 @@
 @endsection
 
 @section('content')
-    {{--    @if($balance)--}}
-    {{--        @include('payu::balance.balance')--}}
-    {{--    @endif--}}
     <x-payu::paper class="bg-slate-800">
         <x-payu::table.title title="Transactions listing">
             <form action="{{route('payu.payments.store')}}" method="POST" id="createTransaction">
@@ -34,6 +31,10 @@
                 PayU-Panel
             </x-payu::buttonlink>
         </x-payu::table.title>
+
+        <div class="p-2">
+        {{ $transactions->links('payu::pagination.full') }}
+        </div>
 
         <x-payu::table>
             <x-payu::table.thead class="text-left text-white leading-8">
@@ -80,7 +81,8 @@
                                   id="delete_{{$transaction->id}}">
                                 @csrf @method('DELETE')
                             </form>
-                            <x-payu::button type="submit" form="delete_{{$transaction->id}}" size="small" color="danger">Delete
+                            <x-payu::button type="submit" form="delete_{{$transaction->id}}" size="small"
+                                            color="danger">Delete
                             </x-payu::button>
                         @endif
                     </x-payu::table.cell>
