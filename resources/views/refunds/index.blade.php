@@ -2,6 +2,7 @@
 
 @section('content')
     <x-payu::paper class="bg-slate-800">
+        <x-payu::paper-title title="Created refunds"/>
         <x-payu::table class="w-full">
             <x-payu::table.thead>
             <x-payu::table.row>
