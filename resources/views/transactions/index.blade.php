@@ -19,7 +19,7 @@
 @endsection
 
 @section('content')
-    {{ $transactions->links('payu::pagination.results') }}
+    <x-payu::pagination.info :source="$transactions"/>
     <x-payu::paper class="bg-slate-800">
         <x-payu::table.title title="Transactions listing">
             <form action="{{route('payu.payments.store')}}" method="POST" id="createTransaction">
@@ -32,10 +32,6 @@
                 PayU-Panel
             </x-payu::buttonlink>
         </x-payu::table.title>
-
-        <div class="p-2">
-        {{ $transactions->links('payu::pagination.full') }}
-        </div>
 
         <x-payu::table>
             <x-payu::table.thead class="text-left text-white leading-8">
@@ -91,6 +87,12 @@
             @endforeach
             </tbody>
         </x-payu::table>
+
+        <div class="py-3">
+            <x-payu::pagination :source="$transactions"/>
+        </div>
+
+
     </x-payu::paper>
 @endsection
 

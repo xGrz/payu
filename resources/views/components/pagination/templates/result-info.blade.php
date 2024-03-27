@@ -1,5 +1,5 @@
 @if ($paginator->hasPages())
-    <p class="text-sm text-slate-400 leading-5 py-1 text-right">
+    <p class="text-sm text-slate-400 leading-5 py-1 my-1 text-right">
         {!! __('Showing') !!}
         @if ($paginator->firstItem())
             <span class="font-medium">{{ $paginator->firstItem() }}</span>
