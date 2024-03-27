@@ -15,15 +15,15 @@
                 <tbody>
                 <tr>
                     <td>Balance</td>
-                    <td>{{ $balance->humanAmount->balance}}</td>
+                    <td class="text-right">{{ $balance->humanAmount->balance}}</td>
                 </tr>
                 <tr>
                     <td>Reserved</td>
-                    <td>{{ $balance->humanAmount->reserved}}</td>
+                    <td class="text-right">{{ $balance->humanAmount->reserved}}</td>
                 </tr>
                 <tr>
                     <td>Available</td>
-                    <td>{{ $balance->humanAmount->available}}</td>
+                    <td class="text-right">{{ $balance->humanAmount->available}}</td>
                 </tr>
                 </tbody>
             </x-payu::table>

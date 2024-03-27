@@ -15,14 +15,15 @@ $isNumeric = $type == 'number';
 
 <label class="inline-block w-full text-gray-700 font-bold mb-2 mt-1">
     @if ($label)
-        <small class="@if($hasError) text-red-600 @else text-gray-500 @endif">{{$label}}</small>
+        <small class="@if($hasError) text-rose-600 @else text-gray-500 @endif">{{$label}}</small>
     @endif
     <input
         {{ $attributes->class([
-            'w-full border rounded-md py-2 px-2 shadow-sm focus:outline-none focus:ring-1 focus:ring-blue-600',
+            'w-full inline-block grow shrink border bg-slate-300 focus:bg-gray-200 text-slate-600 focus:text-slate-700 rounded-md focus:outline-none text-right py-2 px-4 disabled:bg-gray-100 disabled:text-gray-400',
             'border-gray-300' => !$hasError,
-            'border-red-500' => $hasError,
-            'text-right' => $isNumeric
+            'border-rose-500' => $hasError,
+            'text-right' => $isNumeric,
+            '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none' => $isNumeric,
         ])->merge([
             'type' => $type,
             'name' => $name,
