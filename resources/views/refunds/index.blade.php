@@ -1,17 +1,18 @@
 @extends('payu::app')
 
 @section('content')
+    <x-payu::pagination.info :source="$refunds"/>
     <x-payu::paper class="bg-slate-800">
         <x-payu::paper-title title="Created refunds"/>
         <x-payu::table class="w-full">
             <x-payu::table.thead>
-            <x-payu::table.row>
-                <x-payu::table.header class="text-left">Transaction</x-payu::table.header>
-                <x-payu::table.header class="text-left">Description</x-payu::table.header>
-                <x-payu::table.header class="text-left">Bank description</x-payu::table.header>
-                <x-payu::table.header class="text-right">Amount</x-payu::table.header>
-                <x-payu::table.header class="text-right">Status</x-payu::table.header>
-            </x-payu::table.row>
+                <x-payu::table.row>
+                    <x-payu::table.header class="text-left">Transaction</x-payu::table.header>
+                    <x-payu::table.header class="text-left">Description</x-payu::table.header>
+                    <x-payu::table.header class="text-left">Bank description</x-payu::table.header>
+                    <x-payu::table.header class="text-right">Amount</x-payu::table.header>
+                    <x-payu::table.header class="text-right">Status</x-payu::table.header>
+                </x-payu::table.row>
             </x-payu::table.thead>
             <tbody>
             @foreach($refunds as $refund)
@@ -31,5 +32,8 @@
             @endforeach
             </tbody>
         </x-payu::table>
+        <div class="py-2">
+            <x-payu::pagination :source="$refunds"/>
+        </div>
     </x-payu::paper>
 @endsection

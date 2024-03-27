@@ -16,7 +16,7 @@ class PayoutController extends Controller
     {
         return view('payu::payouts.index', [
             'title' => 'Shop details',
-            'payouts' => Payout::latest()->get(),
+            'payouts' => Payout::latest()->paginate(2),
             'balance' => PayU::balance()?->asObject()
         ]);
     }

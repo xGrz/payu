@@ -36,7 +36,9 @@
     @empty($payouts->toArray())
         <span class="block text-gray-500 mt-2">Payouts not found</span>
     @else
-        <x-payu::paper class="bg-slate-800 mt-4">
+        <div class="mt-4"></div>
+        <x-payu::pagination.info :source="$payouts"/>
+        <x-payu::paper class="bg-slate-800">
             <x-payu::paper-title title="Payout listing"/>
             <x-payu::table class="w-full">
                 <x-payu::table.thead>
@@ -51,7 +53,8 @@
                 @foreach($payouts as $payout)
                     <x-payu::table.row>
                         <x-payu::table.cell>{{ $payout->created_at }}</x-payu::table.cell>
-                        <x-payu::table.cell class="text-right">{{ Number::currency($payout->amount, 'PLN', 'pl') }}</x-payu::table.cell>
+                        <x-payu::table.cell
+                            class="text-right">{{ Number::currency($payout->amount, 'PLN', 'pl') }}</x-payu::table.cell>
                         <x-payu::table.cell class="text-right">
                             <x-payu::status :status="$payout->status"/>
                         </x-payu::table.cell>
@@ -70,6 +73,9 @@
                 @endforeach
                 </tbody>
             </x-payu::table>
+            <div class="py-2">
+                <x-payu::pagination :source="$payouts"/>
+            </div>
         </x-payu::paper>
     @endif
 

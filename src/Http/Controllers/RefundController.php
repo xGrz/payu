@@ -15,7 +15,7 @@ class RefundController extends Controller
     {
         return view('payu::refunds.index', [
             'title' => 'Refunds',
-            'refunds' => Refund::with(['transaction'])->latest()->get()
+            'refunds' => Refund::with(['transaction'])->latest()->paginate()
         ]);
     }
 
