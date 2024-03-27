@@ -17,7 +17,7 @@ class PaymentController extends Controller
 
         return view('payu::transactions.index', [
             'title' => 'Transactions',
-            'transactions' => Transaction::orderBy('created_at', 'desc')->paginate(2),
+            'transactions' => Transaction::orderBy('created_at', 'desc')->paginate(10),
             'balance' => PayU::balance()?->asObject()
         ]);
     }
@@ -33,6 +33,7 @@ class PaymentController extends Controller
     {
         $transaction->loadMissing(['refunds']);
         return view('payu::transactions.show', [
+            'title' => 'Transaction',
             'transaction' => $transaction
         ]);
     }

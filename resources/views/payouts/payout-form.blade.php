@@ -1,5 +1,5 @@
 <div>
-    <x-payu::table.title title="Create new payout"/>
+    <x-payu::paper-title title="Create new payout"/>
 
     <form method="POST" action="{{ route('payu.payouts.store') }}">
         @csrf

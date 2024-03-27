@@ -10,7 +10,7 @@
 @section('content')
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <x-payu::paper class="bg-slate-800">
-            <x-payu::table.title title="PayU account balance"/>
+            <x-payu::paper-title title="PayU account balance"/>
             <x-payu::table>
                 <tbody>
                 <tr>
@@ -37,7 +37,7 @@
         <span class="block text-gray-500 mt-2">Payouts not found</span>
     @else
         <x-payu::paper class="bg-slate-800 mt-4">
-            <x-payu::table.title title="Payout listing"/>
+            <x-payu::paper-title title="Payout listing"/>
             <x-payu::table class="w-full">
                 <x-payu::table.thead>
                     <x-payu::table.row>

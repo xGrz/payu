@@ -1,5 +1,5 @@
 <x-payu::paper class="bg-slate-800">
-    <x-payu::table.title title="Transaction details">
+    <x-payu::paper-title title="Transaction details">
         <form action="{{route('payu.payments.accept', $transaction->id)}}" method="POST" id="accept">
             @method('PATCH')
             @csrf
@@ -19,8 +19,8 @@
         @if($transaction->status->actionAvailable('reject'))
             <x-payu::button form="reject" type="submit" color="danger">Reject</x-payu::button>
         @endif
-    </x-payu::table.title>
-    <x-payu::table  class="p-2">
+    </x-payu::paper-title>
+    <x-payu::table class="p-2">
         <x-payu::table.row>
             <x-payu::table.header class="text-left">Transaction id</x-payu::table.header>
             <x-payu::table.cell>{{$transaction->id}}</x-payu::table.cell>
@@ -68,17 +68,19 @@
         </x-payu::table.row>
         <x-payu::table.row>
             <x-payu::table.header class="text-left">Description</x-payu::table.header>
-            <x-payu::table.cell>
-                {{ $transaction->payload['description'] }}
-                @if (!empty($transaction->payload['additionalDescription']))
-                    <hr/>
-                    {{ $transaction->payload['additionalDescription'] }}
-                @endif
-                @if (!empty($transaction->payload['visibleDescription']))
-                    <hr/>
-                    {{ $transaction->payload['visibleDescription'] }}
-                @endif
-            </x-payu::table.cell>
+            <x-payu::table.cell>{{ $transaction->payload['description'] }}</x-payu::table.cell>
         </x-payu::table.row>
+        @if (!empty($transaction->payload['additionalDescription']) && $transaction->payload['additionalDescription'] !== $transaction->payload['description'])
+            <x-payu::table.row>
+                <x-payu::table.header class="text-left">Additional description</x-payu::table.header>
+                <x-payu::table.cell>{{ $transaction->payload['additionalDescription'] }}</x-payu::table.cell>
+            </x-payu::table.row>
+        @endif
+        @if (!empty($transaction->payload['visibleDescription']) && $transaction->payload['visibleDescription'] !== $transaction->payload['description'])
+            <x-payu::table.row>
+                <x-payu::table.header class="text-left">User visible description</x-payu::table.header>
+                <x-payu::table.cell>{{ $transaction->payload['visibleDescription'] }}</x-payu::table.cell>
+            </x-payu::table.row>
+        @endif
     </x-payu::table>
 </x-payu::paper>

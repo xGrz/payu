@@ -21,7 +21,7 @@
 @section('content')
     <x-payu::pagination.info :source="$transactions"/>
     <x-payu::paper class="bg-slate-800">
-        <x-payu::table.title title="Transactions listing">
+        <x-payu::paper-title title="Transactions listing">
             <form action="{{route('payu.payments.store')}}" method="POST" id="createTransaction">
                 @csrf
             </form>
@@ -31,7 +31,7 @@
             <x-payu::buttonlink href="https://merch-prod.snd.payu.com/user/login?lang=pl" target="new" color="warning">
                 PayU-Panel
             </x-payu::buttonlink>
-        </x-payu::table.title>
+        </x-payu::paper-title>
 
         <x-payu::table>
             <x-payu::table.thead class="text-left text-white leading-8">
@@ -91,8 +91,7 @@
         <div class="py-3">
             <x-payu::pagination :source="$transactions"/>
         </div>
-
-
     </x-payu::paper>
+    <x-payu::pagination.info :source="$transactions"/>
 @endsection
 
