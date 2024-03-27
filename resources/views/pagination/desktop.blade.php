@@ -1,31 +1,5 @@
 @if ($paginator->hasPages())
-    <nav
-        role="navigation"
-        aria-label="{{ __('Pagination Navigation') }}"
-        class="flex items-center justify-between sm:hidden"
-    >
-        @if ($paginator->onFirstPage())
-            <x-payu::pagination.disabled class="px-3 py-[.3rem] rounded-md">
-                {!! __('pagination.previous') !!}
-            </x-payu::pagination.disabled>
-        @else
-            <x-payu::pagination.active href="{{ $paginator->previousPageUrl() }}" class="px-3 py-[.3rem] rounded-md">
-                {!! __('pagination.previous') !!}
-            </x-payu::pagination.active>
-        @endif
-
-        @if ($paginator->hasMorePages())
-            <x-payu::pagination.active href="{{ $paginator->nextPageUrl() }}" class="px-3 py-[.3rem] rounded-md">
-                {!! __('pagination.next') !!}
-            </x-payu::pagination.active>
-        @else
-            <x-payu::pagination.disabled class="px-3 py-[.3rem] rounded-md">
-                {!! __('pagination.next') !!}
-            </x-payu::pagination.disabled>
-        @endif
-    </nav>
-
-    <nav class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+    <nav class="hidden sm:flex-1 sm:flex items-center justify-center">
         <div class="flex items-center justify-between">
             {{-- Previous Page Link --}}
             @if ($paginator->onFirstPage())
@@ -42,7 +16,7 @@
             {{-- Pagination Elements --}}
             @foreach ($elements as $element)
                 @if (is_string($element))
-                    <x-payu::pagination.disabled class="px-4 py-2 border border-slate-700">
+                    <x-payu::pagination.disabled class="px-2 py-1 border border-transparent">
                         {{ $element }}
                     </x-payu::pagination.disabled>
                 @endif
