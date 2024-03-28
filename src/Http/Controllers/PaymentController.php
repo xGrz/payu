@@ -17,7 +17,7 @@ class PaymentController extends Controller
 
         return view('payu::transactions.index', [
             'title' => 'Transactions',
-            'transactions' => Transaction::orderBy('created_at', 'desc')->paginate(),
+            'transactions' => Transaction::latest()->paginate(),
             'balance' => PayU::balance()?->asObject()
         ]);
     }
@@ -27,7 +27,6 @@ class PaymentController extends Controller
         $t = TransactionWizard::fake();
         CreatePaymentAction::callApi($t);
         return back()->with('success', 'Transaction created');
-
     }
 
     public function show(Transaction $transaction)
@@ -55,6 +54,14 @@ class PaymentController extends Controller
             $rejected ? 'success' : 'error',
             $rejected ? 'Payment successfully rejected' : 'Payment was not rejected'
         );
+    }
+
+    public function destroy(Transaction $transaction)
+    {
+        $canceled = PayU::cancelTransaction($transaction);
+        return back()->with(
+            $canceled ? 'success' : 'error',
+            $canceled ? 'Payment successfully canceled' : 'Payment was not deleted.');
     }
 
 }

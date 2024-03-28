@@ -28,17 +28,14 @@ class PayU
 
     public static function cancelTransaction(Transaction $transaction): bool
     {
-        try {
-            $rejected = CancelOrder::callApi($transaction);
-            return $rejected->isCanceled();
-        } catch (PayUGeneralException $e) {
-            return false;
-        }
+        if (!$transaction->status->actionAvailable('delete')) return false;
+        return self::destroyTransaction($transaction);
     }
 
     public static function reject(Transaction $transaction): bool
     {
-        return self::cancelTransaction($transaction);
+        if (!$transaction->status->actionAvailable('reject')) return false;
+        return self::destroyTransaction($transaction);
     }
 
     public static function refund(Transaction $transaction, int|float $amount, string $description = null, string $backDescription = null, string $currencyCode = 'PLN'): bool
@@ -95,7 +92,6 @@ class PayU
         return true;
     }
 
-
     public static function getMethods(): array
     {
         try {
@@ -109,5 +105,15 @@ class PayU
     public static function syncMethods(): bool
     {
         return SyncPaymentMethods::handle();
+    }
+
+    private static function destroyTransaction(Transaction $transaction): bool
+    {
+        try {
+            $rejected = CancelOrder::callApi($transaction);
+            return $rejected->isCanceled();
+        } catch (PayUGeneralException $e) {
+            return false;
+        }
     }
 }

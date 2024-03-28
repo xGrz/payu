@@ -68,20 +68,7 @@
                     <x-payu::table.cell
                         class="text-right">{{ $transaction->created_at == $transaction->updated_at ? '' : $transaction->updated_at}}</x-payu::table.cell>
                     <x-payu::table.cell class="text-nowrap text-right">
-                        @if($transaction->status->actionAvailable('pay'))
-                            <x-payu::buttonlink href="{!! $transaction->link !!}" target="new" size="small">
-                                Pay
-                            </x-payu::buttonlink>
-                        @endif
-                        @if($transaction->status->actionAvailable('delete'))
-                            <x-payu::button type="submit" form="delete_{{$transaction->id}}" size="small"
-                                            color="danger">Delete
-                            </x-payu::button>
-                                <form action="{{route('payu.payments.destroy', $transaction->id)}}" method="POST"
-                                      id="delete_{{$transaction->id}}">
-                                    @csrf @method('DELETE')
-                                </form>
-                        @endif
+                        @include('payu::transactions.partials.transaction_actions')
                     </x-payu::table.cell>
                 </x-payu::table.row>
             @endforeach
