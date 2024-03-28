@@ -8,7 +8,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use xGrz\PayU\Api\Actions\SendRequestRefund;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;
+use xGrz\PayU\Enums\RefundStatus;
 use xGrz\PayU\Models\Refund;
 
 class SendRefundJob implements ShouldQueue, ShouldBeUnique
@@ -30,13 +32,12 @@ class SendRefundJob implements ShouldQueue, ShouldBeUnique
             throw new PayUGeneralException('Refund send failed. [Send] action unavailable');
         }
 
-//        $response = SendPayoutRequest::callApi($this->payout->amount * 100)?->asObject();
-//        $this->payout->update([
-//            'payout_id' => $response->payout_id,
-//            'status' => $response->status,
-//        ]);
-//
-//        PayU::payoutStatusCheck($this->payout);
+        $response = SendRequestRefund::callApi($this->refund)?->asObject();
+        $this->refund->update([
+            'refund_id' => $response->refund_id,
+            'status' => RefundStatus::findByName($response->status),
+        ]);
+
     }
 
     public function uniqueId(): string
