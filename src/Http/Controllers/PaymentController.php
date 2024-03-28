@@ -25,7 +25,8 @@ class PaymentController extends Controller
     public function store()
     {
         $t = TransactionWizard::fake();
-        return CreatePaymentAction::callApi($t);
+        CreatePaymentAction::callApi($t);
+        return back()->with('success', 'Transaction created');
 
     }
 
