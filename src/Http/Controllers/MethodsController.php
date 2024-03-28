@@ -18,8 +18,10 @@ class MethodsController extends Controller
 
     public function synchronize()
     {
-        SyncPaymentMethods::handle();
-        return back();
+        return SyncPaymentMethods::handle()
+            ? back()->with('success', 'Payment methods successfully synchronized.')
+            : back()->with('error', 'Error synchronizing payment methods.');
+
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace xGrz\PayU\Facades;
 
+use xGrz\PayU\Actions\SyncPaymentMethods;
 use xGrz\PayU\Api\Actions\AcceptPayment;
 use xGrz\PayU\Api\Actions\CancelOrder;
 use xGrz\PayU\Api\Actions\GetPaymentMethods;
@@ -25,7 +26,7 @@ class PayU
         }
     }
 
-    public static function reject(Transaction $transaction): bool
+    public static function cancelTransaction(Transaction $transaction): bool
     {
         try {
             $rejected = CancelOrder::callApi($transaction);
@@ -33,6 +34,11 @@ class PayU
         } catch (PayUGeneralException $e) {
             return false;
         }
+    }
+
+    public static function reject(Transaction $transaction): bool
+    {
+        return self::cancelTransaction($transaction);
     }
 
     public static function refund(Transaction $transaction, int|float $amount, string $description = null, string $backDescription = null, string $currencyCode = 'PLN'): bool
@@ -98,5 +104,10 @@ class PayU
             return [];
         }
         return $payMethods->toArray();
+    }
+
+    public static function syncMethods(): bool
+    {
+        return SyncPaymentMethods::handle();
     }
 }
