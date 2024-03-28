@@ -25,7 +25,6 @@ enum RefundStatus: int implements WithColors, WithActions
     {
         return match ($this) {
             self::INITIALIZED, self::SCHEDULED => ['send', 'delete'],
-            self::SENT, self::PENDING => ['update'], // TODO: Check if it is required
             default => []
         };
     }
