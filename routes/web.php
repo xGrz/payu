@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use xGrz\PayU\Http\Controllers\MethodsController;
 use xGrz\PayU\Http\Controllers\PaymentController;
 use xGrz\PayU\Http\Controllers\PayoutController;
 use xGrz\PayU\Http\Controllers\RefundController;
@@ -39,4 +40,9 @@ Route::name('payu.')
                 Route::delete('{payout}', [PayoutController::class, 'destroy'])->name('destroy');
             });
 
+        Route::name('methods.')
+            ->prefix('payu-methods')
+            ->group(function () {
+                Route::get('', MethodsController::class)->name('index');
+            });
     });

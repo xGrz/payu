@@ -11,6 +11,9 @@
             <x-payu::nav-item routeName="payu.payouts.index" label="Payouts">
                 <x-payu::icons.payout class="w-5 md:w-8 h-5 md:h-8 mr-1 md:block" />
             </x-payu::nav-item>
+            <x-payu::nav-item routeName="payu.methods.index" label="Methods">
+                <x-payu::icons.methods class="w-5 md:w-8 h-5 md:h-8 mr-1 md:block" />
+            </x-payu::nav-item>
         </nav>
     </div>
     <hr class="border-slate-600"/>
