@@ -18,6 +18,7 @@ use xGrz\PayU\Services\ConfigService;
  * @method static shouldBeLogged()
  * @method static getPayoutInterval()
  * @method static getPayoutSendDelay()
+ * @method static getRefundSendDelay()
  */
 class Config extends Facade
 {

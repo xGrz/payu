@@ -89,6 +89,7 @@ class PayU
         return true;
     }
 
+
     public static function getMethods(): array
     {
         try {

@@ -86,4 +86,15 @@ class ConfigService
     {
         return config('payu.delay.payout', 60);
     }
+
+    public function getRefundInterval():int
+    {
+        return config('payu.interval.refund_status_check', 60);
+    }
+
+    public function getRefundSendDelay(): int
+    {
+        return config('payu.delay.refund', 60);
+    }
+
 }

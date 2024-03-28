@@ -22,8 +22,7 @@ enum PayoutStatus: int implements WithColors, WithActions
     public function actions(): array
     {
         return match($this) {
-            self::INIT => ['send', 'delete'],
-            self::SCHEDULED => ['send', 'delete'],
+            self::INIT, self::SCHEDULED => ['send', 'delete'],
             self::PENDING,self::WAITING => ['update', 'refresh-status'],
             self::REALIZED, self::CANCELED => []
         };

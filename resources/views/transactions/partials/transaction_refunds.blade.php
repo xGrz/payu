@@ -34,7 +34,7 @@
                             class="text-right">{{ $refund->amount }} {{ $refund->currency_code }}</x-payu::table.cell>
                         <x-payu::table.cell class="text-right">{{ $refund->created_at }}</x-payu::table.cell>
                         <x-payu::table.cell class="text-right">
-                            @if($refund->status->isDeletable())
+                            @if($refund->status->actionAvailable('delete'))
                                 <form action="{{ route('payu.refunds.destroy', $refund->id) }}" method="POST"
                                       id="delete_refund_{{$refund->id}}">
                                     @csrf @method('DELETE')
