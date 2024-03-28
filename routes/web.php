@@ -43,6 +43,7 @@ Route::name('payu.')
         Route::name('methods.')
             ->prefix('payu-methods')
             ->group(function () {
-                Route::get('', MethodsController::class)->name('index');
+                Route::get('', [MethodsController::class, 'index'])->name('index');
+                Route::get('sync', [MethodsController::class, 'synchronize'])->name('synchronize');
             });
     });

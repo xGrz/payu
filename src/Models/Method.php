@@ -4,6 +4,7 @@ namespace xGrz\PayU\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Number;
 use xGrz\PayU\Casts\Amount;
 
 class Method extends Model
@@ -27,4 +28,15 @@ class Method extends Model
     {
         return $this->hasMany(PayUTransaction::class, 'method_id');
     }
+
+    public function getMinAttribute(): string
+    {
+        return Number::currency($this->min_amount, 'PLN', app()->getLocale());
+    }
+
+    public function getMaxAttribute(): string
+    {
+        return Number::currency($this->max_amount, 'PLN', app()->getLocale());
+    }
+
 }
