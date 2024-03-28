@@ -16,7 +16,7 @@ class PayoutController extends Controller
     {
         return view('payu::payouts.index', [
             'title' => 'Shop details',
-            'payouts' => Payout::latest()->paginate(2),
+            'payouts' => Payout::latest()->paginate(),
             'balance' => PayU::balance()?->asObject()
         ]);
     }
@@ -25,11 +25,24 @@ class PayoutController extends Controller
     public function store(PayoutRequest $request): RedirectResponse
     {
         $payout = PayU::payout($request->validated('payoutAmount'));
-        return to_route('payu.payouts.index')->with(
-            $payout ? 'success' : 'error',
-            $payout ? 'Payout has been initialized' : 'Payout not initialed'
-        );
+        return $payout
+            ? to_route('payu.payouts.index')->with('success', 'Payout has been scheduled')
+            : to_route('payu.payouts.index')->with('error', 'Payout not initialed. Error occurred.');
     }
 
+    public function update(Payout $payout)
+    {
+        PayU::payoutStatusCheck($payout);
+        return back()->with('success', 'Payout status update in progress');
+    }
+
+    public function destroy(Payout $payout)
+    {
+        $canceled = PayU::cancelPayout($payout);
+
+        return $canceled
+            ? back()->with('success', 'Payout request has been successfully removed')
+            : back()->with('error', 'Error! Payout request cannot be removed');
+    }
 
 }

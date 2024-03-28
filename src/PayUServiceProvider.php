@@ -4,6 +4,11 @@ namespace xGrz\PayU;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
+use xGrz\PayU\Actions\SyncPaymentMethods;
+use xGrz\PayU\Commands\PayMethodsUpdateCommand;
+use xGrz\PayU\Models\Payout;
+use xGrz\PayU\Observers\PayoutObserver;
+use xGrz\PayU\Providers\EventServiceProvider;
 use xGrz\PayU\Services\ConfigService;
 
 class PayUServiceProvider extends ServiceProvider
@@ -11,6 +16,7 @@ class PayUServiceProvider extends ServiceProvider
 
     public function register(): void
     {
+        $this->app->register(EventServiceProvider::class);
     }
 
     public function boot(): void
@@ -19,6 +25,9 @@ class PayUServiceProvider extends ServiceProvider
         self::setupPackageConfig();
         self::setupNotificationRouting();
         self::setupWebRouting();
+        self::setupCommands();
+
+        Payout::observe(PayoutObserver::class);
 
         $this->app->booted(function () {
             $schedule = app(Schedule::class);
@@ -56,6 +65,13 @@ class PayUServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
     }
 
+    public function setupCommands(): void
+    {
+        $this->commands([
+            PayMethodsUpdateCommand::class
+        ]);
+    }
+
     private function setupScheduler(Schedule $schedule): void
     {
 //        $schedule
@@ -68,11 +84,11 @@ class PayUServiceProvider extends ServiceProvider
 //            ->name('PayU | Fill payment method for transactions')
 //            ->everyFiveMinutes();
 //
-//        $schedule
-//            ->call(fn() => SyncPaymentMethods::handle())
-//            ->name('PayU | Synchronize payment methods')
-//            ->weekdays()
-//            ->at('4:30');
+        $schedule
+            ->call(fn() => SyncPaymentMethods::handle())
+            ->name('PayU | Synchronize payment methods')
+            ->weekdays()
+            ->at('4:30');
 //
 //        $schedule
 //            ->call(fn() => ProcessRefundsToTransactions::handle())

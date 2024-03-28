@@ -76,4 +76,14 @@ class ConfigService
     {
         return true;
     }
+
+    public function getPayoutInterval(): int
+    {
+        return config('payu.interval.payout_status_check', 60);
+    }
+
+    public function getPayoutSendDelay(): int
+    {
+        return config('payu.delay.payout', 60);
+    }
 }

@@ -4,8 +4,13 @@ return [
     'use_sandbox' => true,
 
     'delay' => [
-        'refund' => 180,
-        'payout' => 180
+        'refund' => 30,
+        'payout' => 30,
+
+    ],
+    'interval' => [
+        'payout_status_check' => 60,
+        'refund_status_check' => 60,
     ],
 
     'routing' => [

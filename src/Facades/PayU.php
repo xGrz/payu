@@ -4,9 +4,11 @@ namespace xGrz\PayU\Facades;
 
 use xGrz\PayU\Api\Actions\AcceptPayment;
 use xGrz\PayU\Api\Actions\CancelOrder;
+use xGrz\PayU\Api\Actions\GetPaymentMethods;
 use xGrz\PayU\Api\Actions\ShopBalance;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;
 use xGrz\PayU\Api\Responses\ShopBalanceResponse;
+use xGrz\PayU\Jobs\UpdatePayoutStatusJob;
 use xGrz\PayU\Models\Payout;
 use xGrz\PayU\Models\Refund;
 use xGrz\PayU\Models\Transaction;
@@ -48,7 +50,7 @@ class PayU
     public static function cancelRefund(Refund $refund): bool
     {
         if (!$refund->status->isDeletable()) return false;
-        return (bool) $refund->delete();
+        return (bool)$refund->delete();
     }
 
     public static function balance(): ?ShopBalanceResponse
@@ -60,7 +62,7 @@ class PayU
         }
     }
 
-    public static function payout(int|float $amount)
+    public static function payout(int|float $amount): bool
     {
         if (!Config::getShopId()) return false;
 
@@ -69,5 +71,31 @@ class PayU
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+    public static function payoutStatusCheck(Payout $payout, int $delay = null): void
+    {
+        if (is_null($delay)) $delay = Config::getPayoutInterval();
+
+        dispatch(new UpdatePayoutStatusJob($payout))->delay($delay);
+
+    }
+
+    public static function cancelPayout(Payout $payout): bool
+    {
+        if (!$payout->status->actionAvailable('delete')) return false;
+
+        $payout->delete();
+        return true;
+    }
+
+    public static function getMethods(): array
+    {
+        try {
+            $payMethods = GetPaymentMethods::callApi();
+        } catch (PayUGeneralException $e) {
+            return [];
+        }
+        return $payMethods->toArray();
     }
 }

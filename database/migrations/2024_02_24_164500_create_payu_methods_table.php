@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('image')->nullable();
             $table->boolean('available')->default(false);
+            $table->string('type', 10)->nullable();
             $table->unsignedInteger('min_amount')->default(0);
             $table->unsignedInteger('max_amount')->default(99999999);
             $table->timestamps();

@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use xGrz\PayU\Casts\Amount;
 use xGrz\PayU\Enums\PayoutStatus;
 
+/**
+ * @method static findOrFail(int $payoutId)
+ */
 class Payout extends Model
 {
     protected $table = 'payu_payouts';

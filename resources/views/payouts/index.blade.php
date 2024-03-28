@@ -59,9 +59,16 @@
                             <x-payu::status :status="$payout->status"/>
                         </x-payu::table.cell>
                         <x-payu::table.cell class="text-right">
+                            @if($payout->status->actionAvailable('refresh-status') && $payout->updated_at < now()->subHour())
+                                <form action="{{ route('payu.payouts.update', $payout->id) }}" method="POST" id="payout_refresh_{{$payout->id}}">
+                                    @csrf @method('PATCH')
+                                </form>
+                                <x-payu::button type="submit" form="payout_refresh_{{$payout->id}}" color="info" size="small">
+                                    Refresh
+                                </x-payu::button>
+                            @endif
                             @if($payout->status->actionAvailable('delete'))
-                                <form action="{{route('payu.payouts.destroy', $payout->id)}}" method="POST"
-                                      id="payout_{{$payout->id}}">
+                                <form action="{{route('payu.payouts.destroy', $payout->id)}}" method="POST" id="payout_{{$payout->id}}">
                                     @csrf @method('DELETE')
                                 </form>
                                 <x-payu::button type="submit" color="danger" form="payout_{{$payout->id}}" size="small">

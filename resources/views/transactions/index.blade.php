@@ -41,10 +41,10 @@
                     <x-payu::table.header>Status</x-payu::table.header>
                     <x-payu::table.header class="text-right">Created</x-payu::table.header>
                     <x-payu::table.header class="text-right">Updated</x-payu::table.header>
-                    <x-payu::table.header>Actions</x-payu::table.header>
+                    <x-payu::table.header class="text-right">Actions</x-payu::table.header>
                 </x-payu::table.row>
             </x-payu::table.thead>
-            <tbody class="leading-8">
+            <tbody class="leading-tight">
             @foreach($transactions as $transaction)
                 <x-payu::table.row class="hover:bg-gray-100">
                     <x-payu::table.cell>
@@ -67,20 +67,20 @@
                     <x-payu::table.cell class="text-right">{{ $transaction->created_at }}</x-payu::table.cell>
                     <x-payu::table.cell
                         class="text-right">{{ $transaction->created_at == $transaction->updated_at ? '' : $transaction->updated_at}}</x-payu::table.cell>
-                    <x-payu::table.cell>
+                    <x-payu::table.cell class="text-nowrap text-right">
                         @if($transaction->status->actionAvailable('pay'))
                             <x-payu::buttonlink href="{!! $transaction->link !!}" target="new" size="small">
                                 Pay
                             </x-payu::buttonlink>
                         @endif
                         @if($transaction->status->actionAvailable('delete'))
-                            <form action="{{route('payu.payments.destroy', $transaction->id)}}" method="POST"
-                                  id="delete_{{$transaction->id}}">
-                                @csrf @method('DELETE')
-                            </form>
                             <x-payu::button type="submit" form="delete_{{$transaction->id}}" size="small"
                                             color="danger">Delete
                             </x-payu::button>
+                                <form action="{{route('payu.payments.destroy', $transaction->id)}}" method="POST"
+                                      id="delete_{{$transaction->id}}">
+                                    @csrf @method('DELETE')
+                                </form>
                         @endif
                     </x-payu::table.cell>
                 </x-payu::table.row>

@@ -13,6 +13,7 @@ enum PayoutStatus: int implements WithColors, WithActions
     use WithStatusNames, WithLabels, WithActionsDetect;
 
     case INIT = 0;
+    case SCHEDULED = 10;
     case PENDING = 1;
     case WAITING = 2;
     case CANCELED = 5;
@@ -22,7 +23,8 @@ enum PayoutStatus: int implements WithColors, WithActions
     {
         return match($this) {
             self::INIT => ['send', 'delete'],
-            self::PENDING,self::WAITING => ['update'],
+            self::SCHEDULED => ['send', 'delete'],
+            self::PENDING,self::WAITING => ['update', 'refresh-status'],
             self::REALIZED, self::CANCELED => []
         };
     }
@@ -35,5 +37,23 @@ enum PayoutStatus: int implements WithColors, WithActions
             self::REALIZED => 'success',
             default => 'gray'
         };
+    }
+
+    public static function updatable(): array
+    {
+        $updatable = [];
+        foreach (self::cases() as $case) {
+            if ($case->actionAvailable('update')) $updatable[] = $case;
+        }
+        return $updatable;
+    }
+
+    public static function sendable(): array
+    {
+        $sendable = [];
+        foreach (self::cases() as $case) {
+            if ($case->actionAvailable('send')) $sendable[] = $case;
+        }
+        return $sendable;
     }
 }

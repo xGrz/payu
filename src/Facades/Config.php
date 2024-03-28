@@ -16,6 +16,8 @@ use xGrz\PayU\Services\ConfigService;
  * @method static getShopId()
  * @method static getSignatureKey()
  * @method static shouldBeLogged()
+ * @method static getPayoutInterval()
+ * @method static getPayoutSendDelay()
  */
 class Config extends Facade
 {

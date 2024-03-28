@@ -23,7 +23,7 @@ class Transaction extends Model
 
 //    public function payMethod(): BelongsTo
 //    {
-//        return $this->belongsTo(PayMethod::class, 'method_id');
+//        return $this->belongsTo(Method::class, 'method_id');
 //    }
 //
     public function refunds(): HasMany
