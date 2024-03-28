@@ -52,7 +52,7 @@ class PayU
 
     public static function cancelRefund(Refund $refund): bool
     {
-        if (!$refund->status->isDeletable()) return false;
+        if (!$refund->status->actionAvailable('delete')) return false;
         return (bool)$refund->delete();
     }
 

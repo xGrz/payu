@@ -60,6 +60,9 @@
                     </x-payu::table.cell>
                     <x-payu::table.cell class="text-right">
                         {{ Number::currency($transaction->payload['totalAmount'] / 100, $transaction->payload['currencyCode'], 'pl') }}
+                        @if($transaction->refunded())
+                            <small class="block text-red-500">-{{Number::currency($transaction->refunded(), $transaction->payload['currencyCode'], 'pl')}}</small>
+                        @endif
                     </x-payu::table.cell>
                     <x-payu::table.cell>
                         <x-payu::status :status="$transaction->status" class="text-sm mx-2"/>
