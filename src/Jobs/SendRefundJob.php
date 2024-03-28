@@ -28,7 +28,7 @@ class SendRefundJob implements ShouldQueue, ShouldBeUnique
      */
     public function handle(): void
     {
-        if (!$this->refund->status->actionAvailable('send')) {
+        if (!$this->refund->status->hasAction('send')) {
             throw new PayUGeneralException('Refund send failed. [Send] action unavailable');
         }
 

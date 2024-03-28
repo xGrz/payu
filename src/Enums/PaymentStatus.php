@@ -4,14 +4,14 @@ namespace xGrz\PayU\Enums;
 
 use xGrz\PayU\Interfaces\WithActions;
 use xGrz\PayU\Interfaces\WithColors;
-use xGrz\PayU\Traits\WithActionsDetect;
-use xGrz\PayU\Traits\WithLabels;
-use xGrz\PayU\Traits\WithStatusNames;
+use xGrz\PayU\Traits\HasActions;
+use xGrz\PayU\Traits\HasLabels;
+use xGrz\PayU\Traits\WithNames;
 
 enum PaymentStatus: int implements WithActions, WithColors
 {
 
-    use WithStatusNames, WithLabels, WithActionsDetect;
+    use WithNames, HasLabels, HasActions;
 
     case INITIALIZED = 0;
     case NEW = 1;

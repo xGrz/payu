@@ -6,5 +6,5 @@ interface WithActions
 {
     public function actions(): array;
 
-    public function actionAvailable(string $actionName): bool;
+    public function hasAction(string $actionName): bool;
 }

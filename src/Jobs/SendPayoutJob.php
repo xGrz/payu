@@ -28,7 +28,7 @@ class SendPayoutJob implements ShouldQueue, ShouldBeUnique
      */
     public function handle(): void
     {
-        if (!$this->payout->status->actionAvailable('send')) {
+        if (!$this->payout->status->hasAction('send')) {
             throw new PayUGeneralException('Payout send failed. [Send] action unavailable');
         }
 

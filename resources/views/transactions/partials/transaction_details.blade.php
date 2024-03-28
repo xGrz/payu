@@ -9,14 +9,14 @@
             @csrf
         </form>
 
-        @if($transaction->status->actionAvailable('delete'))
+        @if($transaction->status->hasAction('delete'))
             <x-payu::button form="reject" type="submit" color="danger">Delete transaction</x-payu::button>
         @endif
 
-        @if($transaction->status->actionAvailable('accept'))
+        @if($transaction->status->hasAction('accept'))
             <x-payu::button form="accept" type="submit" color="success">Accept</x-payu::button>
         @endif
-        @if($transaction->status->actionAvailable('reject'))
+        @if($transaction->status->hasAction('reject'))
             <x-payu::button form="reject" type="submit" color="danger">Reject</x-payu::button>
         @endif
     </x-payu::paper-title>

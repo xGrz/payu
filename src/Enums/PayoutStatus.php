@@ -4,13 +4,13 @@ namespace xGrz\PayU\Enums;
 
 use xGrz\PayU\Interfaces\WithActions;
 use xGrz\PayU\Interfaces\WithColors;
-use xGrz\PayU\Traits\WithActionsDetect;
-use xGrz\PayU\Traits\WithLabels;
-use xGrz\PayU\Traits\WithStatusNames;
+use xGrz\PayU\Traits\HasActions;
+use xGrz\PayU\Traits\HasLabels;
+use xGrz\PayU\Traits\WithNames;
 
 enum PayoutStatus: int implements WithColors, WithActions
 {
-    use WithStatusNames, WithLabels, WithActionsDetect;
+    use WithNames, HasLabels, HasActions;
 
     case INIT = 0;
     case SCHEDULED = 10;
@@ -42,7 +42,7 @@ enum PayoutStatus: int implements WithColors, WithActions
     {
         $updatable = [];
         foreach (self::cases() as $case) {
-            if ($case->actionAvailable('update')) $updatable[] = $case;
+            if ($case->hasAction('update')) $updatable[] = $case;
         }
         return $updatable;
     }
@@ -51,7 +51,7 @@ enum PayoutStatus: int implements WithColors, WithActions
     {
         $sendable = [];
         foreach (self::cases() as $case) {
-            if ($case->actionAvailable('send')) $sendable[] = $case;
+            if ($case->hasAction('send')) $sendable[] = $case;
         }
         return $sendable;
     }

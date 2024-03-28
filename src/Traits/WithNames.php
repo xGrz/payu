@@ -5,7 +5,7 @@ namespace xGrz\PayU\Traits;
 
 use xGrz\PayU\Exceptions\StatusNameException;
 
-trait WithStatusNames
+trait WithNames
 {
     /**
      * @throws StatusNameException

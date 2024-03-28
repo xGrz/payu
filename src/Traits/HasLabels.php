@@ -2,7 +2,7 @@
 
 namespace xGrz\PayU\Traits;
 
-trait WithLabels
+trait HasLabels
 {
     public function getLabel(): string
     {

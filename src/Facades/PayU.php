@@ -28,19 +28,19 @@ class PayU
 
     public static function cancelTransaction(Transaction $transaction): bool
     {
-        if (!$transaction->status->actionAvailable('delete')) return false;
+        if (!$transaction->status->hasAction('delete')) return false;
         return self::destroyTransaction($transaction);
     }
 
     public static function reject(Transaction $transaction): bool
     {
-        if (!$transaction->status->actionAvailable('reject')) return false;
+        if (!$transaction->status->hasAction('reject')) return false;
         return self::destroyTransaction($transaction);
     }
 
     public static function refund(Transaction $transaction, int|float $amount, string $description = null, string $backDescription = null, string $currencyCode = 'PLN'): bool
     {
-        if (!$transaction->status->actionAvailable('refund')) return false;
+        if (!$transaction->status->hasAction('refund')) return false;
         $transaction->refunds()->create([
             'amount' => $amount,
             'description' => $description,
@@ -52,7 +52,7 @@ class PayU
 
     public static function cancelRefund(Refund $refund): bool
     {
-        if (!$refund->status->actionAvailable('delete')) return false;
+        if (!$refund->status->hasAction('delete')) return false;
         return (bool)$refund->delete();
     }
 
@@ -86,7 +86,7 @@ class PayU
 
     public static function cancelPayout(Payout $payout): bool
     {
-        if (!$payout->status->actionAvailable('delete')) return false;
+        if (!$payout->status->hasAction('delete')) return false;
 
         $payout->delete();
         return true;

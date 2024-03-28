@@ -2,9 +2,9 @@
 
 namespace xGrz\PayU\Traits;
 
-trait WithActionsDetect
+trait HasActions
 {
-    public function actionAvailable(string $actionName): bool
+    public function hasAction(string $actionName): bool
     {
         return in_array(strtolower($actionName), self::actions());
     }

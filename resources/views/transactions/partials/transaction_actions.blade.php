@@ -1,5 +1,5 @@
 {{--Pay link--}}
-@if($transaction->status->actionAvailable('pay'))
+@if($transaction->status->hasAction('pay'))
     <x-payu::buttonlink href="{!! $transaction->link !!}" target="new" size="small">
         Pay
     </x-payu::buttonlink>
@@ -7,7 +7,7 @@
 
 
 {{--Delete transction --}}
-@if($transaction->status->actionAvailable('delete'))
+@if($transaction->status->hasAction('delete'))
     <x-payu::button type="submit" form="delete_{{$transaction->id}}" size="small" color="danger">
         Delete
     </x-payu::button>
@@ -18,7 +18,7 @@
 
 
 {{--Accept transaction--}}
-@if($transaction->status->actionAvailable('accept'))
+@if($transaction->status->hasAction('accept'))
     <x-payu::button type="submit" color="success" size="small" form="accept_{{$transaction->id}}">Accept</x-payu::button>
     <form action="{{route('payu.payments.accept', $transaction->id)}}" method="POST" id="accept_{{$transaction->id}}" class="hidden">
         @method('PATCH')
@@ -27,7 +27,7 @@
 @endif
 
 {{--Reject transaction--}}
-@if($transaction->status->actionAvailable('reject'))
+@if($transaction->status->hasAction('reject'))
     <x-payu::button type="submit" color="danger" size="small" form="reject_{{$transaction->id}}">Reject</x-payu::button>
     <form action="{{route('payu.payments.reject', $transaction->id)}}" method="POST" id="reject_{{$transaction->id}}" class="hidden">
         @method('DELETE')

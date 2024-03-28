@@ -1,4 +1,4 @@
-@if ($transaction->status->actionAvailable('refund'))
+@if ($transaction->status->hasAction('refund'))
     <x-payu::paper class="bg-slate-800 mt-4">
         <x-payu::paper-title title="Refunds to transaction">
             <x-payu::buttonlink href="{{route('payu.refunds.create', $transaction->id)}}">
@@ -34,7 +34,7 @@
                             class="text-right">{{ $refund->amount }} {{ $refund->currency_code }}</x-payu::table.cell>
                         <x-payu::table.cell class="text-right">{{ $refund->created_at }}</x-payu::table.cell>
                         <x-payu::table.cell class="text-right">
-                            @if($refund->status->actionAvailable('delete'))
+                            @if($refund->status->hasAction('delete'))
                                 <form action="{{ route('payu.refunds.destroy', $refund->id) }}" method="POST"
                                       id="delete_refund_{{$refund->id}}">
                                     @csrf @method('DELETE')

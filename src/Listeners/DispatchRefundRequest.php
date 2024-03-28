@@ -12,7 +12,7 @@ class DispatchRefundRequest
 {
     public function handle(RefundCreated $event): void
     {
-        if (is_null($event->refund->status) || $event->refund->status->actionAvailable('send')) {
+        if (is_null($event->refund->status) || $event->refund->status->hasAction('send')) {
             self::updateStatus($event->refund);
             self::dispatchJob($event->refund);
         }

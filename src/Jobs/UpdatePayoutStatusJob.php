@@ -44,7 +44,7 @@ class UpdatePayoutStatusJob implements ShouldQueue
             ]);
         }
 
-        if ($this->payout->status->actionAvailable('update')) {
+        if ($this->payout->status->hasAction('update')) {
             PayU::payoutStatusCheck($this->payout);
         }
     }
