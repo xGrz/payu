@@ -9,4 +9,15 @@ trait HasActions
         return in_array(strtolower($actionName), self::actions());
     }
 
+    public static function withAction(string $actionName): array
+    {
+        $statuses = [];
+        foreach (self::cases() as $case) {
+            if ($case->hasAction($actionName)) {
+                $statuses[] = $case;
+            }
+        }
+        return $statuses;
+    }
+
 }

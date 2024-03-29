@@ -9,7 +9,11 @@
     "autoload": {
         "psr-4": {
             "xGrz\\PayU\\": "src/"
-        }
+        },
+        "files": [
+            "src/Helpers/payu-global-helpers.php"
+        ]
+
     },
     "extra": {
         "laravel": {
