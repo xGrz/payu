@@ -17,7 +17,7 @@ class PaymentController extends Controller
 
         return view('payu::transactions.index', [
             'title' => 'Transactions',
-            'transactions' => Transaction::with(['refunds'])->latest()->paginate(),
+            'transactions' => Transaction::latest()->paginate(),
             'balance' => PayU::balance()?->asObject()
         ]);
     }

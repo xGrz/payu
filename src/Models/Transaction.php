@@ -5,8 +5,11 @@ namespace xGrz\PayU\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use xGrz\PayU\Casts\Amount;
 use xGrz\PayU\Enums\PaymentStatus;
+use xGrz\PayU\Enums\RefundStatus;
 
 class Transaction extends Model
 {
@@ -16,16 +19,19 @@ class Transaction extends Model
 
     protected $casts = [
         'status' => PaymentStatus::class,
-        'payload' => 'array'
+        'amount' => Amount::class,
+        'payload' => 'array',
     ];
+
+    protected $with = ['refunds', 'payMethod'];
 
     protected $guarded = [];
 
-//    public function payMethod(): BelongsTo
-//    {
-//        return $this->belongsTo(Method::class, 'method_id');
-//    }
-//
+    public function payMethod(): BelongsTo
+    {
+        return $this->belongsTo(Method::class, 'method_id');
+    }
+
     public function refunds(): HasMany
     {
         return $this->hasMany(Refund::class, 'transaction_id')->latest();
@@ -33,7 +39,26 @@ class Transaction extends Model
 
     public function refunded(): int
     {
-        return $this->refunds()->sum('payu_refunds.amount') / 100 ?? 0;
+        return $this
+            ->refunds
+            ->whereIn('status', RefundStatus::withAction('success'))
+            ->sum('amount')
+        ;
+    }
+
+    public function hasRefunds(): bool
+    {
+        return count($this->refunds);
+    }
+
+    public function maxRefundAmount(): float|int
+    {
+        return ($this->amount / 100) - $this->refunded();
+    }
+
+    public function isRefundAvailable(): bool
+    {
+        return ($this->amount / 100) - $this->refunded() > 0;
     }
 
 }

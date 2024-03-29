@@ -13,10 +13,11 @@ $hasError = $errors->has($name);
 $isNumeric = $type == 'number';
 ?>
 
-<label class="inline-block w-full text-gray-700 font-bold mb-2 mt-1">
+<label class="inline-block w-full text-gray-700 font-semibold">
     @if ($label)
         <small class="@if($hasError) text-rose-600 @else text-gray-500 @endif">{{$label}}</small>
     @endif
+    {{ $isNumeric ? 'Numeric' : 'non-numeric' }}
     <input
         {{ $attributes->class([
             'w-full inline-block grow shrink border bg-slate-300 focus:bg-gray-200 text-slate-600 focus:text-slate-700 rounded-md focus:outline-none text-right py-2 px-4 disabled:bg-gray-100 disabled:text-gray-400',
@@ -35,8 +36,7 @@ $isNumeric = $type == 'number';
         }}
     />
     @error($name)
-    <small class="text-red-600 font-normal">{{ $message }}</small>
-    @else <small>&nbsp;</small>
+        <small class="text-red-600 text-sm mb-1 leading-none">{{ $message }}</small>
     @enderror
 
 </label>

@@ -24,7 +24,9 @@ enum RefundStatus: int implements WithColors, WithActions
     public function actions(): array
     {
         return match ($this) {
-            self::INITIALIZED, self::SCHEDULED => ['send', 'delete'],
+            self::INITIALIZED, self::SCHEDULED => ['send', 'delete', 'in-progress'],
+            self::SENT, self::PENDING, self::FINALIZED => ['success'],
+            self::CANCELED, self::ERROR => ['failed'],
             default => []
         };
     }

@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Laravel-App-Settings</title>
     <script src="https://cdn.tailwindcss.com"></script>
-{{--    <script src="//unpkg.com/alpinejs" defer></script>--}}
+    <script src="//unpkg.com/alpinejs" defer></script>
 </head>
 <body class="flex flex-col min-h-full">
 

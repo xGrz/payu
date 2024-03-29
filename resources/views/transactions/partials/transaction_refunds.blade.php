@@ -1,9 +1,13 @@
+@props(['tableTitle' => '[tableTitle] not set', 'shouldRenderAction' => false])
+
 @if ($transaction->status->hasAction('refund'))
     <x-payu::paper class="bg-slate-800 mt-4">
-        <x-payu::paper-title title="Refunds to transaction">
-            <x-payu::buttonlink href="{{route('payu.refunds.create', $transaction->id)}}">
-                Create refund
-            </x-payu::buttonlink>
+        <x-payu::paper-title title="{{ $tableTitle ?? 'Upss, no title set' }}">
+            @if($shouldRenderAction && $transaction->isRefundAvailable())
+                <x-payu::buttonlink href="{{route('payu.refunds.create', $transaction->id)}}">
+                    Create refund
+                </x-payu::buttonlink>
+            @endif
         </x-payu::paper-title>
 
         @if ($transaction->refunds->count())
@@ -12,7 +16,6 @@
                     <x-payu::table.row>
                         <x-payu::table.header class="text-left">Description</x-payu::table.header>
                         <x-payu::table.header>RefundId</x-payu::table.header>
-                        <x-payu::table.header>ExtOrderId</x-payu::table.header>
                         <x-payu::table.header class="text-left">Bank description</x-payu::table.header>
                         <x-payu::table.header class="text-left">Status</x-payu::table.header>
                         <x-payu::table.header class="text-right">Amount</x-payu::table.header>
@@ -25,13 +28,12 @@
                     <x-payu::table.row>
                         <x-payu::table.cell>{{ $refund->description }}</x-payu::table.cell>
                         <x-payu::table.cell>{{ $refund->refund_id }}</x-payu::table.cell>
-                        <x-payu::table.cell>{{ $refund->ext_refund_id }}</x-payu::table.cell>
                         <x-payu::table.cell>{{ $refund->bank_description }}</x-payu::table.cell>
                         <x-payu::table.cell>
                             <x-payu::status :status="$refund->status"/>
                         </x-payu::table.cell>
                         <x-payu::table.cell
-                            class="text-right">{{ $refund->amount }} {{ $refund->currency_code }}</x-payu::table.cell>
+                            class="text-right">{{ humanAmount($refund->amount, $refund->currency_code) }}</x-payu::table.cell>
                         <x-payu::table.cell class="text-right">{{ $refund->created_at }}</x-payu::table.cell>
                         <x-payu::table.cell class="text-right">
                             @if($refund->status->hasAction('delete'))

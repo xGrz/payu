@@ -51,19 +51,19 @@
                     <img
                         src="{!! $transaction->payMethod->image !!}"
                         alt="{{ $transaction->payMethod->name }}"
-                        class="max-h-8 max-w-16 fill"
+                        class="max-h-10 max-w-16 fill bg-white p-2"
                     />
                 @endif
             </x-payu::table.cell>
         </x-payu::table.row>
         <x-payu::table.row>
             <x-payu::table.header class="text-left">Amount</x-payu::table.header>
-            <x-payu::table.cell>{{ Number::currency($transaction->payload['totalAmount'] / 100, $transaction->payload['currencyCode'], app()->currentLocale()) }}</x-payu::table.cell>
+            <x-payu::table.cell>{{ humanAmount($transaction->payload['totalAmount'] / 100, $transaction->payload['currencyCode']) }}</x-payu::table.cell>
         </x-payu::table.row>
         <x-payu::table.row>
             <x-payu::table.header class="text-left">Refunded</x-payu::table.header>
             <x-payu::table.cell>
-                {{ Number::currency($transaction->refunded(), $transaction->payload['currencyCode'], app()->currentLocale()) }}
+                {{ humanAmount($transaction->refunded(), $transaction->payload['currencyCode']) }}
             </x-payu::table.cell>
         </x-payu::table.row>
         <x-payu::table.row>

@@ -38,7 +38,8 @@
                 <x-payu::table.row>
                     <x-payu::table.header>Description</x-payu::table.header>
                     <x-payu::table.header>Value</x-payu::table.header>
-                    <x-payu::table.header>Status</x-payu::table.header>
+                    <x-payu::table.header class="text-right">Refunded</x-payu::table.header>
+                    <x-payu::table.header class="text-center">Status</x-payu::table.header>
                     <x-payu::table.header class="text-right">Created</x-payu::table.header>
                     <x-payu::table.header class="text-right">Updated</x-payu::table.header>
                     <x-payu::table.header class="text-right">Actions</x-payu::table.header>
@@ -51,17 +52,22 @@
                         @if($transaction->status === PaymentStatus::INITIALIZED)
                             <span class="text-gray-300">{{ $transaction->payload['description']  }}</span>
                         @else
-                            <x-payu::link
-                                href="{{ route('payu.payments.show', $transaction->id )}}"
-                            >
+                            <x-payu::link href="{{ route('payu.payments.show', $transaction->id )}}">
                                 {{ $transaction->payload['description']  }}
                             </x-payu::link>
                         @endif
                     </x-payu::table.cell>
                     <x-payu::table.cell class="text-right">
                         {{ Number::currency($transaction->payload['totalAmount'] / 100, $transaction->payload['currencyCode'], 'pl') }}
-                        @if($transaction->refunded())
-                            <small class="block text-red-500">-{{Number::currency($transaction->refunded(), $transaction->payload['currencyCode'], 'pl')}}</small>
+                        @if($transaction->payMethod)
+                            <small class="block">
+                                {{$transaction->payMethod->name}}
+                            </small>
+                        @endif
+                    </x-payu::table.cell>
+                    <x-payu::table.cell class="text-red-500 text-right">
+                        @if($transaction->hasRefunds())
+                            <small>{{ humanAmount($transaction->refunded()) }}</small>
                         @endif
                     </x-payu::table.cell>
                     <x-payu::table.cell>

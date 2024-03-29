@@ -13,8 +13,7 @@ return new class extends Migration {
             $table->uuid('id')->primary();
             $table->string('payu_order_id', 50);
             $table->text('link');
-            $table->unsignedInteger('amount')->nullable();
-            $table->unsignedInteger('refunded')->nullable();
+            $table->unsignedInteger('amount')->default(0);
             $table->json('payload');
             $table->unsignedTinyInteger('status')->default(PaymentStatus::INITIALIZED);
             $table->string('method_id')->nullable();
