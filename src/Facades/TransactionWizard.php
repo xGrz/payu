@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;
 use xGrz\PayU\Facades\TransactionWizard\Buyer;
 use xGrz\PayU\Facades\TransactionWizard\Delivery\PostalBox;
+use xGrz\PayU\Facades\TransactionWizard\PayMethod;
 use xGrz\PayU\Facades\TransactionWizard\Product;
 use xGrz\PayU\Facades\TransactionWizard\Products;
 use xGrz\PayU\Interfaces\DeliveryTypeInterface;
@@ -15,6 +16,8 @@ class TransactionWizard
     private ?Products $products = null;
     private ?Buyer $buyer = null;
     private ?DeliveryTypeInterface $delivery = null;
+
+    private ?PayMethod $method = null;
     private array $data = [
         /* REQUIRED */
         'customerIp' => '',
@@ -25,14 +28,15 @@ class TransactionWizard
         'products' => [],
     ];
 
-    public function __construct(string $description = null, ?Products $products = null, ?Buyer $buyer = null, ?DeliveryTypeInterface $delivery = null, string $redirectAfterTransaction = null)
+    public function __construct(string $description = null, ?Products $products = null, ?Buyer $buyer = null, ?DeliveryTypeInterface $delivery = null, string $redirectAfterTransaction = null, ?PayMethod $method = null)
     {
         self::fillTransaction();
-        if(!empty($description)) self::setDescription($description);
+        if (!empty($description)) self::setDescription($description);
         if (!empty($redirectAfterTransaction)) self::setRedirectAfterTransaction($redirectAfterTransaction);
         $this->products = $products ?? new Products();
         if (!empty($buyer)) self::setBuyer($buyer);
         if (!empty($delivery)) self::setDelivery($delivery);
+        if (!empty($method)) self::setMethod($method);
     }
 
     public function setDescription(string $description): static
@@ -68,6 +72,12 @@ class TransactionWizard
         return $this;
     }
 
+    public function setMethod(PayMethod $method): static
+    {
+        $this->method = $method;
+        return $this;
+    }
+
     public function setDelivery(DeliveryTypeInterface $delivery): static
     {
         $this->delivery = $delivery;
@@ -95,12 +105,13 @@ class TransactionWizard
 
         if (!empty($this->buyer)) $transaction['buyer'] = $this->buyer->toArray();
         if (!empty($this->delivery) && !empty($this->buyer)) $transaction['buyer']['delivery'] = $this->delivery->toArray();
+        if (!empty($this->method)) $transaction['payMethods']['payMethod'] = $this->method->toArray();
         return $transaction;
     }
 
-    public static function make(string $description = null, ?Products $products = null, ?Buyer $buyer = null, ?DeliveryTypeInterface $delivery = null, string $redirectAfterTransaction = null): static
+    public static function make(string $description = null, ?Products $products = null, ?Buyer $buyer = null, ?DeliveryTypeInterface $delivery = null, string $redirectAfterTransaction = null, ?PayMethod $method = null): static
     {
-        return new static($description, $products, $buyer, $delivery, $redirectAfterTransaction);
+        return new static($description, $products, $buyer, $delivery, $redirectAfterTransaction, $method);
     }
 
     /**
@@ -111,15 +122,16 @@ class TransactionWizard
     public static function fake(string $redirectAfterTransaction = null): static
     {
         return new static(
-            'Order no ' . rand(1,5000) . '/' . date('Y'),
+            'Order no ' . rand(1, 5000) . '/' . date('Y'),
             Products::make([
-                Product::make('Product A', rand(1, 300), rand(1,3)),
-                Product::make('Product B', rand(1, 300), rand(1,2)),
-                Product::make('Product C', rand(1, 300), rand(2,3)),
+                Product::make('Product A', rand(1, 300), rand(1, 3)),
+                Product::make('Product B', rand(1, 300), rand(1, 2)),
+                Product::make('Product C', rand(1, 300), rand(2, 3)),
             ]),
             Buyer::make(auth()->user()->email ?? 'test@example.com', '909765456', 'John', 'Kovalsky'),
             PostalBox::make(auth()->user()->email ?? 'test@example.com', 'John Kovalsky', '909765456', 'WA101'),
-            $redirectAfterTransaction ?? route('home')
+            $redirectAfterTransaction ?? route('home'),
+            PayMethod::make('P')
         );
     }
 
