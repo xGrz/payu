@@ -4,9 +4,7 @@
     <x-payu::paper class="bg-slate-800 mt-4">
         <x-payu::paper-title title="{{ $tableTitle ?? 'Upss, no title set' }}">
             @if($shouldRenderAction && $transaction->isRefundAvailable())
-                <x-payu::buttonlink href="{{route('payu.refunds.create', $transaction->id)}}">
-                    Create refund
-                </x-payu::buttonlink>
+                @include('payu::refunds.create-refund')
             @endif
         </x-payu::paper-title>
 

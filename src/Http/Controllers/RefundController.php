@@ -19,17 +19,6 @@ class RefundController extends Controller
         ]);
     }
 
-    public function create(Transaction $transaction)
-    {
-        return view('payu::refunds.create', [
-            'title' => 'Create refund',
-            'transaction' => $transaction,
-            'products' => $transaction->payload['products'],
-            'transactionAmount' => $transaction->payload['totalAmount'] / 100,
-            'refunded' => $transaction->refunded()
-        ]);
-    }
-
     public function store(StoreRefundRequest $request, Transaction $transaction)
     {
         $refunded = PayU::refund(
