@@ -33,7 +33,7 @@ class PayoutController extends Controller
     public function update(Payout $payout)
     {
         PayU::payoutStatusCheck($payout);
-        return back()->with('success', 'Payout status update in progress');
+        return back()->with('success', 'Payout status retry in progress');
     }
 
     public function destroy(Payout $payout)

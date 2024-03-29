@@ -26,9 +26,10 @@ class PayUResponseException extends PayUGeneralException
      */
     public static function bedRequest(Response $response)
     {
-        $message = '[HTTP: '. $response->status() . '] PayU bad request' ;
-        LoggerService::warning($message, ['http_status' => $response->status()]);
-        throw new self($message);
+        $message = '[HTTP: '. $response->status() . '] PayU Bad request';
+        if ($response->json('status.codeLiteral')) $message .= '(' . $response->json('status.codeLiteral') .')' ;
+        LoggerService::error($message, ['http_status' => $response->status(), 'response' => $response->json()]);
+        throw new self($message, $response->json('status.code'));
     }
 
     /**
@@ -37,7 +38,7 @@ class PayUResponseException extends PayUGeneralException
     public static function unAuthorized(Response $response)
     {
         $message = '[HTTP: '. $response->status() . '] PayU unauthorized' ;
-        LoggerService::warning($message, ['http_status' => $response->status()]);
+        LoggerService::error($message, ['http_status' => $response->status()]);
         throw new self($message);
     }
 
@@ -47,7 +48,7 @@ class PayUResponseException extends PayUGeneralException
     public static function forbidden(Response $response)
     {
         $message = '[HTTP: '. $response->status() . '] PayU forbidden' ;
-        LoggerService::warning($message, ['http_status' => $response->status()]);
+        LoggerService::error($message, ['http_status' => $response->status()]);
         throw new self($message);
     }
 
@@ -57,7 +58,13 @@ class PayUResponseException extends PayUGeneralException
     public static function notFound(Response $response)
     {
         $message = '[HTTP: '. $response->status() . '] PayU not found' ;
-        LoggerService::warning($message, ['http_status' => $response->status()]);
+        LoggerService::error($message, ['http_status' => $response->status()]);
         throw new self($message);
+    }
+
+    public function getReason(): string
+    {
+        preg_match('/\((.*?)\)/', $this->getMessage(), $matches);
+        return $matches[1] ?? 'Unknown';
     }
 }

@@ -26,6 +26,7 @@ Route::name('payu.')
             ->prefix('payu-refunds')
             ->group(function () {
                 Route::get('', [RefundController::class, 'index'])->name('index');
+                Route::get('{refund}', [RefundController::class, 'retry'])->name('retry');
                 Route::post('{transaction}/create', [RefundController::class, 'store'])->name('store');
                 Route::delete('{refund}', [RefundController::class, 'destroy'])->name('destroy');
             });
@@ -35,7 +36,7 @@ Route::name('payu.')
             ->group(function () {
                 Route::get('', [PayoutController::class, 'index'])->name('index');
                 Route::post('', [PayoutController::class, 'store'])->name('store');
-                Route::patch('{payout}', [PayoutController::class, 'update'])->name('update');
+                Route::patch('{payout}', [PayoutController::class, 'update'])->name('retry');
                 Route::delete('{payout}', [PayoutController::class, 'destroy'])->name('destroy');
             });
 

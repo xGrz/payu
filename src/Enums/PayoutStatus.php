@@ -23,7 +23,7 @@ enum PayoutStatus: int implements WithColors, WithActions
     {
         return match($this) {
             self::INIT, self::SCHEDULED => ['send', 'delete'],
-            self::PENDING,self::WAITING => ['update', 'refresh-status'],
+            self::PENDING,self::WAITING => ['retry', 'refresh-status'],
             self::REALIZED, self::CANCELED => []
         };
     }
@@ -42,7 +42,7 @@ enum PayoutStatus: int implements WithColors, WithActions
     {
         $updatable = [];
         foreach (self::cases() as $case) {
-            if ($case->hasAction('update')) $updatable[] = $case;
+            if ($case->hasAction('retry')) $updatable[] = $case;
         }
         return $updatable;
     }

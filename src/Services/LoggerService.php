@@ -26,7 +26,7 @@ class LoggerService
     {
         if (!Config::shouldBeLogged()) return;
         if (!isset($context['userId'])) $context['userId'] = auth()->id();
-        Log::notice('PayU | ' . $message, $context);
+        Log::warning('PayU | ' . $message, $context);
     }
 
     public static function error(string $message, array $context = []): void

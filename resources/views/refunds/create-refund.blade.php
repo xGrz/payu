@@ -11,8 +11,8 @@
                 type="number"
                 name="amount"
                 step="0.01"
-                max="{{ $transaction->amount - $transaction->refunded }}"
-                value="{{ $transaction->amount - $transaction->refunded }}"
+                max="{{ ($transaction->amount - $transaction->refunded) / 100}}"
+                value="{{($transaction->amount - $transaction->refunded) / 100 }}"
                 label="Amount"
             />
             <x-payu::input

@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->string('currency_code')->nullable();
             $table->string('ext_refund_id')->nullable();
             $table->string('refund_id')->nullable();
+            $table->string('error')->nullable();
             $table->timestamps();
         });
 

@@ -60,7 +60,7 @@
                         </x-payu::table.cell>
                         <x-payu::table.cell class="text-right">
                             @if($payout->status->hasAction('refresh-status') && $payout->updated_at < now()->subHour())
-                                <form action="{{ route('payu.payouts.update', $payout->id) }}" method="POST" id="payout_refresh_{{$payout->id}}">
+                                <form action="{{ route('payu.payouts.retry', $payout->id) }}" method="POST" id="payout_refresh_{{$payout->id}}">
                                     @csrf @method('PATCH')
                                 </form>
                                 <x-payu::button type="submit" form="payout_refresh_{{$payout->id}}" color="info" size="small">

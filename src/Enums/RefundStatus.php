@@ -14,19 +14,23 @@ enum RefundStatus: int implements WithColors, WithActions
     use WithNames, HasLabels, HasActions;
 
     case INITIALIZED = 0;
-    case SCHEDULED = 10;
     case SENT = 1;
     case PENDING = 2;
     case CANCELED = 3;
     case FINALIZED = 4;
     case ERROR = 5;
 
+    case SCHEDULED = 10;
+    case RETRY = 11;
+
     public function actions(): array
     {
         return match ($this) {
             self::INITIALIZED, self::SCHEDULED => ['send', 'delete', 'in-progress'],
             self::SENT, self::PENDING, self::FINALIZED => ['success'],
-            self::CANCELED, self::ERROR => ['failed'],
+            self::CANCELED => ['failed'],
+            self::ERROR => ['failed', 'retry', 'delete'],
+            self::RETRY => ['send'],
             default => []
         };
     }
@@ -36,7 +40,7 @@ enum RefundStatus: int implements WithColors, WithActions
         return match ($this) {
             self::INITIALIZED, self::SCHEDULED => 'gray',
             self::SENT, self::PENDING => 'info',
-            self::CANCELED => 'warning',
+            self::CANCELED, self::RETRY => 'warning',
             self::FINALIZED => 'success',
             self::ERROR => 'danger',
             default => ''

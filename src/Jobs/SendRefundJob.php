@@ -17,7 +17,7 @@ class SendRefundJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 3;
+    public int $tries = 1;
 
     public function __construct(public Refund $refund)
     {
@@ -29,14 +29,25 @@ class SendRefundJob implements ShouldQueue, ShouldBeUnique
     public function handle(): void
     {
         if (!$this->refund->status->hasAction('send')) {
-            throw new PayUGeneralException('Refund send failed. [Send] action unavailable');
+            throw new PayUGeneralException('Refund send failed. [Send/retry] action unavailable');
         }
 
-        $response = SendRequestRefund::callApi($this->refund)?->asObject();
-        $this->refund->update([
-            'refund_id' => $response->refund_id,
-            'status' => RefundStatus::findByName($response->status),
-        ]);
+        try {
+            $response = SendRequestRefund::callApi($this->refund)?->toArray();
+
+            $this->refund->update([
+                'refund_id' => $response['refund_id'],
+                'status' => RefundStatus::findByName($response['status']),
+                'error' => null,
+            ]);
+        } catch (PayUGeneralException $e) {
+            $this->refund->update([
+                'status' => RefundStatus::ERROR,
+                'error' => $e->getReason(),
+            ]);
+        }
+
+
 
     }
 

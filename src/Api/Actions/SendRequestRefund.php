@@ -13,6 +13,8 @@ class SendRequestRefund extends BaseApiCall
 
 
     /**
+     * @param Refund $refund
+     * @return SendRefundRequestResponse
      * @throws PayUGeneralException
      */
     public static function callApi(Refund $refund): SendRefundRequestResponse

@@ -29,6 +29,9 @@
                         <x-payu::table.cell>{{ $refund->bank_description }}</x-payu::table.cell>
                         <x-payu::table.cell>
                             <x-payu::status :status="$refund->status"/>
+                            @if($refund->error)
+                                <small class="block">{{$refund->error}}</small>
+                            @endif
                         </x-payu::table.cell>
                         <x-payu::table.cell
                             class="text-right">{{ humanAmount($refund->amount, $refund->currency_code) }}</x-payu::table.cell>
@@ -42,6 +45,11 @@
                                 <x-payu::button class="text-red-500" form="delete_refund_{{$refund->id}}" size="small"
                                                 color="danger" type="submit">Delete
                                 </x-payu::button>
+                            @endif
+                            @if($refund->status->hasAction('retry'))
+                                <x-payu::buttonlink href="{{route('payu.refunds.retry', $refund->id)}}">
+                                    Retry
+                                </x-payu::buttonlink>
                             @endif
                         </x-payu::table.cell>
                     </x-payu::table.row>
