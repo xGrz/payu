@@ -1,4 +1,4 @@
-@props(['class' => 'w-64 h64'])
+@props(['class' => 'w-64 h-64'])
 
 <svg class="{{ $class }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
     <path fill-rule="evenodd"
