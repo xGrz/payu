@@ -26,10 +26,8 @@ class PayUResponseException extends PayUGeneralException
      */
     public static function bedRequest(Response $response)
     {
-        $message = '[HTTP: '. $response->status() . '] PayU Bad request';
-        if ($response->json('status.codeLiteral')) $message .= '(' . $response->json('status.codeLiteral') .')' ;
-        LoggerService::error($message, ['http_status' => $response->status(), 'response' => $response->json()]);
-        throw new self($message, $response->json('status.code'));
+        LoggerService::error(self::buildLogMessage($response), self::getContext($response));
+        throw new self(self::buildLogMessage($response), $response->json('status.code') ?? $response->status());
     }
 
     /**
@@ -37,9 +35,8 @@ class PayUResponseException extends PayUGeneralException
      */
     public static function unAuthorized(Response $response)
     {
-        $message = '[HTTP: '. $response->status() . '] PayU unauthorized' ;
-        LoggerService::error($message, ['http_status' => $response->status()]);
-        throw new self($message);
+        LoggerService::error(self::buildLogMessage($response), self::getContext($response));
+        throw new self(self::buildLogMessage($response), $response->json('status.code') ?? $response->status());
     }
 
     /**
@@ -47,9 +44,8 @@ class PayUResponseException extends PayUGeneralException
      */
     public static function forbidden(Response $response)
     {
-        $message = '[HTTP: '. $response->status() . '] PayU forbidden' ;
-        LoggerService::error($message, ['http_status' => $response->status()]);
-        throw new self($message);
+        LoggerService::error(self::buildLogMessage($response), self::getContext($response));
+        throw new self(self::buildLogMessage($response), $response->json('status.code') ?? $response->status());
     }
 
     /**
@@ -57,14 +53,42 @@ class PayUResponseException extends PayUGeneralException
      */
     public static function notFound(Response $response)
     {
-        $message = '[HTTP: '. $response->status() . '] PayU not found' ;
-        LoggerService::error($message, ['http_status' => $response->status()]);
-        throw new self($message);
+        LoggerService::error(self::buildLogMessage($response), self::getContext($response));
+        throw new self(self::buildLogMessage($response), $response->json('status.code') ?? $response->status());
     }
 
     public function getReason(): string
     {
         preg_match('/\((.*?)\)/', $this->getMessage(), $matches);
         return $matches[1] ?? 'Unknown';
+    }
+
+    private static function buildLogMessage(Response $response): string
+    {
+        $errorLiteral = match ($response->status()) {
+            400 => 'Bad request',
+            401 => 'Unauthorized',
+            403 => 'Forbidden',
+            404 => 'Not found'
+
+        };
+
+        return '[HTTP: ' . $response->status() . "] $errorLiteral " . self::getErrorDescription($response);
+    }
+
+    private static function getErrorDescription(Response $response)
+    {
+        return $response->json('status.codeLiteral')
+            ?? $response->json('status.statusDesc')
+            ?? $response->json('status.error_description')
+            ?? '';
+    }
+
+    private static function getContext(Response $response): array
+    {
+        return [
+            'http_status' => $response->status(),
+            'response' => $response->json()
+        ];
     }
 }

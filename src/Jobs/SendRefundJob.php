@@ -29,7 +29,7 @@ class SendRefundJob implements ShouldQueue, ShouldBeUnique
     public function handle(): void
     {
         if (!$this->refund->status->hasAction('send')) {
-            throw new PayUGeneralException('Refund send failed. [Send/retry] action unavailable');
+            throw new PayUGeneralException('Refund send failed. [Send] action unavailable');
         }
 
         try {
@@ -38,7 +38,6 @@ class SendRefundJob implements ShouldQueue, ShouldBeUnique
             $this->refund->update([
                 'refund_id' => $response['refund_id'],
                 'status' => RefundStatus::findByName($response['status']),
-                'error' => null,
             ]);
         } catch (PayUGeneralException $e) {
             $this->refund->update([

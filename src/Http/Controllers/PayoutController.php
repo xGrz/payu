@@ -24,8 +24,7 @@ class PayoutController extends Controller
 
     public function store(PayoutRequest $request): RedirectResponse
     {
-        $payout = PayU::payout($request->validated('payoutAmount'));
-        return $payout
+        return PayU::payout($request->validated('payoutAmount'))
             ? to_route('payu.payouts.index')->with('success', 'Payout has been scheduled')
             : to_route('payu.payouts.index')->with('error', 'Payout not initialed. Error occurred.');
     }
@@ -36,11 +35,16 @@ class PayoutController extends Controller
         return back()->with('success', 'Payout status retry in progress');
     }
 
+    public function retry(Payout $payout)
+    {
+        return PayU::retryPayout($payout)
+            ? back()->with('success', 'Retry payout has been dispatched')
+            : back()->with('error', 'Retry payout failed');
+    }
+
     public function destroy(Payout $payout)
     {
-        $canceled = PayU::cancelPayout($payout);
-
-        return $canceled
+        return PayU::cancelPayout($payout)
             ? back()->with('success', 'Payout request has been successfully removed')
             : back()->with('error', 'Error! Payout request cannot be removed');
     }

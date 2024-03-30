@@ -5,11 +5,14 @@ namespace xGrz\PayU\Facades;
 use xGrz\PayU\Actions\SyncPaymentMethods;
 use xGrz\PayU\Api\Actions\AcceptPayment;
 use xGrz\PayU\Api\Actions\CancelOrder;
+use xGrz\PayU\Api\Actions\CreatePaymentAction;
 use xGrz\PayU\Api\Actions\GetPaymentMethods;
 use xGrz\PayU\Api\Actions\ShopBalance;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;
 use xGrz\PayU\Api\Responses\ShopBalanceResponse;
+use xGrz\PayU\Enums\PayoutStatus;
 use xGrz\PayU\Enums\RefundStatus;
+use xGrz\PayU\Jobs\SendPayoutJob;
 use xGrz\PayU\Jobs\SendRefundJob;
 use xGrz\PayU\Jobs\UpdatePayoutStatusJob;
 use xGrz\PayU\Models\Payout;
@@ -18,6 +21,17 @@ use xGrz\PayU\Models\Transaction;
 
 class PayU
 {
+
+    public static function getTransactionWizard()
+    {
+        return new TransactionWizard();
+    }
+
+    public static function createPayment(TransactionWizard $transaction)
+    {
+        return CreatePaymentAction::callApi($transaction);
+    }
+
     public static function accept(Transaction $transaction): bool
     {
         try {
@@ -54,6 +68,7 @@ class PayU
 
     public static function retryRefund(Refund $refund, int $delay = null): bool
     {
+        // todo: add protection
         SendRefundJob::dispatch($refund)
             ->delay(is_null($delay) ? Config::getRefundSendDelay() : 0);
 
@@ -87,6 +102,18 @@ class PayU
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+    public static function retryPayout(Payout $payout, int $delay = null): bool
+    {
+        // todo: add protection
+
+        SendPayoutJob::dispatch($payout)
+            ->delay(is_null($delay) ? Config::getPayoutSendDelay() : 0);
+        $payout
+            ->update(['status' => PayoutStatus::RETRY]);
+
+        return true;
     }
 
     public static function payoutStatusCheck(Payout $payout, int $delay = null): void

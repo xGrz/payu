@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use xGrz\PayU\Api\Actions\SendPayoutRequest;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;
+use xGrz\PayU\Enums\PayoutStatus;
 use xGrz\PayU\Facades\PayU;
 use xGrz\PayU\Models\Payout;
 
@@ -32,13 +33,21 @@ class SendPayoutJob implements ShouldQueue, ShouldBeUnique
             throw new PayUGeneralException('Payout send failed. [Send] action unavailable');
         }
 
-        $response = SendPayoutRequest::callApi($this->payout->amount * 100)?->asObject();
-        $this->payout->update([
-            'payout_id' => $response->payout_id,
-            'status' => $response->status,
-        ]);
+        try {
+            $response = SendPayoutRequest::callApi($this->payout->amount * 100)?->asObject();
+            $this->payout->update([
+                'payout_id' => $response->payout_id,
+                'status' => $response->status,
+            ]);
+            PayU::payoutStatusCheck($this->payout);
 
-        PayU::payoutStatusCheck($this->payout);
+        } catch (PayUGeneralException $e) {
+            $this->payout->update([
+                'status' => PayoutStatus::CANCELED,
+                'error' => $e->getReason()
+            ]);
+        }
+
     }
 
     public function uniqueId(): string

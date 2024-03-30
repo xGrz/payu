@@ -3,10 +3,8 @@
 namespace xGrz\PayU\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use xGrz\PayU\Facades\Config;
 use xGrz\PayU\Facades\PayU;
 use xGrz\PayU\Http\Requests\StoreRefundRequest;
-use xGrz\PayU\Jobs\SendRefundJob;
 use xGrz\PayU\Models\Refund;
 use xGrz\PayU\Models\Transaction;
 
@@ -37,16 +35,14 @@ class RefundController extends Controller
 
     public function retry(Refund $refund)
     {
-        PayU::retryRefund($refund, );
-        SendRefundJob::dispatch($refund)->delay(Config::getRefundSendDelay());
-        return back()->with('success', 'Retry refund send dispatched');
+        return PayU::retryRefund($refund)
+            ? back()->with('success', 'Retry refund has been dispatched')
+            : back()->with('error', 'Retry refund failed');
     }
 
     public function destroy(Refund $refund)
     {
-        $canceled = PayU::cancelRefund($refund);
-
-        return $canceled
+        return PayU::cancelRefund($refund)
             ? back()->with('success', 'Refund successfully canceled')
             : back()->with('error', 'Sorry, refund request has been already sent.');
     }

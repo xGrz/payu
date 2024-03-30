@@ -10,7 +10,7 @@ use xGrz\PayU\Api\Notification\TransactionStatusNotificationHandler;
 use xGrz\PayU\Http\Requests\NotificationRequest;
 use xGrz\PayU\Models\Transaction;
 
-class NotificationController extends Controller
+class NotificationWebhookController extends Controller
 {
 
 

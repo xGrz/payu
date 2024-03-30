@@ -3,7 +3,7 @@
 namespace xGrz\PayU\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use xGrz\PayU\Actions\SyncPaymentMethods;
+use xGrz\PayU\Facades\PayU;
 use xGrz\PayU\Models\Method;
 
 class MethodsController extends Controller
@@ -18,7 +18,7 @@ class MethodsController extends Controller
 
     public function synchronize()
     {
-        return SyncPaymentMethods::handle()
+        return PayU::syncMethods()
             ? back()->with('success', 'Payment methods successfully synchronized.')
             : back()->with('error', 'Error synchronizing payment methods.');
 

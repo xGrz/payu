@@ -13,18 +13,21 @@ enum PayoutStatus: int implements WithColors, WithActions
     use WithNames, HasLabels, HasActions;
 
     case INIT = 0;
-    case SCHEDULED = 10;
     case PENDING = 1;
     case WAITING = 2;
     case CANCELED = 5;
     case REALIZED = 4;
+    case SCHEDULED = 10;
+    case RETRY = 11;
 
     public function actions(): array
     {
         return match($this) {
             self::INIT, self::SCHEDULED => ['send', 'delete'],
-            self::PENDING,self::WAITING => ['retry', 'refresh-status'],
-            self::REALIZED, self::CANCELED => []
+            self::PENDING,self::WAITING => ['refresh-status'],
+            self::RETRY => ['send', 'failed', 'delete'],
+            self::CANCELED => ['failed', 'delete', 'retry'],
+            self::REALIZED => ['success']
         };
     }
 

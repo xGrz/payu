@@ -42,51 +42,39 @@
             <x-payu::paper-title title="Payout listing"/>
 
             @if($payouts->count())
-            <x-payu::table class="w-full">
-                <x-payu::table.thead>
-                    <x-payu::table.row>
-                        <x-payu::table.header class="text-left">Payout ordered at</x-payu::table.header>
-                        <x-payu::table.header class="text-right">Amount</x-payu::table.header>
-                        <x-payu::table.header class="text-right">Status</x-payu::table.header>
-                        <x-payu::table.header class="text-right"></x-payu::table.header>
-                    </x-payu::table.row>
-                </x-payu::table.thead>
-                <tbody>
-                @foreach($payouts as $payout)
-                    <x-payu::table.row>
-                        <x-payu::table.cell>{{ $payout->created_at }}</x-payu::table.cell>
-                        <x-payu::table.cell
-                            class="text-right">{{ Number::currency($payout->amount, 'PLN', 'pl') }}</x-payu::table.cell>
-                        <x-payu::table.cell class="text-right">
-                            <x-payu::status :status="$payout->status"/>
-                        </x-payu::table.cell>
-                        <x-payu::table.cell class="text-right">
-                            @if($payout->status->hasAction('refresh-status') && $payout->updated_at < now()->subHour())
-                                <form action="{{ route('payu.payouts.retry', $payout->id) }}" method="POST" id="payout_refresh_{{$payout->id}}">
-                                    @csrf @method('PATCH')
-                                </form>
-                                <x-payu::button type="submit" form="payout_refresh_{{$payout->id}}" color="info" size="small">
-                                    Refresh
-                                </x-payu::button>
-                            @endif
-                            @if($payout->status->hasAction('delete'))
-                                <form action="{{route('payu.payouts.destroy', $payout->id)}}" method="POST" id="payout_{{$payout->id}}">
-                                    @csrf @method('DELETE')
-                                </form>
-                                <x-payu::button type="submit" color="danger" form="payout_{{$payout->id}}" size="small">
-                                    Delete
-                                </x-payu::button>
-                            @endif
-                        </x-payu::table.cell>
-                    </x-payu::table.row>
-                @endforeach
-                </tbody>
-            </x-payu::table>
-            <div class="py-2">
-                <x-payu::pagination :source="$payouts"/>
-            </div>
+                <x-payu::table class="w-full">
+                    <x-payu::table.thead>
+                        <x-payu::table.row>
+                            <x-payu::table.header class="text-left">Payout ordered at</x-payu::table.header>
+                            <x-payu::table.header class="text-right">Amount</x-payu::table.header>
+                            <x-payu::table.header class="text-right">Status</x-payu::table.header>
+                            <x-payu::table.header class="text-right"></x-payu::table.header>
+                        </x-payu::table.row>
+                    </x-payu::table.thead>
+                    <tbody>
+                    @foreach($payouts as $payout)
+                        <x-payu::table.row>
+                            <x-payu::table.cell>{{ $payout->created_at }}</x-payu::table.cell>
+                            <x-payu::table.cell
+                                class="text-right">{{ Number::currency($payout->amount, 'PLN', 'pl') }}</x-payu::table.cell>
+                            <x-payu::table.cell class="text-right">
+                                <x-payu::status :status="$payout->status"/>
+                                @if($payout->errorDescription)
+                                    <small class="block">{{$payout->errorDescription}}</small>
+                                @endif
+                            </x-payu::table.cell>
+                            <x-payu::table.cell class="text-right text-nowrap">
+                                @include('payu::payouts.partials.actions')
+                            </x-payu::table.cell>
+                        </x-payu::table.row>
+                    @endforeach
+                    </tbody>
+                </x-payu::table>
+                <div class="py-2">
+                    <x-payu::pagination :source="$payouts"/>
+                </div>
             @else
-                <x-payu::not-found message="Payouts not found" />
+                <x-payu::not-found message="Payouts not found"/>
             @endif
         </x-payu::paper>
     @endif
