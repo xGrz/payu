@@ -40,6 +40,8 @@
         <x-payu::pagination.info :source="$payouts"/>
         <x-payu::paper class="bg-slate-800">
             <x-payu::paper-title title="Payout listing"/>
+
+            @if($payouts->count())
             <x-payu::table class="w-full">
                 <x-payu::table.thead>
                     <x-payu::table.row>
@@ -83,6 +85,9 @@
             <div class="py-2">
                 <x-payu::pagination :source="$payouts"/>
             </div>
+            @else
+                <x-payu::not-found message="Payouts not found" />
+            @endif
         </x-payu::paper>
     @endif
 
