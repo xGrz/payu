@@ -22,7 +22,7 @@ use xGrz\PayU\Models\Transaction;
 class PayU
 {
 
-    public static function getTransactionWizard()
+    public static function getTransactionWizard(): TransactionWizard
     {
         return new TransactionWizard();
     }
