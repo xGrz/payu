@@ -24,10 +24,10 @@ enum PayoutStatus: int implements WithColors, WithActions
     {
         return match($this) {
             self::INIT, self::SCHEDULED => ['send', 'delete'],
-            self::PENDING,self::WAITING => ['refresh-status'],
-            self::RETRY => ['send', 'failed', 'delete'],
-            self::CANCELED => ['failed', 'delete', 'retry'],
-            self::REALIZED => ['success']
+            self::PENDING, self::WAITING => ['processing', 'success'],
+            self::CANCELED => ['delete', 'retry', 'failed'],
+            self::REALIZED => ['success'],
+            self::RETRY => ['send', 'failed'],
         };
     }
 

@@ -13,6 +13,7 @@ use xGrz\PayU\Api\Exceptions\PayUGeneralException;
 use xGrz\PayU\Enums\PayoutStatus;
 use xGrz\PayU\Facades\PayU;
 use xGrz\PayU\Models\Payout;
+use xGrz\PayU\Services\LoggerService;
 
 class SendPayoutJob implements ShouldQueue, ShouldBeUnique
 {
@@ -30,7 +31,12 @@ class SendPayoutJob implements ShouldQueue, ShouldBeUnique
     public function handle(): void
     {
         if (!$this->payout->status->hasAction('send')) {
-            throw new PayUGeneralException('Payout send failed. [Send] action unavailable');
+            LoggerService::error('Payout dispatching failed', [
+                'payout_status' => $this->payout->status->name,
+                'actions' => $this->payout->status->actions(),
+                'requested_action' => 'send'
+            ]);
+            throw new PayUGeneralException('Payout dispatching failed. [Send] action unavailable');
         }
 
         try {
