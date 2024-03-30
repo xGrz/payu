@@ -25,7 +25,7 @@
                         </x-payu::table.cell>
                         <x-payu::table.cell>{{$refund->description}}</x-payu::table.cell>
                         <x-payu::table.cell>{{$refund->bankDescription}}</x-payu::table.cell>
-                        <x-payu::table.cell class="text-right">{{$refund->amount}}</x-payu::table.cell>
+                        <x-payu::table.cell class="text-right">{{ humanAmount($refund->amount)}}</x-payu::table.cell>
                         <x-payu::table.cell class="text-right">
                             <x-payu::status :status="$refund->status"/>
                         </x-payu::table.cell>
@@ -37,7 +37,7 @@
                 <x-payu::pagination :source="$refunds"/>
             </div>
         @else
-            <x-payu::not-found message="Refunds not found" />
+            <x-payu::not-found message="Refunds not found"/>
         @endif
 
     </x-payu::paper>

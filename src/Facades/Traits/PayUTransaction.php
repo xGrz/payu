@@ -1,11 +1,12 @@
 <?php
 
-namespace xGrz\PayU\Facades;
+namespace xGrz\PayU\Facades\Traits;
 
 use xGrz\PayU\Api\Actions\AcceptPayment;
 use xGrz\PayU\Api\Actions\CancelOrder;
 use xGrz\PayU\Api\Actions\CreatePaymentAction;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;
+use xGrz\PayU\Facades\TransactionWizard;
 use xGrz\PayU\Models\Transaction;
 
 trait PayUTransaction

@@ -70,13 +70,16 @@ class PayUResponseException extends PayUGeneralException
             401 => 'Unauthorized',
             403 => 'Forbidden',
             404 => 'Not found'
-
         };
 
-        return '[HTTP: ' . $response->status() . "] $errorLiteral " . self::getErrorDescription($response);
+        $errorDescription = self::getErrorDescription($response);
+        if (!empty($errorDescription)) {
+            $errorDescription = '(' . $errorDescription . ')';
+        }
+        return '[HTTP: ' . $response->status() . "] $errorLiteral " . $errorDescription;
     }
 
-    private static function getErrorDescription(Response $response)
+    private static function getErrorDescription(Response $response): string
     {
         return $response->json('status.codeLiteral')
             ?? $response->json('status.statusDesc')

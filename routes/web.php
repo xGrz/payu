@@ -36,7 +36,8 @@ Route::name('payu.')
             ->group(function () {
                 Route::get('', [PayoutController::class, 'index'])->name('index');
                 Route::post('', [PayoutController::class, 'store'])->name('store');
-                Route::patch('{payout}', [PayoutController::class, 'update'])->name('retry');
+                Route::patch('{payout}/status', [PayoutController::class, 'update'])->name('status');
+                Route::patch('{payout}/retry', [PayoutController::class, 'retry'])->name('retry');
                 Route::delete('{payout}', [PayoutController::class, 'destroy'])->name('destroy');
             });
 

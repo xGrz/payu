@@ -19,7 +19,7 @@ class SendPayoutJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public int $tries = 1;
+    public int $tries = 2;
 
     public function __construct(public Payout $payout)
     {
@@ -38,7 +38,6 @@ class SendPayoutJob implements ShouldQueue, ShouldBeUnique
             ]);
             throw new PayUGeneralException('Payout dispatching failed. [Send] action unavailable');
         }
-
         try {
             $response = SendPayoutRequest::callApi($this->payout->amount * 100)?->asObject();
             $this->payout->update([
