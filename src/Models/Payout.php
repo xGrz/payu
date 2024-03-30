@@ -18,5 +18,18 @@ class Payout extends Model
         'amount' => Amount::class,
     ];
 
+    protected $appends = [
+        'errorDescription'
+    ];
+
+
     protected $guarded = ['id', 'payoutId'];
+
+    public function getErrorDescriptionAttribute(): string
+    {
+        return $this->error
+            ? str($this->error)->lower()->headline()->lower()->ucfirst()
+            : '';
+
+    }
 }
