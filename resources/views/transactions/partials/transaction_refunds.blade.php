@@ -30,7 +30,7 @@
                         <x-payu::table.cell>
                             <x-payu::status :status="$refund->status"/>
                             @if($refund->error)
-                                <small class="block">{{$refund->error}}</small>
+                                <small class="block">{{ $refund->errorDescription }}</small>
                             @endif
                         </x-payu::table.cell>
                         <x-payu::table.cell

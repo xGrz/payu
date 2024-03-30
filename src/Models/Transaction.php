@@ -42,13 +42,29 @@ class Transaction extends Model
         return $this
             ->refunds
             ->whereIn('status', RefundStatus::withAction('success'))
-            ->sum('amount')
-        ;
+            ->sum('amount');
     }
 
     public function hasRefunds(): bool
     {
-        return count($this->refunds);
+        return (bool)$this->refunded();
+    }
+
+    public function hasDefinedRefunds()
+    {
+        return $this
+            ->refunds
+            ->whereNotIn('status', RefundStatus::withAction('success'))
+            ->whereNotIn('status', RefundStatus::withAction('failed'))
+            ->sum('amount');
+    }
+
+    public function hasFailedRefunds()
+    {
+        return $this
+            ->refunds
+            ->whereIn('status', RefundStatus::withAction('failed'))
+            ->sum('amount');
     }
 
     public function maxRefundAmount(): float|int

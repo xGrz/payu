@@ -17,10 +17,22 @@ class Refund extends Model
         'amount' => Amount::class
     ];
 
+    protected $appends = [
+        'errorDescription'
+    ];
+
 
     public function transaction(): BelongsTo
     {
         return $this->belongsTo(Transaction::class, 'transaction_id');
+    }
+
+    public function getErrorDescriptionAttribute(): string
+    {
+        return $this->error
+            ? str($this->error)->lower()->headline()->lower()->ucfirst()
+            : '';
+
     }
 
 }

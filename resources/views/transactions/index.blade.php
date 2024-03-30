@@ -66,9 +66,15 @@
                                 </small>
                             @endif
                         </x-payu::table.cell>
-                        <x-payu::table.cell class="text-red-500 text-right">
+                        <x-payu::table.cell class="text-right">
                             @if($transaction->hasRefunds())
-                                <small>{{ humanAmount($transaction->refunded()) }}</small>
+                                <small class="block text-green-500">{{ humanAmount($transaction->refunded()) }}</small>
+                            @endif
+                            @if($transaction->hasDefinedRefunds())
+                                <small class="block text-slate-500">{{ humanAmount($transaction->hasDefinedRefunds()) }}</small>
+                            @endif
+                            @if($transaction->hasFailedRefunds())
+                                <small class="block text-red-500">{{ humanAmount($transaction->hasFailedRefunds()) }}</small>
                             @endif
                         </x-payu::table.cell>
                         <x-payu::table.cell>

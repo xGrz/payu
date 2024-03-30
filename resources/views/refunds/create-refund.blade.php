@@ -11,7 +11,7 @@
                     type="number"
                     name="amount"
                     step="0.01"
-                    max="{{$transaction->maxRefundAmount()}}"
+{{--                    max="{{$transaction->maxRefundAmount()}}"--}}
                     value="{{$transaction->maxRefundAmount()}}"
                 label="Amount"
             />

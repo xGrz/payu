@@ -30,7 +30,7 @@ enum RefundStatus: int implements WithColors, WithActions
             self::SENT, self::PENDING, self::FINALIZED => ['success'],
             self::CANCELED => ['failed'],
             self::ERROR => ['failed', 'retry', 'delete'],
-            self::RETRY => ['send'],
+            self::RETRY => ['send', 'failed'],
             default => []
         };
     }
