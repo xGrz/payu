@@ -3,7 +3,6 @@
 namespace xGrz\PayU\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use xGrz\PayU\Enums\RefundStatus;
 use xGrz\PayU\Facades\Config;
 use xGrz\PayU\Facades\PayU;
 use xGrz\PayU\Http\Requests\StoreRefundRequest;
@@ -38,10 +37,8 @@ class RefundController extends Controller
 
     public function retry(Refund $refund)
     {
-        if (!$refund->status->hasAction('retry')) return back()->with('error', 'Retry failed.');
-
+        PayU::retryRefund($refund, );
         SendRefundJob::dispatch($refund)->delay(Config::getRefundSendDelay());
-        $refund->update(['status' => RefundStatus::RETRY, 'error' => null]);
         return back()->with('success', 'Retry refund send dispatched');
     }
 

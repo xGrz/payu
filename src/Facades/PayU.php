@@ -9,6 +9,8 @@ use xGrz\PayU\Api\Actions\GetPaymentMethods;
 use xGrz\PayU\Api\Actions\ShopBalance;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;
 use xGrz\PayU\Api\Responses\ShopBalanceResponse;
+use xGrz\PayU\Enums\RefundStatus;
+use xGrz\PayU\Jobs\SendRefundJob;
 use xGrz\PayU\Jobs\UpdatePayoutStatusJob;
 use xGrz\PayU\Models\Payout;
 use xGrz\PayU\Models\Refund;
@@ -50,6 +52,17 @@ class PayU
         return true;
     }
 
+    public static function retryRefund(Refund $refund, int $delay = null): bool
+    {
+        SendRefundJob::dispatch($refund)
+            ->delay(is_null($delay) ? Config::getRefundSendDelay() : 0);
+
+        $refund
+            ->update(['status' => RefundStatus::RETRY]);
+        return true;
+
+    }
+
     public static function cancelRefund(Refund $refund): bool
     {
         if (!$refund->status->hasAction('delete')) return false;
@@ -78,9 +91,8 @@ class PayU
 
     public static function payoutStatusCheck(Payout $payout, int $delay = null): void
     {
-        if (is_null($delay)) $delay = Config::getPayoutInterval();
-
-        dispatch(new UpdatePayoutStatusJob($payout))->delay($delay);
+        dispatch(new UpdatePayoutStatusJob($payout))
+            ->delay(is_null($delay) ? Config::getPayoutInterval() : $delay);
 
     }
 
