@@ -8,11 +8,11 @@
         <form action="{{route('payu.refunds.store', $transaction->id)}}" method="POST" class="px-2">
             @csrf
             <x-payu::input
-                type="number"
-                name="amount"
-                step="0.01"
-                max="{{ ($transaction->amount - $transaction->refunded) / 100}}"
-                value="{{($transaction->amount - $transaction->refunded) / 100 }}"
+                    type="number"
+                    name="amount"
+                    step="0.01"
+                    max="{{$transaction->maxRefundAmount()}}"
+                    value="{{$transaction->maxRefundAmount()}}"
                 label="Amount"
             />
             <x-payu::input
