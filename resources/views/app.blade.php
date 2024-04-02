@@ -8,6 +8,9 @@
     <title>Laravel-App-Settings</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="//unpkg.com/alpinejs" defer></script>
+    <style>
+        @yield('css')
+    </style>
 </head>
 <body class="flex flex-col min-h-full">
 

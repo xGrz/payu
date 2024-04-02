@@ -14,7 +14,9 @@ Route::name('payu.')
             ->prefix('payu-payments')
             ->group(function () {
                 Route::get('', [PaymentController::class, 'index'])->name('index');
+                Route::get('create', [PaymentController::class, 'create'])->name('create');
                 Route::post('store', [PaymentController::class, 'store'])->name('store');
+                Route::post('store-fake', [PaymentController::class, 'storeFake'])->name('storeFake');
                 Route::patch('{transaction}/accept', [PaymentController::class, 'accept'])->name('accept');
                 Route::delete('{transaction}/reject', [PaymentController::class, 'reject'])->name('reject');
                 Route::get('{transaction}', [PaymentController::class, 'show'])->name('show');

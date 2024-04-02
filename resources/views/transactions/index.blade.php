@@ -22,11 +22,12 @@
     <x-payu::pagination.info :source="$transactions"/>
     <x-payu::paper class="bg-slate-800">
         <x-payu::paper-title title="Transactions listing">
-            <form action="{{route('payu.payments.store')}}" method="POST" id="createTransaction">
+            <x-payu::buttonlink href="{{route('payu.payments.create')}}">Wizard</x-payu::buttonlink>
+            <form action="{{route('payu.payments.storeFake')}}" method="POST" id="createTransaction" class="hidden">
                 @csrf
             </form>
             <x-payu::button type="submit" form="createTransaction" color="success">
-                Create fake payment
+                Fake payment
             </x-payu::button>
             <x-payu::buttonlink href="https://merch-prod.snd.payu.com/user/login?lang=pl" target="new" color="warning">
                 PayU-Panel

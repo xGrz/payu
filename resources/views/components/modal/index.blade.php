@@ -1,13 +1,14 @@
 @props(['title' => 'Title', 'watchErrors' => []])
 
 <?php
+
+$shouldBeOpen = false;
 if ($watchErrors) {
-    $shouldBeOpen = false;
     foreach ($watchErrors as $errorName) {
         if ($errors->has($errorName)) $shouldBeOpen = true;
     }
-    $shouldBeOpen = $shouldBeOpen ? 'true' : 'false';
 }
+$shouldBeOpen = $shouldBeOpen ? 'true' : 'false';
 
 ?>
 
