@@ -3,14 +3,18 @@
 return [
     'use_sandbox' => true,
 
-    'delay' => [
-        'refund' => 30,
-        'payout' => 30,
-
+    'job_delay' => [
+        'refund' => [
+            'send' => 30,
+            'retry' => 3
+        ],
+        'payout' => [
+            'send' => 30,
+            'retry' => 3
+        ],
     ],
     'interval' => [
         'payout_status_check' => 60,
-        'refund_status_check' => 60,
     ],
 
     'routing' => [

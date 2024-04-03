@@ -48,7 +48,7 @@ trait PayUPayouts
             ->update(['status' => PayoutStatus::RETRY]);
 
         SendPayoutJob::dispatch($payout)
-            ->delay(is_null($delay) ? Config::getPayoutSendDelay() : 0);
+            ->delay(is_null($delay) ? Config::getPayoutRetryDelay() : $delay);
 
 
         return true;

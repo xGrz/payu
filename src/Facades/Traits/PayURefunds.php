@@ -26,7 +26,7 @@ trait PayURefunds
     {
         // todo: add protection
         SendRefundJob::dispatch($refund)
-            ->delay(is_null($delay) ? Config::getRefundSendDelay() : 0);
+            ->delay(is_null($delay) ? Config::getRefundRetryDelay() : $delay);
 
         $refund
             ->update(['status' => RefundStatus::RETRY]);

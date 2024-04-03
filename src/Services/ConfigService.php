@@ -84,17 +84,22 @@ class ConfigService
 
     public function getPayoutSendDelay(): int
     {
-        return config('payu.delay.payout', 60);
+        return config('payu.job_delay.payout.send', 60);
     }
 
-    public function getRefundInterval():int
+    public function getPayoutRetryDelay(): int
     {
-        return config('payu.interval.refund_status_check', 60);
+        return config('payu.job_delay.payout.retry', 60);
     }
 
     public function getRefundSendDelay(): int
     {
-        return config('payu.delay.refund', 60);
+        return config('payu.job_delay.refund.send', 60);
+    }
+
+    public function getRefundRetryDelay(): int
+    {
+        return config('payu.job_delay.refund.retry', 60);
     }
 
 }
