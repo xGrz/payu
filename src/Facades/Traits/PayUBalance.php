@@ -10,10 +10,28 @@ trait PayUBalance
 {
     public static function balance(): ?ShopBalanceResponse
     {
+        return cache()->remember(
+            'payu:balance',
+            self::getBalanceCacheTtl(),
+            fn() => self::getRealBalance()
+        );
+    }
+
+    private static function getRealBalance(): ?ShopBalanceResponse
+    {
         try {
             return ShopBalance::callApi();
         } catch (PayUGeneralException $e) {
             return null;
         }
     }
+
+    private static function getBalanceCacheTtl(): int
+    {
+        $nextMinuteIn = now()->secondsUntil(now()->addMinute()->setSecond(0)->setMicro(0))->count();
+        return $nextMinuteIn > 1
+            ? $nextMinuteIn
+            : 0;
+    }
+
 }

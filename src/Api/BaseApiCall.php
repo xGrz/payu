@@ -43,8 +43,8 @@ abstract class BaseApiCall
             ->contentType('application/json')
             ->withToken(Config::getToken())
             ->withUserAgent('xGrz Laravel plugin')
-            ->timeout(5)
-            ->connectTimeout(5)
+            ->timeout(1)
+            ->connectTimeout(1)
             ;
     }
 
