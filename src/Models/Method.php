@@ -24,7 +24,7 @@ class Method extends Model
 
     public function scopeActive(Builder $query, bool $isActive = true): void
     {
-        $query->where('available', $isActive);
+        $query->where('available', true)->where('active', $isActive);
     }
 
     public function scopeAmount(Builder $query, int|float $amount): void

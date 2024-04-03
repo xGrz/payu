@@ -48,5 +48,7 @@ Route::name('payu.')
             ->group(function () {
                 Route::get('', [MethodsController::class, 'index'])->name('index');
                 Route::get('sync', [MethodsController::class, 'synchronize'])->name('synchronize');
+                Route::post('{method}', [MethodsController::class, 'activate'])->name('activate');
+                Route::delete('{method}', [MethodsController::class, 'deactivate'])->name('deactivate');
             });
     });

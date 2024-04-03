@@ -10,10 +10,11 @@
         </x-payu::paper-title>
         @if($methods->count())
             <x-payu::table>
-                <x-payu::table.header class="text-center">Active</x-payu::table.header>
+                <x-payu::table.header class="text-center">Available<br/>in PayU</x-payu::table.header>
                 <x-payu::table.header class="text-left">Name</x-payu::table.header>
                 <x-payu::table.header class="text-center">Image</x-payu::table.header>
                 <x-payu::table.header class="text-center">Symbol</x-payu::table.header>
+                <x-payu::table.header class="text-center">Active</x-payu::table.header>
                 <tbody>
                 @foreach($methods as $method)
                     <x-payu::table.row>
@@ -36,6 +37,23 @@
                         </x-payu::table.cell>
                         <x-payu::table.cell class="text-center">
                             {{ $method->code }}
+                        </x-payu::table.cell>
+                        <x-payu::table.cell class="text-center">
+                            @if($method->available)
+                                @if($method->active)
+                                    <form action="{{ route('payu.methods.deactivate', $method) }}" method="POST">
+                                        @csrf @method('DELETE')
+                                        <x-payu::button type="submit" size="small" color="success">ACTIVE
+                                        </x-payu::button>
+                                    </form>
+                                @else
+                                    <form action="{{ route('payu.methods.activate', $method) }}" method="POST">
+                                        @csrf
+                                        <x-payu::button type="submit" size="small" color="danger">DISABLED
+                                        </x-payu::button>
+                                    </form>
+                                @endif
+                            @endif
                         </x-payu::table.cell>
                     </x-payu::table.row>
                 @endforeach

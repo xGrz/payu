@@ -24,4 +24,16 @@ class MethodsController extends Controller
 
     }
 
+    public function activate(Method $method)
+    {
+        $method->update(['active' => true]);
+        return back();
+    }
+
+    public function deactivate(Method $method)
+    {
+        $method->update(['active' => false]);
+        return back();
+    }
+
 }
