@@ -5,8 +5,10 @@ namespace xGrz\PayU\Providers;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use xGrz\PayU\Events\PayoutCreated;
 use xGrz\PayU\Events\RefundCreated;
+use xGrz\PayU\Events\TransactionCompleted;
 use xGrz\PayU\Listeners\DispatchPayoutRequest;
 use xGrz\PayU\Listeners\DispatchRefundRequest;
+use xGrz\PayU\Listeners\RetrieveTransactionPaymentMethod;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -17,6 +19,9 @@ class EventServiceProvider extends ServiceProvider
         RefundCreated::class => [
             DispatchRefundRequest::class
         ],
+        TransactionCompleted::class => [
+            RetrieveTransactionPaymentMethod::class
+        ]
     ];
 
 

@@ -14,7 +14,7 @@ class NotificationWebhookController extends Controller
 {
 
 
-    public function __invoke(NotificationRequest $request, Transaction $transaction)
+    public function __invoke(NotificationRequest $request, Transaction $transaction): Response
     {
 
         if ($request->validated('order')) {
