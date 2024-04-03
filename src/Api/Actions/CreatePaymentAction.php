@@ -15,7 +15,7 @@ class CreatePaymentAction extends BaseApiCall
     /**
      * Sends payment request for provided Payment asObject. If created returns PayUTransaction model from local DB
      */
-    public static function callApi(TransactionWizard $payment)
+    public static function callApi(TransactionWizard $payment): Transaction
     {
         $transactionWizardData = $payment->toArray();
 
@@ -33,5 +33,6 @@ class CreatePaymentAction extends BaseApiCall
         }
         $transaction->fill($response);
         $transaction->save();
+        return $transaction;
     }
 }

@@ -8,8 +8,10 @@ use xGrz\PayU\Actions\SyncPaymentMethods;
 use xGrz\PayU\Commands\PayMethodsUpdateCommand;
 use xGrz\PayU\Models\Payout;
 use xGrz\PayU\Models\Refund;
+use xGrz\PayU\Models\Transaction;
 use xGrz\PayU\Observers\PayoutObserver;
 use xGrz\PayU\Observers\RefundObserver;
+use xGrz\PayU\Observers\TransactionObserver;
 use xGrz\PayU\Providers\EventServiceProvider;
 use xGrz\PayU\Services\ConfigService;
 
@@ -31,6 +33,7 @@ class PayUServiceProvider extends ServiceProvider
 
         Payout::observe(PayoutObserver::class);
         Refund::observe(RefundObserver::class);
+        Transaction::observe(TransactionObserver::class);
 
         $this->app->booted(function () {
             $schedule = app(Schedule::class);

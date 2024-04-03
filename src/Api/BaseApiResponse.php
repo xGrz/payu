@@ -15,7 +15,6 @@ abstract class BaseApiResponse
      */
     final public static function consumeResponse(Response $response): static
     {
-        // dd($response->status(), $response->json());
         self::errorHandler($response);
         return new static($response);
     }

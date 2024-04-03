@@ -50,7 +50,7 @@ class PaymentController extends Controller
 
     public function store(StorePaymentRequest $request)
     {
-        $transaction = new TransactionWizard('Order ' . rand(1,2000) . '/2024');
+        $transaction = new TransactionWizard('Order number ' . rand(1,2000) . '/2024');
         $items = new TransactionWizard\Products();
         foreach ($request->validated('items') as $item) {
             $items->add(Product::make($item['name'], $item['price'], $item['quantity']));
@@ -71,6 +71,7 @@ class PaymentController extends Controller
         }
 
         PayU::createPayment($transaction);
+
         return to_route('payu.payments.index')->with('success', 'Transaction created');
     }
 
