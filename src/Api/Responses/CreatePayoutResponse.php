@@ -1,6 +1,6 @@
 <?php
 
-namespace xGrz\PayU\ApiResponses;
+namespace xGrz\PayU\Api\Responses;
 
 
 use Illuminate\Http\Client\Response;

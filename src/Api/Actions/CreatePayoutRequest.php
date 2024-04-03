@@ -4,7 +4,7 @@ namespace xGrz\PayU\Api\Actions;
 
 
 use xGrz\PayU\Api\BaseApiCall;
-use xGrz\PayU\ApiResponses\CreatePayoutResponse;
+use xGrz\PayU\Api\Responses\CreatePayoutResponse;
 use xGrz\PayU\Facades\Config;
 
 class CreatePayoutRequest extends BaseApiCall
