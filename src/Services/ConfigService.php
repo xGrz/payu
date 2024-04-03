@@ -72,6 +72,11 @@ class ConfigService
         return $this->cache_key;
     }
 
+    public function getBalanceCacheKey(): string
+    {
+        return 'payu:balance';
+    }
+
     public function shouldBeLogged(): bool
     {
         return true;

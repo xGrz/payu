@@ -5,13 +5,14 @@ namespace xGrz\PayU\Facades\Traits;
 use xGrz\PayU\Api\Actions\ShopBalance;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;
 use xGrz\PayU\Api\Responses\ShopBalanceResponse;
+use xGrz\PayU\Facades\Config;
 
 trait PayUBalance
 {
     public static function balance(): ?ShopBalanceResponse
     {
         return cache()->remember(
-            'payu:balance',
+            Config::getBalanceCacheKey(),
             self::getBalanceCacheTtl(),
             fn() => self::getRealBalance()
         );
