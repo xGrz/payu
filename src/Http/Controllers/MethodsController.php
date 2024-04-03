@@ -12,7 +12,7 @@ class MethodsController extends Controller
     {
         return view('payu::methods.index', [
             'title' => 'Payment methods',
-            'methods' => Method::orderBy('available', 'desc')->orderBy('name')->get()
+            'methods' => Method::withCount('transactions')->orderBy('available', 'desc')->orderBy('name')->get()
         ]);
     }
 

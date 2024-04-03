@@ -14,6 +14,7 @@
                 <x-payu::table.header class="text-left">Name</x-payu::table.header>
                 <x-payu::table.header class="text-center">Image</x-payu::table.header>
                 <x-payu::table.header class="text-center">Symbol</x-payu::table.header>
+                <x-payu::table.header class="text-center">Used</x-payu::table.header>
                 <x-payu::table.header class="text-center">Active</x-payu::table.header>
                 <tbody>
                 @foreach($methods as $method)
@@ -29,7 +30,7 @@
                             {{ $method->name }}
                             <small class="block">
                                 <span class="text-slate-600">{{ $method->min }}</span> - <span
-                                    class="text-slate-600">{{ $method->max }}</span>
+                                        class="text-slate-600">{{ $method->max }}</span>
                             </small>
                         </x-payu::table.cell>
                         <x-payu::table.cell class="text-center m-auto">
@@ -37,6 +38,12 @@
                         </x-payu::table.cell>
                         <x-payu::table.cell class="text-center">
                             {{ $method->code }}
+                        </x-payu::table.cell>
+                        <x-payu::table.cell class="text-center">
+                            <span @class([
+                                'text-green-700' => $method->transactions_count,
+                                'text-slate-600' => !$method->transactions_count
+                                ])>{{ $method->transactions_count }}</span>
                         </x-payu::table.cell>
                         <x-payu::table.cell class="text-center">
                             @if($method->available)

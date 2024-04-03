@@ -44,7 +44,7 @@ class Method extends Model
 
     public function transactions(): HasMany
     {
-        return $this->hasMany(PayUTransaction::class, 'method_id');
+        return $this->hasMany(Transaction::class, 'method_id');
     }
 
     public function getMinAttribute(): string
