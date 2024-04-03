@@ -37,8 +37,8 @@ class PayoutController extends Controller
 
     public function retry(Payout $payout)
     {
-        return PayU::retryPayout($payout, 3)
-            ? back()->with('success', 'Retry payout has been dispatched')
+        return PayU::retryPayout($payout)
+            ? back()->with('success', 'Retry payout has been successfully dispatched')
             : back()->with('error', 'Retry payout failed');
     }
 

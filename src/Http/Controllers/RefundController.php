@@ -35,7 +35,7 @@ class RefundController extends Controller
 
     public function retry(Refund $refund)
     {
-        return PayU::retryRefund($refund, 3)
+        return PayU::retryRefund($refund)
             ? back()->with('success', 'Retry refund has been dispatched')
             : back()->with('error', 'Retry refund failed');
     }

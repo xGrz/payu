@@ -56,13 +56,12 @@
                 @endforeach
                 </tbody>
             </x-payu::table>
-            <div class="text-gray-500 my-1">
-                Refunds are dispatched to operator every 30 minutes. Once refund is sent you cannot revoke it.
+            <div class="text-gray-500 my-1 mx-2">
+                Once refund is sent you cannot revoke it.
             </div>
         @else
             <x-payu::not-found message="Refunds not found"/>
         @endif
-
 
     </x-payu::paper>
 @endif
