@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('ext_refund_id')->nullable();
             $table->string('refund_id')->nullable();
             $table->string('error')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
 

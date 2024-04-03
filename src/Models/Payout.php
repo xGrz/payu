@@ -3,6 +3,7 @@
 namespace xGrz\PayU\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use xGrz\PayU\Casts\Amount;
 use xGrz\PayU\Enums\PayoutStatus;
 
@@ -11,6 +12,9 @@ use xGrz\PayU\Enums\PayoutStatus;
  */
 class Payout extends Model
 {
+
+    use SoftDeletes;
+
     protected $table = 'payu_payouts';
 
     protected $casts = [

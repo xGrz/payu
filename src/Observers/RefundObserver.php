@@ -5,6 +5,7 @@ namespace xGrz\PayU\Observers;
 use xGrz\PayU\Enums\RefundStatus;
 use xGrz\PayU\Events\RefundCompleted;
 use xGrz\PayU\Events\RefundCreated;
+use xGrz\PayU\Events\RefundDeleted;
 use xGrz\PayU\Events\RefundFailed;
 use xGrz\PayU\Models\Refund;
 use xGrz\PayU\Traits\WithStatusChangeObserver;
@@ -26,6 +27,10 @@ class RefundObserver
         self::clearErrorMessage($refund, RefundStatus::ERROR);
     }
 
+    public function deleting(Refund $refund): void
+    {
+        RefundDeleted::dispatch($refund);
+    }
 
 
 }

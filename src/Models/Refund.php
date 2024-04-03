@@ -4,11 +4,14 @@ namespace xGrz\PayU\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use xGrz\PayU\Casts\Amount;
 use xGrz\PayU\Enums\RefundStatus;
 
 class Refund extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'payu_refunds';
 
     protected $guarded = ['id'];

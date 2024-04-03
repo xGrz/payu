@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->unsignedTinyInteger('status')->default(PayoutStatus::INIT);
             $table->unsignedInteger('amount')->default(0);
             $table->string('error')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
 
