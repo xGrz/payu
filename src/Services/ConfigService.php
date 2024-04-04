@@ -22,8 +22,17 @@ class ConfigService
 
     private function buildCacheKey(): static
     {
-        $keyType = config('payu.use_sandbox', true) ? 'sandbox' : 'production';
-        $this->cache_key = 'payu:access_token_' . $keyType;
+        $envType = config('payu.use_sandbox', true) ? 'sandbox' : 'production';
+
+        $config = join(':', [
+            self::getServiceDomain(),
+            self::getMerchantPosId(),
+            self::getShopId(),
+            self::getSignatureKey(),
+            self::getClientSecret(),
+            self::getClientId()
+        ]);
+        $this->cache_key = 'payu:access_token_' . $envType . ':' . md5($config);
         return $this;
     }
 
@@ -45,7 +54,7 @@ class ConfigService
 
     public function getSignatureKey(): ?string
     {
-        if(config('payu.use_sandbox', true)) {
+        if (config('payu.use_sandbox', true)) {
             return config('payu.api.signatureKey') ?? self::SANDBOX_CREDENTIALS['PAYU_SIGNATURE_KEY'];
         }
         return config('payu.api.signatureKey');
