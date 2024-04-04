@@ -2,6 +2,8 @@
 
 namespace xGrz\PayU\Services;
 
+use xGrz\PayU\Models\Method;
+
 class ConfigService
 {
     const SANDBOX_CREDENTIALS = [
@@ -123,6 +125,11 @@ class ConfigService
     public function getTransactionMethodCheckDelay(): int
     {
         return config('payu.job_delay.transaction_method_check', 60);
+    }
+
+    public function hasPayMethods(): bool
+    {
+        return (bool)Method::count();
     }
 
 }

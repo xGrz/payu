@@ -23,6 +23,7 @@ use xGrz\PayU\Services\ConfigService;
  * @method static getRefundRetryDelay()
  * @method static getBalanceCacheKey()
  * @method static getTransactionMethodCheckDelay()
+ * @method static hasPayMethods()
  */
 class Config extends Facade
 {

@@ -131,7 +131,9 @@ class TransactionWizard
             Buyer::make(auth()->user()->email ?? 'test@example.com', '909765456', 'John', 'Kovalsky'),
             PostalBox::make(auth()->user()->email ?? 'test@example.com', 'John Kovalsky', '909765456', 'WA101'),
             $redirectAfterTransaction ?? route('home'),
-            PayMethod::make('P')
+            Config::hasPayMethods()
+                ? PayMethod::make('P')
+                : null
         );
     }
 

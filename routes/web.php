@@ -19,6 +19,7 @@ Route::name('payu.')
                 Route::post('store-fake', [PaymentController::class, 'storeFake'])->name('storeFake');
                 Route::patch('{transaction}/accept', [PaymentController::class, 'accept'])->name('accept');
                 Route::delete('{transaction}/reject', [PaymentController::class, 'reject'])->name('reject');
+                Route::get('{transaction}/payMethod', [PaymentController::class, 'requestPayMethod'])->name('method');
                 Route::get('{transaction}', [PaymentController::class, 'show'])->name('show');
                 Route::delete('{transaction}', [PaymentController::class, 'destroy'])->name('destroy');
             });

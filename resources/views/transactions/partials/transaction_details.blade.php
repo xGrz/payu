@@ -45,7 +45,10 @@
             <x-payu::table.header class="text-left">PayMethod</x-payu::table.header>
             <x-payu::table.cell>
                 @if (empty($transaction->payMethod))
-                    No transaction details received yet
+                    No transaction details received yet.
+                    @if($transaction->status->hasAction('payMethod'))
+                        <x-payu::link href="{{ route('payu.payments.method', $transaction->id) }}">Get pay method now.</x-payu::link>
+                    @endif
                 @else
                     {{ $transaction->payMethod->name }}
                     <img
