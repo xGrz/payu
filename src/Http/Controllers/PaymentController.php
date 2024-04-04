@@ -43,7 +43,7 @@ class PaymentController extends Controller
                 ['name' => fake('pl_PL')->words(2, true), 'quantity' => rand(1, 5), 'price' => rand(1, 20000) / 100],
                 ['name' => fake('pl_PL')->words(2, true), 'quantity' => rand(2, 10), 'price' => rand(1, 20000) / 100],
             ],
-            'methods' => Method::active()->amount(12000)->get()
+            'methods' => Method::active()->get()
         ]);
     }
 

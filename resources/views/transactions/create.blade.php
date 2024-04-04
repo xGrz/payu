@@ -16,10 +16,14 @@
                 <x-payu::paper-title title="Order items"/>
                 @include('payu::transactions.create.items')
             </x-payu::paper>
+
+            @if($methods->count())
             <x-payu::paper class="bg-slate-800">
                 <x-payu::paper-title title="Payment method"/>
                 @include('payu::transactions.create.paymethod')
             </x-payu::paper>
+            @endif
+
             <div class="text-center">
                 <x-payu::button type="submit" size="large">
                     Create order
