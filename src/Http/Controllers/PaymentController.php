@@ -4,10 +4,12 @@ namespace xGrz\PayU\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\View\View;
+use xGrz\PayU\Facades\Config;
 use xGrz\PayU\Facades\PayU;
 use xGrz\PayU\Facades\TransactionWizard;
 use xGrz\PayU\Facades\TransactionWizard\Product;
 use xGrz\PayU\Http\Requests\StorePaymentRequest;
+use xGrz\PayU\Jobs\RetrieveTransactionPayMethodJob;
 use xGrz\PayU\Models\Method;
 use xGrz\PayU\Models\Transaction;
 
@@ -43,7 +45,7 @@ class PaymentController extends Controller
                 ['name' => fake('pl_PL')->words(2, true), 'quantity' => rand(1, 5), 'price' => rand(1, 20000) / 100],
                 ['name' => fake('pl_PL')->words(2, true), 'quantity' => rand(2, 10), 'price' => rand(1, 20000) / 100],
             ],
-            'methods' => Method::active()->amount(12000)->get()
+            'methods' => Method::active()->get()
         ]);
     }
 
@@ -108,6 +110,14 @@ class PaymentController extends Controller
         return PayU::cancelTransaction($transaction)
             ? back()->with('success', 'Payment successfully canceled')
             : back()->with('error', 'Payment was not deleted.');
+    }
+
+    public function requestPayMethod(Transaction $transaction)
+    {
+        RetrieveTransactionPayMethodJob::dispatch($transaction)
+            ->delay(Config::getTransactionMethodCheckDelay());
+
+        return back()->with('success', 'Request sent. Please wait few seconds...');
     }
 
 }

@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use xGrz\PayU\Api\Actions\RetrieveTransactionPayMethod;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;
+use xGrz\PayU\Facades\Config;
 use xGrz\PayU\Models\Transaction;
 use xGrz\PayU\Services\LoggerService;
 
@@ -25,6 +26,13 @@ class RetrieveTransactionPayMethodJob implements ShouldQueue, ShouldBeUnique
 
     public function handle(): void
     {
+        if(!Config::hasPayMethods()) {
+            LoggerService::warning('Pay methods are not available (not synchronized)', [
+                ''
+            ]);
+            return;
+        }
+
         try {
             $payMethod = RetrieveTransactionPayMethod::callApi($this->transaction);
 

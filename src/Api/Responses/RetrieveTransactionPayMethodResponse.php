@@ -9,7 +9,7 @@ use xGrz\PayU\Models\Method;
 
 class RetrieveTransactionPayMethodResponse extends BaseApiResponse
 {
-    private Method $method;
+    private ?Method $method;
 
     protected array $data = [
         'code' => null,
