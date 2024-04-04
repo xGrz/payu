@@ -12,6 +12,7 @@ return [
             'send' => 30,
             'retry' => 3
         ],
+        'transaction_method_check' => 10
     ],
     'interval' => [
         'payout_status_check' => 60,
