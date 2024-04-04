@@ -107,6 +107,6 @@ class PayUServiceProvider extends ServiceProvider
 
     private function setupTranslations(): void
     {
-        $this->loadJsonTranslationsFrom(__DIR__ . '/../lang');
+        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'payu');
     }
 }
