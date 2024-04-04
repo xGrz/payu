@@ -88,14 +88,14 @@ class PaymentController extends Controller
 
         PayU::createPayment($transaction);
 
-        return to_route('payu.payments.index')->with('success', 'Transaction created');
+        return to_route('payu.payments.index')->with('success', __('payu::transactions.created'));
     }
 
     public function storeFake()
     {
         $transaction = TransactionWizard::fake();
         PayU::createPayment($transaction);
-        return back()->with('success', 'Transaction created');
+        return back()->with('success', __('payu::transactions.created'));
     }
 
     public function show(Transaction $transaction)
@@ -109,15 +109,15 @@ class PaymentController extends Controller
     public function accept(Transaction $transaction)
     {
         return PayU::accept($transaction)
-            ? back()->with('success', 'Payment successfully accepted')
-            : back()->with('error', 'Payment not accepted');
+            ? back()->with('success', __('payu::transactions.accept.success'))
+            : back()->with('error', __('payu::transactions.accept.failed'));
     }
 
     public function reject(Transaction $transaction)
     {
         return PayU::reject($transaction)
-            ? back()->with('success', 'Payment successfully rejected')
-            : back()->with('error', 'Payment was not rejected');
+            ? back()->with('success', __('payu::transactions.reject.success'))
+            : back()->with('error', __('payu::transactions.reject.failed'));
     }
 
     public function destroy(Transaction $transaction)

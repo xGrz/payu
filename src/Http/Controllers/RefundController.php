@@ -27,24 +27,23 @@ class RefundController extends Controller
             $request->validated('description'),
             $request->validated('bankDescription', null)
         );
-        return back()->with(
-            $refunded ? 'success' : 'error',
-            $refunded ? 'Refund created' : 'Cannot create refund'
-        );
+        return $refunded
+            ? back()->with('success', __('payu::refunds.create.success'))
+            : back()->with('error', __('payu::refunds.create.failed'));
     }
 
     public function retry(Refund $refund)
     {
         return PayU::retryRefund($refund)
-            ? back()->with('success', 'Retry refund has been dispatched')
-            : back()->with('error', 'Retry refund failed');
+            ? back()->with('success', __('payu::refunds.retry.success'))
+            : back()->with('error', __('payu::refunds.retry.failed'));
     }
 
     public function destroy(Refund $refund)
     {
         return PayU::cancelRefund($refund)
-            ? back()->with('success', 'Refund successfully canceled')
-            : back()->with('error', 'Sorry, refund request has been already sent.');
+            ? back()->with('success', __('payu::refunds.destroy.success'))
+            : back()->with('error', __('payu::refunds.destroy.failed'));
     }
 
 }

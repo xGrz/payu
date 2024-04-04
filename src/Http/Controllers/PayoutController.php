@@ -25,28 +25,28 @@ class PayoutController extends Controller
     public function store(PayoutRequest $request): RedirectResponse
     {
         return PayU::payout($request->validated('payoutAmount'))
-            ? to_route('payu.payouts.index')->with('success', 'Payout has been scheduled')
-            : to_route('payu.payouts.index')->with('error', 'Payout not initialed. Error occurred.');
+            ? to_route('payu.payouts.index')->with('success', __('payu::payouts.create.success'))
+            : to_route('payu.payouts.index')->with('error', __('payu::payouts.create.failed'));
     }
 
     public function update(Payout $payout)
     {
         PayU::payoutStatusCheck($payout);
-        return back()->with('success', 'Payout status retry in progress');
+        return back()->with('success', __('payu::payouts.updateStatus.success'));
     }
 
     public function retry(Payout $payout)
     {
         return PayU::retryPayout($payout)
-            ? back()->with('success', 'Retry payout has been successfully dispatched')
-            : back()->with('error', 'Retry payout failed');
+            ? back()->with('success', __('payu::payouts.retry.success'))
+            : back()->with('error', __('payu::payouts.retry.failed'));
     }
 
     public function destroy(Payout $payout)
     {
         return PayU::cancelPayout($payout)
-            ? back()->with('success', 'Payout request has been successfully removed')
-            : back()->with('error', 'Error! Payout request cannot be removed');
+            ? back()->with('success', __('payu::payouts.destroy.success'))
+            : back()->with('error', __('payu::payouts.destroy.failed'));
     }
 
 }

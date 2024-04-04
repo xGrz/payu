@@ -20,7 +20,7 @@ class MethodsController extends Controller
     {
         return PayU::syncMethods()
             ? back()->with('success', __('payu::methods.synchronization.success'))
-            : back()->with('error', __('payu::methods.synchronization.error'));
+            : back()->with('error', __('payu::methods.synchronization.failed'));
     }
 
     public function activate(Method $method)
