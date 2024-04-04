@@ -51,7 +51,7 @@ class PaymentController extends Controller
 
     public function store(StorePaymentRequest $request)
     {
-        $transaction = new TransactionWizard('Order number ' . rand(1,2000) . '/2024');
+        $transaction = new TransactionWizard('Order number ' . rand(1, 2000) . '/2024');
         $items = new TransactionWizard\Products();
         foreach ($request->validated('items') as $item) {
             $items->add(Product::make($item['name'], $item['price'], $item['quantity']));
@@ -66,9 +66,24 @@ class PaymentController extends Controller
 
         $transaction->addProducts($items);
         $transaction->setBuyer($buyer);
+        $transaction->setDelivery(TransactionWizard\Delivery\Address::make(
+            $request->validated('customer.email'),
+            $request->validated('customer.name'),
+            $request->validated('customer.phone'),
+            $request->validated('customer.city'),
+            join('/', [
+                join(' ', [
+                    $request->validated('customer.street'),
+                    $request->validated('customer.house_number')
+                ]),
+                $request->validated('customer.apartment_number')
+            ]),
+            $request->validated('customer.postalCode'),
+            'PL',
+        ));
 
         if ($request->validated('method')) {
-            $transaction->setMethod( TransactionWizard\PayMethod::make($request->validated('method')));
+            $transaction->setMethod(TransactionWizard\PayMethod::make($request->validated('method')));
         }
 
         PayU::createPayment($transaction);

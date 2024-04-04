@@ -2,6 +2,7 @@
 
 namespace xGrz\PayU\Api;
 
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;
@@ -22,7 +23,7 @@ abstract class BaseApiCall
         if (!empty(static::$endpoint_parameters)) {
             foreach (static::$endpoint_parameters as $parameter => $value) {
                 if (empty($value)) throw new PayUGeneralException("Required endpoint parameter [$parameter] not defined.");
-                $endpoint = str($endpoint)->replace('{'.$parameter.'}', $value);
+                $endpoint = str($endpoint)->replace('{' . $parameter . '}', $value);
             }
         }
         if (str($endpoint)->contains(['{', '}'])) {
@@ -36,16 +37,19 @@ abstract class BaseApiCall
         ]);
     }
 
+    /**
+     * @throws PayUGeneralException
+     */
     private static function connection(): PendingRequest
     {
         return Http::acceptJson()
             ->withoutRedirecting()
             ->contentType('application/json')
             ->withToken(Config::getToken())
-            ->withUserAgent('xGrz Laravel plugin')
+            ->withUserAgent('xGrz/PayU Laravel')
             ->timeout(1)
             ->connectTimeout(1)
-            ;
+            ->retry(2, 200);
     }
 
     protected static function defineEndpointParameter(string $parameterName, string $value): void
@@ -53,20 +57,42 @@ abstract class BaseApiCall
         static::$endpoint_parameters[$parameterName] = $value;
     }
 
+    /**
+     * @throws PayUGeneralException
+     */
     protected static function apiGetCall(): ?object
     {
-        return self::connection()->get(static::getUri());
+        try {
+            return self::connection()->get(static::getUri());
+        } catch (ConnectionException $e) {
+            throw new PayUGeneralException('API connection problem');
+        }
+
     }
 
+    /**
+     * @throws PayUGeneralException
+     */
     protected static function apiPostCall(array $data = []): ?object
     {
-        if (empty($data)) $data = null;
-        return self::connection()->post(static::getUri(), $data);
+        try {
+            if (empty($data)) $data = null;
+            return self::connection()->post(static::getUri(), $data);
+        } catch (ConnectionException $e) {
+            throw new PayUGeneralException('API connection problem');
+        }
     }
 
+    /**
+     * @throws PayUGeneralException
+     */
     protected static function apiDeleteCall(array $data = []): ?object
     {
-        if (empty($data)) $data = null;
-        return self::connection()->delete(static::getUri(), $data);
+        try {
+            if (empty($data)) $data = null;
+            return self::connection()->delete(static::getUri(), $data);
+        } catch (ConnectionException $e) {
+            throw new PayUGeneralException('API connection problem');
+        }
     }
 }
