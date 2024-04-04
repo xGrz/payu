@@ -1,0 +1,10 @@
+{
+    "Transactions": "Transakcje",
+    "Refunds": "Zwroty",
+    "Payouts": "Wypłaty",
+    "Methods": "Metody płatności",
+    "Transaction": "Płatność",
+    "Description": "Opis",
+    "Bank description": "Opis dla banku",
+    "Amount": "Kwota"
+}

@@ -30,6 +30,7 @@ class PayUServiceProvider extends ServiceProvider
         self::setupNotificationRouting();
         self::setupWebRouting();
         self::setupCommands();
+        self::setupTranslations();
 
         Payout::observe(PayoutObserver::class);
         Refund::observe(RefundObserver::class);
@@ -54,7 +55,8 @@ class PayUServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/config.php' => config_path('payu.php', '')
+                __DIR__ . '/../config/config.php' => config_path('payu.php'),
+                __DIR__ . '/../lang' => $this->app->langPath('vendor/payu')
             ], 'payu');
         }
 
@@ -71,7 +73,7 @@ class PayUServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
     }
 
-    public function setupCommands(): void
+    private function setupCommands(): void
     {
         $this->commands([
             PayMethodsUpdateCommand::class
@@ -101,5 +103,10 @@ class PayUServiceProvider extends ServiceProvider
 //            ->name('PayU | Process refunds')
 //            ->everyThirtyMinutes();
 //
+    }
+
+    private function setupTranslations(): void
+    {
+        $this->loadJsonTranslationsFrom(__DIR__ . '/../lang');
     }
 }
