@@ -107,4 +107,9 @@ class ConfigService
         return config('payu.job_delay.refund.retry', 60);
     }
 
+    public function getTransactionMethodCheckDelay(): int
+    {
+        return config('payu.job_delay.transaction_method_check', 60);
+    }
+
 }
