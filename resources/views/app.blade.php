@@ -15,14 +15,14 @@
 <body class="flex flex-col min-h-full">
 
     @include('payu::navigation.container')
+    @include('payu::status.status')
 
-    <main class="container px-4 mx-auto mb-2 grow">
-        @include('payu::status.status')
+    <main class="container px-4 mx-auto my-2 grow">
         @yield('content')
     </main>
 
     <footer class="px-4 py-6 mt-8 bg-slate-950 grow-0">
-        <div class="container mx-auto">
+        <div class="container px-4 mx-auto">
             xGrz/payu plugin for Laravel
         </div>
     </footer>
