@@ -19,9 +19,8 @@ class MethodsController extends Controller
     public function synchronize()
     {
         return PayU::syncMethods()
-            ? back()->with('success', 'Payment methods successfully synchronized.')
-            : back()->with('error', 'Error synchronizing payment methods.');
-
+            ? back()->with('success', __('payu::methods.synchronization.success'))
+            : back()->with('error', __('payu::methods.synchronization.error'));
     }
 
     public function activate(Method $method)
