@@ -22,30 +22,42 @@ class ConfigService
 
     private function buildCacheKey(): static
     {
-        $keyType = config('payu.use_sandbox', true) ? 'sandbox' : 'production';
-        $this->cache_key = 'payu:access_token_' . $keyType;
+        $envType = config('payu.use_sandbox', true) ? 'sandbox' : 'production';
+
+        $config = join(':', [
+            self::getServiceDomain(),
+            self::getMerchantPosId(),
+            self::getShopId(),
+            self::getSignatureKey(),
+            self::getClientSecret(),
+            self::getClientId()
+        ]);
+        $this->cache_key = 'payu:access_token_' . $envType . ':' . md5($config);
         return $this;
     }
 
-    public function getClientId(): ?string
+    public function getClientId(): ?int
     {
-        return config('payu.use_sandbox', true)
-            ? config('payu.api.oAuthClientId', self::SANDBOX_CREDENTIALS['PAYU_O_AUTH_CLIENT_ID'])
-            : config('payu.api.oAuthClientId');
+        if (config('payu.use_sandbox', true)) {
+            return config('payu.api.oAuthClientId') ?? self::SANDBOX_CREDENTIALS['PAYU_O_AUTH_CLIENT_ID'];
+        }
+        return config('payu.api.oAuthClientId');
     }
 
-    public function getClientSecret(): string
+    public function getClientSecret(): ?string
     {
-        return config('payu.use_sandbox', true)
-            ? config('payu.api.oAuthClientSecret', self::SANDBOX_CREDENTIALS['PAYU_O_AUTH_CLIENT_SECRET'])
-            : config('payu.api.oAuthClientSecret');
+        if (config('payu.use_sandbox', true)) {
+            return config('payu.api.oAuthClientSecret') ?? self::SANDBOX_CREDENTIALS['PAYU_O_AUTH_CLIENT_SECRET'];
+        }
+        return config('payu.api.oAuthClientSecret');
     }
 
-    public function getSignatureKey(): string
+    public function getSignatureKey(): ?string
     {
-        return config('payu.use_sandbox', true)
-            ? config('payu.api.signatureKey', self::SANDBOX_CREDENTIALS['PAYU_SIGNATURE_KEY'])
-            : config('payu.api.signatureKey');
+        if (config('payu.use_sandbox', true)) {
+            return config('payu.api.signatureKey') ?? self::SANDBOX_CREDENTIALS['PAYU_SIGNATURE_KEY'];
+        }
+        return config('payu.api.signatureKey');
     }
 
     public function getShopId(): ?string
@@ -53,11 +65,12 @@ class ConfigService
         return config('payu.api.shopId');
     }
 
-    public function getMerchantPosId(): int
+    public function getMerchantPosId(): ?int
     {
-        return config('payu.use_sandbox', true)
-            ? config('payu.api.merchantPosId', self::SANDBOX_CREDENTIALS['PAYU_MERCHANT_POS_ID'])
-            : config('payu.api.merchantPosId');
+        if (config('payu.use_sandbox', true)) {
+            return config('payu.api.merchantPosId') ?? self::SANDBOX_CREDENTIALS['PAYU_MERCHANT_POS_ID'];
+        }
+        return config('payu.api.merchantPosId');
     }
 
     public function getServiceDomain(): string
