@@ -4,14 +4,15 @@ namespace xGrz\PayU\Enums;
 
 use xGrz\PayU\Interfaces\WithActions;
 use xGrz\PayU\Interfaces\WithColors;
+use xGrz\PayU\Interfaces\WithLabel;
 use xGrz\PayU\Traits\HasActions;
-use xGrz\PayU\Traits\HasLabels;
+use xGrz\PayU\Traits\HasLabel;
 use xGrz\PayU\Traits\WithNames;
 
-enum PaymentStatus: int implements WithActions, WithColors
+enum PaymentStatus: int implements WithActions, WithColors, WithLabel
 {
 
-    use WithNames, HasLabels, HasActions;
+    use WithNames, HasLabel, HasActions;
 
     case INITIALIZED = 0;
     case NEW = 1;
@@ -24,9 +25,11 @@ enum PaymentStatus: int implements WithActions, WithColors
     public function actions(): array
     {
         return match ($this) {
-            self::PENDING, self::INITIALIZED => ['pay', 'delete'],
-            self::WAITING_FOR_CONFIRMATION => ['accept', 'reject'],
-            self::COMPLETED => ['refund', 'paymethod'],
+            self::INITIALIZED => ['pay', 'delete', 'processing'],
+            self::PENDING => ['pay', 'delete', 'processing', 'reset'],
+            self::WAITING_FOR_CONFIRMATION => ['accept', 'reject', 'processing'],
+            self::COMPLETED => ['refund', 'paymethod', 'success'],
+            self::CANCELED => ['failed'],
             default => []
         };
     }
@@ -41,6 +44,11 @@ enum PaymentStatus: int implements WithActions, WithColors
             self::CANCELED => 'danger',
             default => ''
         };
+    }
+
+    public function getLangKey(): string
+    {
+        return 'transactions.status';
     }
 
 }

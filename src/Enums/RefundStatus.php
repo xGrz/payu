@@ -5,13 +5,14 @@ namespace xGrz\PayU\Enums;
 
 use xGrz\PayU\Interfaces\WithActions;
 use xGrz\PayU\Interfaces\WithColors;
+use xGrz\PayU\Interfaces\WithLabel;
 use xGrz\PayU\Traits\HasActions;
-use xGrz\PayU\Traits\HasLabels;
+use xGrz\PayU\Traits\HasLabel;
 use xGrz\PayU\Traits\WithNames;
 
-enum RefundStatus: int implements WithColors, WithActions
+enum RefundStatus: int implements WithColors, WithActions, WithLabel
 {
-    use WithNames, HasLabels, HasActions;
+    use WithNames, HasLabel, HasActions;
 
     case INITIALIZED = 0;
     case SENT = 1;
@@ -45,6 +46,11 @@ enum RefundStatus: int implements WithColors, WithActions
             self::ERROR => 'danger',
             default => ''
         };
+    }
+
+    public function getLangKey(): string
+    {
+        return 'refunds.status';
     }
 
 }

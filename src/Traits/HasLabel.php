@@ -2,11 +2,11 @@
 
 namespace xGrz\PayU\Traits;
 
-trait HasLabels
+trait HasLabel
 {
     public function getLabel(): string
     {
-        return __($this->name);
+        return __('payu::' . self::getLangKey() . '.' . $this->name);
     }
 
 }

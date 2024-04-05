@@ -7,6 +7,7 @@ use xGrz\PayU\Exceptions\StatusNameException;
 
 trait WithNames
 {
+
     /**
      * @throws StatusNameException
      */

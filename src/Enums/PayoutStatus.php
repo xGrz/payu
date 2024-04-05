@@ -4,13 +4,14 @@ namespace xGrz\PayU\Enums;
 
 use xGrz\PayU\Interfaces\WithActions;
 use xGrz\PayU\Interfaces\WithColors;
+use xGrz\PayU\Interfaces\WithLabel;
 use xGrz\PayU\Traits\HasActions;
-use xGrz\PayU\Traits\HasLabels;
+use xGrz\PayU\Traits\HasLabel;
 use xGrz\PayU\Traits\WithNames;
 
-enum PayoutStatus: int implements WithColors, WithActions
+enum PayoutStatus: int implements WithColors, WithActions, WithLabel
 {
-    use WithNames, HasLabels, HasActions;
+    use WithNames, HasLabel, HasActions;
 
     case INIT = 0;
     case PENDING = 1;
@@ -57,5 +58,10 @@ enum PayoutStatus: int implements WithColors, WithActions
             if ($case->hasAction('send')) $sendable[] = $case;
         }
         return $sendable;
+    }
+
+    public function getLangKey(): string
+    {
+        return 'payouts.status';
     }
 }
