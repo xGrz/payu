@@ -17,7 +17,8 @@ return new class extends Migration {
             $table->json('payload');
             $table->unsignedTinyInteger('status')->default(PaymentStatus::INITIALIZED);
             $table->string('method_id')->nullable();
-            $table->nullableMorphs('payuable');
+            $table->string('payuable_type')->nullable();
+            $table->string('payuable_id')->nullable();
             $table->timestamps();
         });
 
