@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use xGrz\PayU\Casts\Amount;
 use xGrz\PayU\Enums\PaymentStatus;
 use xGrz\PayU\Enums\RefundStatus;
@@ -76,5 +77,11 @@ class Transaction extends Model
     {
         return ($this->amount / 100) - $this->refunded() > 0;
     }
+
+    public function payuable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
 
 }
