@@ -25,7 +25,7 @@ class CreatePaymentAction extends BaseApiCall
         $transaction = new Transaction();
         $transaction->fill([
             'id' => $transactionWizardData['extOrderId'],
-            'amount' => $transactionWizardData['totalAmount'],
+            'amount' => $transactionWizardData['totalAmount'] / 100,
             'payload' => $transactionWizardData,
         ]);
         if (isset($transactionWizardData['payMethods']['payMethod']['value'])) {
