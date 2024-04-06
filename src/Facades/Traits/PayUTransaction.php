@@ -48,14 +48,23 @@ trait PayUTransaction
     public static function cancelTransaction(Transaction $transaction): bool
     {
         if (!$transaction->status->hasAction('delete')) return false;
-
         try {
             $rejected = CancelOrder::callApi($transaction);
             return $rejected->isCanceled();
         } catch (PayUGeneralException $e) {
             return false;
         }
+    }
 
+    public static function resetTransaction(Transaction $transaction): bool
+    {
+        if (!$transaction->status->hasAction('reset')) return false;
+        try {
+            $rejected = CancelOrder::callApi($transaction);
+            return $rejected->isCanceled();
+        } catch (PayUGeneralException $e) {
+            return false;
+        }
     }
 
 }
