@@ -1,5 +1,7 @@
 <?php
 
+use xGrz\PayU\Enums\PaymentStatus;
+
 return [
     'created' => 'Transaction created',
     'accept' => [
@@ -9,5 +11,13 @@ return [
     'reject' => [
         'success' => 'Payment was rejected',
         'failed' => 'An error occurred while rejecting your transaction',
+    ],
+    'status' => [
+        PaymentStatus::INITIALIZED->name => 'Initialized',
+        PaymentStatus::NEW->name => 'Created',
+        PaymentStatus::PENDING->name => 'In progress',
+        PaymentStatus::WAITING_FOR_CONFIRMATION->name => 'Waiting for confirmation',
+        PaymentStatus::COMPLETED->name => 'Paid',
+        PaymentStatus::CANCELED->name => 'Canceled'
     ]
 ];
