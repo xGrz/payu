@@ -10,11 +10,11 @@ use xGrz\PayU\Models\Refund;
 
 class DispatchRefundRequest
 {
-    public function handle(RefundCreated $event): void
+    public function handle(RefundCreated $refundCreatedEvent): void
     {
-        if (is_null($event->refund->status) || $event->refund->status->hasAction('send')) {
-            self::updateStatus($event->refund);
-            self::dispatchJob($event->refund);
+        if (is_null($refundCreatedEvent->refund->status) || $refundCreatedEvent->refund->status->hasAction('send')) {
+            self::updateStatus($refundCreatedEvent->refund);
+            self::dispatchJob($refundCreatedEvent->refund);
         }
     }
 
