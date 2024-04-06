@@ -29,7 +29,7 @@ enum PaymentStatus: int implements WithActions, WithColors, WithLabel
             self::PENDING => ['pay', 'delete', 'processing', 'reset'],
             self::WAITING_FOR_CONFIRMATION => ['accept', 'reject', 'processing'],
             self::COMPLETED => ['refund', 'paymethod', 'success'],
-            self::CANCELED => ['failed'],
+            self::CANCELED => ['failed', 'reset'],
             default => []
         };
     }

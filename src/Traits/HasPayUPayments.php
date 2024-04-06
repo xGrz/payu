@@ -2,6 +2,7 @@
 
 namespace xGrz\PayU\Traits;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use xGrz\PayU\Api\Exceptions\PayUPaymentException;
 use xGrz\PayU\Facades\PayU;
@@ -17,7 +18,10 @@ trait HasPayUPayments
      */
     public function payable(): MorphMany
     {
-        return $this->morphMany(Transaction::class, 'payuable')->latest();
+        /* Latest sorting is required. Do not remove/change it */
+        return $this
+            ->morphMany(Transaction::class, 'payuable')
+            ->latest();
     }
 
     /**
@@ -26,12 +30,7 @@ trait HasPayUPayments
     public function createTransaction(TransactionWizard $transactionWizard): bool
     {
         if (self::hasActiveTransaction()) return false;
-        if ($payment = PayU::createPayment($transactionWizard)) {
-            $payment->payuable()->associate($this);
-            $payment->save();
-            return true;
-        }
-        throw new PayUPaymentException('Transaction could not be created.');
+        return self::setupNewTransaction($transactionWizard);
     }
 
     public function canResetTransaction(): bool
@@ -41,13 +40,16 @@ trait HasPayUPayments
         return (bool)self::getTransaction()?->status->hasAction('reset');
     }
 
-
+    /**
+     * @throws PayUPaymentException
+     */
     public function resetTransaction(TransactionWizard $transactionWizard): bool
     {
         if (!self::canResetTransaction()) return false;
         if (!self::cancelPayment()) return false;
-        return self::createTransaction($transactionWizard);
+        return self::setupNewTransaction($transactionWizard);
     }
+
 
     public function hasActiveTransaction(): bool
     {
@@ -85,7 +87,7 @@ trait HasPayUPayments
     {
         $status = self::getTransaction()?->status;
         if (!$status) return [];
-        $statusData =  [
+        $statusData = [
             'name' => __('payu::transactions.status.' . $status->name),
             'code' => $status->name,
             'value' => $status->value,
@@ -105,6 +107,11 @@ trait HasPayUPayments
     public function hasPaymentAction($actionName): bool
     {
         return (bool)self::getTransaction()?->status->hasAction($actionName);
+    }
+
+    public function paymentHistory(): Collection
+    {
+        return $this->payable;
     }
 
     public function refunds()
@@ -131,6 +138,18 @@ trait HasPayUPayments
         if (!$refund->status->hasAction('delete')) return false;
         return PayU::cancelRefund($refund);
     }
+
+    private function setupNewTransaction(TransactionWizard $transactionWizard): bool
+    {
+        if ($payment = PayU::createPayment($transactionWizard)) {
+            $payment->payuable()->associate($this);
+            $payment->save();
+            return true;
+        }
+        throw new PayUPaymentException('Transaction could not be created.');
+    }
+
+
 
 
 }
