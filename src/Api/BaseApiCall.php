@@ -43,13 +43,14 @@ abstract class BaseApiCall
     private static function connection(): PendingRequest
     {
         return Http::acceptJson()
-            ->withoutRedirecting()
             ->contentType('application/json')
+            ->withoutRedirecting()
             ->withToken(Config::getToken())
             ->withUserAgent('xGrz/PayU Laravel')
             ->timeout(1)
             ->connectTimeout(1)
-            ->retry(2, 200);
+            ->retry(2, 200, throw: false)
+            ;
     }
 
     protected static function defineEndpointParameter(string $parameterName, string $value): void
