@@ -35,8 +35,6 @@ trait HasPayUPayments
 
     public function canResetTransaction(): bool
     {
-        if (!self::hasActiveTransaction()) return false;
-        if (!self::hasTransactions()) return false;
         return (bool)self::getTransaction()?->status->hasAction('reset');
     }
 
@@ -46,10 +44,9 @@ trait HasPayUPayments
     public function resetTransaction(TransactionWizard $transactionWizard): bool
     {
         if (!self::canResetTransaction()) return false;
-        if (!self::cancelPayment()) return false;
+        if (!PayU::resetTransaction(self::getTransaction())) return false;
         return self::setupNewTransaction($transactionWizard);
     }
-
 
     public function hasActiveTransaction(): bool
     {
@@ -86,7 +83,7 @@ trait HasPayUPayments
     public function paymentStatus(string $key = null): array|string
     {
         $status = self::getTransaction()?->status;
-        if (!$status) return [];
+        if (!$status) return $key ? '' : [];
         $statusData = [
             'name' => __('payu::transactions.status.' . $status->name),
             'code' => $status->name,
@@ -116,13 +113,25 @@ trait HasPayUPayments
 
     public function refunds()
     {
-        if (!self::getTransaction()?->status->hasAction('refund')) return [];
-        return $this->payable->first()?->refunds;
+        // if (!self::getTransaction()?->status->hasAction('refund')) return [];
+        return self::getTransaction()?->refunds ?? [];
     }
 
     public function getTransaction(): ?Transaction
     {
         return $this->payable->first();
+    }
+
+    public function getPreviousTransaction(): ?Transaction
+    {
+        if ($this->payable->count() < 2) return null;
+        return $this->payable[1];
+    }
+
+    public function hasRefunds(): bool
+    {
+        if(!self::hasTransactions()) return false;
+        return (bool) self::getTransaction()->refunds->count();
     }
 
     public function createRefund(int|float $amount, string $description, string $bankDescription = ''): bool
@@ -148,8 +157,6 @@ trait HasPayUPayments
         }
         throw new PayUPaymentException('Transaction could not be created.');
     }
-
-
 
 
 }
