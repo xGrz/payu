@@ -23,6 +23,6 @@ return [
         RefundStatus::FINALIZED->name => 'Zakończony',
         RefundStatus::ERROR->name => 'Błąd',
         RefundStatus::SCHEDULED->name => 'Zaplanowany',
-        RefundStatus::RETRY->name => 'Ponowna próba wysyłki',
+        RefundStatus::RETRY->name => 'Ponawiam',
     ]
 ];

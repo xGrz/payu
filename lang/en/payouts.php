@@ -1,5 +1,7 @@
 <?php
 
+use xGrz\PayU\Enums\PayoutStatus;
+
 return [
     'create' => [
         'success' => 'Payout has been successfully scheduled.',
@@ -15,6 +17,14 @@ return [
     'destroy' => [
         'success' => 'Payout has been deleted.',
         'failed' => 'Error! Payout request cannot be deleted.'
-    ]
-
+    ],
+    'status' => [
+        PayoutStatus::INIT->name => 'Initialized',
+        PayoutStatus::PENDING->name => 'Pending',
+        PayoutStatus::WAITING->name => 'Waiting',
+        PayoutStatus::CANCELED->name => 'Canceled',
+        PayoutStatus::REALIZED->name => 'Done',
+        PayoutStatus::SCHEDULED->name => 'Scheduled',
+        PayoutStatus::RETRY->name => 'Retrying'
+    ],
 ];
