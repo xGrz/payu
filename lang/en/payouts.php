@@ -27,4 +27,7 @@ return [
         PayoutStatus::SCHEDULED->name => 'Scheduled',
         PayoutStatus::RETRY->name => 'Retrying'
     ],
+    'errors' => [
+        'NOT_ENOUGH_FUNDS' => 'Not enough funds',
+    ],
 ];

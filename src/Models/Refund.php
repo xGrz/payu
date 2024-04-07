@@ -32,9 +32,12 @@ class Refund extends Model
 
     public function getErrorDescriptionAttribute(): string
     {
-        return $this->error
+        if (!$this->error) return '';
+
+        $transKey = 'payu::refunds.errors.' . $this->error;
+        return __($transKey) === $transKey
             ? str($this->error)->lower()->headline()->lower()->ucfirst()
-            : '';
+            : __($transKey);
 
     }
 

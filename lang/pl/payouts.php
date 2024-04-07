@@ -27,4 +27,7 @@ return [
         PayoutStatus::SCHEDULED->name => 'Zaplanowana',
         PayoutStatus::RETRY->name => 'Ponawiam'
     ],
+    'errors' => [
+        'NOT_ENOUGH_FUNDS' => 'Saldo zbyt niskie'
+    ],
 ];

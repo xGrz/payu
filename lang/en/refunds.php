@@ -24,5 +24,8 @@ return [
         RefundStatus::ERROR->name => 'Error',
         RefundStatus::SCHEDULED->name => 'Scheduled',
         RefundStatus::RETRY->name => 'Retrying',
+    ],
+    'errors' => [
+        'AMOUNT_TOO_BIG' => 'The amount too big.',
     ]
 ];
