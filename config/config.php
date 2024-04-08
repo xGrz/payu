@@ -5,14 +5,14 @@ return [
 
     'job_delay' => [
         'refund' => [
-            'send' => 30,
-            'retry' => 3
+            'send' => 120,
+            'retry' => 60
         ],
         'payout' => [
-            'send' => 30,
-            'retry' => 3
+            'send' => 120,
+            'retry' => 60
         ],
-        'transaction_method_check' => 10
+        'transaction_method_check' => 60
     ],
     'interval' => [
         'payout_status_check' => 60,
@@ -26,12 +26,13 @@ return [
     ],
 
     'expose_admin_panel' => [
-        'expose' => true,
-        'prefix' => 'payu',
-        'url' => 'payu',
+        'expose' => false,
+        'route_naming' => 'payu',
+        'url_prefix' => 'payu',
         'paymentController' => xGrz\PayU\Http\Controllers\PaymentController::class,
         'refundController' => xGrz\PayU\Http\Controllers\RefundController::class,
         'payoutController' => xGrz\PayU\Http\Controllers\PayoutController::class,
+        'methodsController' => xGrz\PayU\Http\Controllers\MethodsController::class,
     ],
 
     // Do not pass any credential here. Please use your .env file to add keys and values

@@ -1,55 +1,57 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use xGrz\PayU\Http\Controllers\MethodsController;
-use xGrz\PayU\Http\Controllers\PaymentController;
-use xGrz\PayU\Http\Controllers\PayoutController;
-use xGrz\PayU\Http\Controllers\RefundController;
+use xGrz\PayU\Facades\Config;
 
-Route::name('payu.')
+
+Route::name(Config::getRouteRootNaming())
     ->middleware(['web'])
+    ->controller(Config::getPaymentController())
     ->group(function () {
 
         Route::name('payments.')
-            ->prefix('payu-payments')
+            ->prefix(Config::getUri('payments'))
             ->group(function () {
-                Route::get('', [PaymentController::class, 'index'])->name('index');
-                Route::get('create', [PaymentController::class, 'create'])->name('create');
-                Route::post('store', [PaymentController::class, 'store'])->name('store');
-                Route::post('store-fake', [PaymentController::class, 'storeFake'])->name('storeFake');
-                Route::patch('{transaction}/accept', [PaymentController::class, 'accept'])->name('accept');
-                Route::delete('{transaction}/reject', [PaymentController::class, 'reject'])->name('reject');
-                Route::get('{transaction}/payMethod', [PaymentController::class, 'requestPayMethod'])->name('method');
-                Route::get('{transaction}', [PaymentController::class, 'show'])->name('show');
-                Route::delete('{transaction}', [PaymentController::class, 'destroy'])->name('destroy');
+                Route::get('', 'index')->name('index');
+                Route::get('create', 'create')->name('create');
+                Route::post('store', 'store')->name('store');
+                Route::post('store-fake', 'storeFake')->name('storeFake');
+                Route::patch('{transaction}/accept', 'accept')->name('accept');
+                Route::delete('{transaction}/reject', 'reject')->name('reject');
+                Route::get('{transaction}/payMethod', 'requestPayMethod')->name('method');
+                Route::get('{transaction}', 'show')->name('show');
+                Route::delete('{transaction}', 'destroy')->name('destroy');
             });
 
 
         Route::name('refunds.')
-            ->prefix('payu-refunds')
+            ->prefix(Config::getUri('refunds'))
+            ->controller(Config::getRefundController())
             ->group(function () {
-                Route::get('', [RefundController::class, 'index'])->name('index');
-                Route::get('{refund}', [RefundController::class, 'retry'])->name('retry');
-                Route::post('{transaction}/create', [RefundController::class, 'store'])->name('store');
-                Route::delete('{refund}', [RefundController::class, 'destroy'])->name('destroy');
+                Route::get('', 'index')->name('index');
+                Route::get('{refund}', 'retry')->name('retry');
+                Route::post('{transaction}/create', 'store')->name('store');
+                Route::delete('{refund}', 'destroy')->name('destroy');
             });
 
         Route::name('payouts.')
-            ->prefix('payu-payouts')
+            ->prefix(Config::getUri('payouts'))
+            ->controller(Config::getPayoutController())
             ->group(function () {
-                Route::get('', [PayoutController::class, 'index'])->name('index');
-                Route::post('', [PayoutController::class, 'store'])->name('store');
-                Route::patch('{payout}/status', [PayoutController::class, 'update'])->name('status');
-                Route::patch('{payout}/retry', [PayoutController::class, 'retry'])->name('retry');
-                Route::delete('{payout}', [PayoutController::class, 'destroy'])->name('destroy');
+                Route::get('', 'index')->name('index');
+                Route::post('', 'store')->name('store');
+                Route::patch('{payout}/status', 'update')->name('status');
+                Route::patch('{payout}/retry', 'retry')->name('retry');
+                Route::delete('{payout}', 'destroy')->name('destroy');
             });
 
         Route::name('methods.')
-            ->prefix('payu-methods')
+            ->prefix(Config::getUri('methods'))
+            ->controller(Config::getMethodsController())
             ->group(function () {
-                Route::get('', [MethodsController::class, 'index'])->name('index');
-                Route::get('sync', [MethodsController::class, 'synchronize'])->name('synchronize');
-                Route::post('{method}', [MethodsController::class, 'activate'])->name('activate');
-                Route::delete('{method}', [MethodsController::class, 'deactivate'])->name('deactivate');
+                Route::get('', 'index')->name('index');
+                Route::get('sync', 'synchronize')->name('synchronize');
+                Route::post('{method}', 'activate')->name('activate');
+                Route::delete('{method}', 'deactivate')->name('deactivate');
             });
     });

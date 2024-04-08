@@ -132,4 +132,50 @@ class ConfigService
         return (bool)Method::count();
     }
 
+    public function getPaymentController(): string
+    {
+        return config(
+            'payu.expose_admin_panel.paymentController',
+            \xGrz\PayU\Http\Controllers\PaymentController::class
+        );
+    }
+
+    public function getPayoutController(): string
+    {
+        return config(
+            'payu.expose_admin_panel.payoutController',
+            \xGrz\PayU\Http\Controllers\PayoutController::class
+        );
+    }
+
+    public function getRefundController(): string
+    {
+        return config(
+            'payu.expose_admin_panel.refundController',
+            \xGrz\PayU\Http\Controllers\RefundController::class
+        );
+    }
+
+    public function getMethodsController()
+    {
+        return config(
+            'payu.expose_admin_panel.methodsController',
+            \xGrz\PayU\Http\Controllers\MethodsController::class
+        );
+    }
+
+    public function getRouteRootNaming(): string
+    {
+        $routeNaming = str(config('payu.expose_admin_panel.route_naming', 'payu'));
+        return $routeNaming->endsWith('.') ? $routeNaming : $routeNaming->append('.');
+    }
+
+    public function getUri(string $suffix): string
+    {
+        return join('/', [
+            config('payu.expose_admin_panel.uri', 'payu'),
+            $suffix
+        ]);
+    }
+
 }

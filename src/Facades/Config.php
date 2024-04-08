@@ -12,7 +12,7 @@ use xGrz\PayU\Services\ConfigService;
  * @method static getServiceDomain()
  * @method static getCacheKey()
  * @method static getClientSecret()
-  * @method static getMerchantPosId()
+ * @method static getMerchantPosId()
  * @method static getShopId()
  * @method static getSignatureKey()
  * @method static shouldBeLogged()
@@ -24,6 +24,12 @@ use xGrz\PayU\Services\ConfigService;
  * @method static getBalanceCacheKey()
  * @method static getTransactionMethodCheckDelay()
  * @method static hasPayMethods()
+ * @method static getPaymentController()
+ * @method static getRefundController()
+ * @method static getPayoutController()
+ * @method static getMethodsController()
+ * @method static getUri(string $string): string
+ * @method static getRouteRootNaming()
  */
 class Config extends Facade
 {

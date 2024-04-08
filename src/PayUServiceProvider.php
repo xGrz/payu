@@ -65,6 +65,8 @@ class PayUServiceProvider extends ServiceProvider
 
     private function setupWebRouting(): void
     {
+        if (!config('payu.expose_admin_panel.expose', false)) return;
+
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'payu');
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
     }
@@ -93,7 +95,7 @@ class PayUServiceProvider extends ServiceProvider
             ->call(fn() => LongProcessingTransactionsStatusRetriever::handle())
             ->name('PayU | Retrieve transaction states for unfinished payments')
             ->everyMinute();
-            // ->everyTwoHours();
+        // ->everyTwoHours();
     }
 
     private function setupTranslations(): void
