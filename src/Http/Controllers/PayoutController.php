@@ -31,7 +31,7 @@ class PayoutController extends Controller
 
     public function update(Payout $payout)
     {
-        PayU::payoutStatusCheck($payout);
+        PayU::forceUpdatePayoutStatus($payout);
         return back()->with('success', __('payu::payouts.updateStatus.success'));
     }
 

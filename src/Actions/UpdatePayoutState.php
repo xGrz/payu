@@ -12,7 +12,7 @@ class UpdatePayoutState
     {
         $payouts = Payout::whereIn('status', PayoutStatus::updatable())->get();
         foreach ($payouts as $payout) {
-            PayU::payoutStatusCheck($payout);
+            PayU::forceUpdatePayoutStatus($payout);
         }
     }
 

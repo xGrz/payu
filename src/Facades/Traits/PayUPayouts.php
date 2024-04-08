@@ -28,7 +28,7 @@ trait PayUPayouts
         }
     }
 
-    public static function payoutStatusCheck(Payout $payout, int $delay = null): bool
+    public static function forceUpdatePayoutStatus(Payout $payout, int $delay = null): bool
     {
         if (!Config::getShopId()) return false;
         if (!$payout->status->hasAction('processing')) return false;

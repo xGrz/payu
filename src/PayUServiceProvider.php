@@ -4,6 +4,7 @@ namespace xGrz\PayU;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
+use xGrz\PayU\Actions\LongProcessingTransactionsStatusRetriever;
 use xGrz\PayU\Actions\SyncPaymentMethods;
 use xGrz\PayU\Commands\PayMethodsUpdateCommand;
 use xGrz\PayU\Models\Payout;
@@ -82,27 +83,17 @@ class PayUServiceProvider extends ServiceProvider
 
     private function setupScheduler(Schedule $schedule): void
     {
-//        $schedule
-//            ->call(fn() => UpdatePayoutsStates::handle())
-//            ->everyFiveMinutes()
-//            ->name('PayU | Update payouts states');
-//
-//        $schedule
-//            ->call(fn() => (new ProcessFillTransactionsPayMethodJob())->handle())
-//            ->name('PayU | Fill payment method for transactions')
-//            ->everyFiveMinutes();
-//
         $schedule
             ->call(fn() => SyncPaymentMethods::handle())
             ->name('PayU | Synchronize payment methods')
             ->weekdays()
             ->at('4:30');
-//
-//        $schedule
-//            ->call(fn() => ProcessRefundsToTransactions::handle())
-//            ->name('PayU | Process refunds')
-//            ->everyThirtyMinutes();
-//
+
+        $schedule
+            ->call(fn() => LongProcessingTransactionsStatusRetriever::handle())
+            ->name('PayU | Retrieve transaction states for unfinished payments')
+            ->everyMinute();
+            // ->everyTwoHours();
     }
 
     private function setupTranslations(): void

@@ -7,6 +7,7 @@ use xGrz\PayU\Api\Actions\CancelOrder;
 use xGrz\PayU\Api\Actions\CreatePaymentAction;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;
 use xGrz\PayU\Facades\TransactionWizard;
+use xGrz\PayU\Jobs\RetrieveTransactionStatusJob;
 use xGrz\PayU\Models\Transaction;
 
 trait PayUTransaction
@@ -14,6 +15,14 @@ trait PayUTransaction
     public static function getTransactionWizard(): TransactionWizard
     {
         return new TransactionWizard();
+    }
+
+    public static function forceUpdatePaymentStatus(Transaction $transaction, int $delay = null): void
+    {
+        if (!$transaction->status->hasAction('processing')) return;
+        RetrieveTransactionStatusJob::dispatch($transaction)
+            ->delay($delay ?? 0);
+        ;
     }
 
     public static function createPayment(TransactionWizard $transaction): ?Transaction
