@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->unsignedTinyInteger('status')->default(RefundStatus::INITIALIZED);
             $table->text('description');
             $table->text('bank_description')->nullable();
-            $table->unsignedInteger('amount')->default(0);
+            $table->unsignedBigInteger('amount')->default(0);
             $table->string('currency_code')->nullable();
             $table->string('ext_refund_id')->nullable();
             $table->string('refund_id')->nullable();
