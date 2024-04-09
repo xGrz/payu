@@ -15,8 +15,8 @@ return new class extends Migration {
             $table->boolean('available')->default(false);
             $table->boolean('active')->default(true);
             $table->string('type', 10)->nullable();
-            $table->unsignedInteger('min_amount')->default(0);
-            $table->unsignedInteger('max_amount')->default(99999999);
+            $table->unsignedBigInteger('min_amount')->default(0);
+            $table->unsignedBigInteger('max_amount')->default(99999999);
             $table->timestamps();
         });
     }

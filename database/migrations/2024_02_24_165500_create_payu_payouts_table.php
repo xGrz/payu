@@ -13,7 +13,7 @@ return new class extends Migration {
             $table->id();
             $table->string('payout_id')->nullable();
             $table->unsignedTinyInteger('status')->default(PayoutStatus::INIT);
-            $table->unsignedInteger('amount')->default(0);
+            $table->unsignedBigInteger('amount')->default(0);
             $table->string('error')->nullable();
             $table->softDeletes();
             $table->timestamps();
