@@ -24,7 +24,7 @@ class ConfigService
 
     private function buildCacheKey(): static
     {
-        $envType = config('payu.api.use_sandbox', true) ? 'sandbox' : 'production';
+        $envType = self::isSandboxMode() ? 'sandbox' : 'production';
 
         $config = join(':', [
             self::getServiceDomain(),
@@ -40,7 +40,7 @@ class ConfigService
 
     public function getClientId(): ?int
     {
-        if (config('payu.use_sandbox', true)) {
+        if (self::isSandboxMode()) {
             return config('payu.api.oAuthClientId') ?? self::SANDBOX_CREDENTIALS['PAYU_O_AUTH_CLIENT_ID'];
         }
         return config('payu.api.oAuthClientId');
@@ -48,7 +48,7 @@ class ConfigService
 
     public function getClientSecret(): ?string
     {
-        if (config('payu.use_sandbox', true)) {
+        if (self::isSandboxMode()) {
             return config('payu.api.oAuthClientSecret') ?? self::SANDBOX_CREDENTIALS['PAYU_O_AUTH_CLIENT_SECRET'];
         }
         return config('payu.api.oAuthClientSecret');
@@ -56,7 +56,7 @@ class ConfigService
 
     public function getSignatureKey(): ?string
     {
-        if (config('payu.use_sandbox', true)) {
+        if (self::isSandboxMode()) {
             return config('payu.api.signatureKey') ?? self::SANDBOX_CREDENTIALS['PAYU_SIGNATURE_KEY'];
         }
         return config('payu.api.signatureKey');
@@ -69,7 +69,7 @@ class ConfigService
 
     public function getMerchantPosId(): ?int
     {
-        if (config('payu.use_sandbox', true)) {
+        if (self::isSandboxMode()) {
             return config('payu.api.merchantPosId') ?? self::SANDBOX_CREDENTIALS['PAYU_MERCHANT_POS_ID'];
         }
         return config('payu.api.merchantPosId');
@@ -77,7 +77,7 @@ class ConfigService
 
     public function getServiceDomain(): string
     {
-        return config('payu.use_sandbox', true)
+        return self::isSandboxMode()
             ? 'https://secure.snd.payu.com'
             : 'https://secure.payu.com';
     }
@@ -176,6 +176,11 @@ class ConfigService
             config('payu.expose_admin_panel.uri', 'payu'),
             $suffix
         ]);
+    }
+
+    public function isSandboxMode(): bool
+    {
+        return (bool) config('payu.api.use_sandbox');
     }
 
 }

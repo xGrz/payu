@@ -30,6 +30,7 @@ use xGrz\PayU\Services\ConfigService;
  * @method static getMethodsController()
  * @method static getUri(string $string): string
  * @method static getRouteRootNaming()
+ * @method static isSandboxMode()
  */
 class Config extends Facade
 {
