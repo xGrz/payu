@@ -23,6 +23,9 @@ class PayMethod
         $this->data['value'] = $method->code;
     }
 
+    /**
+     * @throws PayUGeneralException
+     */
     public static function make(Method|string $method): static
     {
         return new static($method);
