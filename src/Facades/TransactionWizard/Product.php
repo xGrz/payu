@@ -12,6 +12,7 @@ use xGrz\PayU\Traits\Arrayable;
 class Product
 {
     use Arrayable;
+
     private array $data = [
         'name' => null,
         'unitPrice' => null,
@@ -43,7 +44,8 @@ class Product
 
     public function setUnitPrice(int|float $unitPrice): static
     {
-        $this->data['unitPrice'] = (int) $unitPrice * 100;
+        $price = round($unitPrice * 100);
+        $this->data['unitPrice'] = (int)$price;
         return $this;
     }
 
