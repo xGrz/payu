@@ -43,7 +43,7 @@ class ApiAuthTest extends TestCase
         $this->assertNotEquals($token1, $token2);
     }
 
-    public function test_failed_get_api_authentication_token()
+    public function test_failed_get_api_authentication_token_success()
     {
         Config::set('payu.api.oAuthClientId', 123456);
         Cache::forget(\xGrz\PayU\Facades\Config::getCacheKey());
@@ -56,7 +56,12 @@ class ApiAuthTest extends TestCase
     {
         Cache::forget(\xGrz\PayU\Facades\Config::getCacheKey());
         Http::fake([
-            '*' => Http::response(['access_token' => 'abc']),
+            '*' => Http::response([
+                'access_token' => 'some-bearer-token',
+                'token_type' => 'bearer',
+                'expires_in' => 43199,
+                'grant_type' => 'client_credentials',
+            ]),
         ]);
 
         $token1 = \xGrz\PayU\Facades\Config::getToken();
@@ -65,7 +70,40 @@ class ApiAuthTest extends TestCase
         Http::assertSentCount(1);
 
         $this->assertEquals($token1, $token2);
+        $this->assertEquals('some-bearer-token', $token1);
+        Cache::forget(\xGrz\PayU\Facades\Config::getCacheKey());
     }
+
+    public function test_get_api_token_400_throws_exception()
+    {
+        Cache::forget(\xGrz\PayU\Facades\Config::getCacheKey());
+        Http::fake([
+            '*' => Http::response([
+                'error' => 'Bad request error',
+                'error_description' => 'Description of error',
+            ], 400),
+        ]);
+        $this->expectException(PayUGeneralException::class);
+        $this->expectExceptionMessage('Bad request error: Description of error');
+
+        \xGrz\PayU\Facades\Config::getToken();
+    }
+
+    public function test_get_api_token_401_throws_exception()
+    {
+        Cache::forget(\xGrz\PayU\Facades\Config::getCacheKey());
+        Http::fake([
+            '*' => Http::response([
+                'error' => 'Unauthorized error',
+                'error_description' => 'Description of error',
+            ], 401),
+        ]);
+        $this->expectException(PayUGeneralException::class);
+        $this->expectExceptionMessage('Unauthorized error');
+
+        \xGrz\PayU\Facades\Config::getToken();
+    }
+
 }
 
 
