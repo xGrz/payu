@@ -24,7 +24,7 @@ class ConfigService
 
     private function buildCacheKey(): static
     {
-        $envType = config('payu.use_sandbox', true) ? 'sandbox' : 'production';
+        $envType = config('payu.api.use_sandbox', true) ? 'sandbox' : 'production';
 
         $config = join(':', [
             self::getServiceDomain(),

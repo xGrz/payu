@@ -37,6 +37,7 @@ return [
 
     // Do not pass any credential here. Please use your .env file to add keys and values
     'api' => [
+        'use_sandbox' => env('PAYU_USE_SANDBOX', false),
         'shopId' => env('PAYU_SHOP_ID', null),
         'merchantPosId' => env('PAYU_MERCHANT_POS_ID', null),
         'signatureKey' => env('PAYU_SIGNATURE_KEY', null),
