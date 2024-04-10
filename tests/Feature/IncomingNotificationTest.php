@@ -13,20 +13,25 @@ class IncomingNotificationTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function fakeIncomingOrderNotificationData(): array
+    private function createFakeTransaction(PaymentStatus $paymentStatus = null, int $amount = 1000)
     {
-        $transaction = Transaction::create([
-            'amount' => 1000,
-            'status' => PaymentStatus::INITIALIZED,
+        return Transaction::create([
+            'amount' => $amount,
+            'status' => $paymentStatus ?? PaymentStatus::INITIALIZED,
             'payu_order_id' => '9GLFZSPNG9240409GUEST000P01',
             'payload' => [],
             'link' => 'https://google.com'
         ]);
+    }
+
+    private function fakeIncomingOrderNotificationData(Transaction $transaction = null, PaymentStatus $payloadStatus = null): array
+    {
+        $transaction = $transaction ?? self::createFakeTransaction();
         $payload = [
             'order' => [
                 'orderId' => $transaction->payu_order_id,
                 'extOrderId' => $transaction->id,
-                'status' => PaymentStatus::PENDING->name,
+                'status' => $payloadStatus?->name ?? PaymentStatus::PENDING->name,
                 'products' => [
                     [
                         'name' => 'Product1',
@@ -50,15 +55,9 @@ class IncomingNotificationTest extends TestCase
         ];
     }
 
-    private function fakeIncomingRefundNotificationData(): array
+    private function fakeIncomingRefundNotificationData(Transaction $transaction = null, RefundStatus $status = null): array
     {
-        $transaction = Transaction::create([
-            'amount' => 1000,
-            'status' => PaymentStatus::COMPLETED,
-            'payu_order_id' => '9GLFZSPNG9240409GUEST000P01',
-            'payload' => [],
-            'link' => 'https://google.com'
-        ]);
+        $transaction = $transaction ?? self::createFakeTransaction();
         $payload = [
             'orderId' => $transaction->payu_order_id,
             'extOrderId' => $transaction->id,
@@ -67,7 +66,7 @@ class IncomingNotificationTest extends TestCase
                 'extRefundId' => $transaction->id,
                 'amount' => 1000,
                 'currencyCode' => 'PLN',
-                'status' => RefundStatus::FINALIZED->name,
+                'status' => $status?->name ?? RefundStatus::FINALIZED->name,
                 'refundDate' => now(),
                 'reasonDescription' => 'RMA',
             ]
@@ -146,6 +145,47 @@ class IncomingNotificationTest extends TestCase
         $response->assertStatus(404);
     }
 
+    public function test_order_transaction_status_updated_after_notification_received()
+    {
+        $transaction = $this->createFakeTransaction(PaymentStatus::INITIALIZED);
+
+        $this->assertDatabaseHas('payu_transactions', [
+            'id' => $transaction->id,
+            'status' => PaymentStatus::INITIALIZED,
+        ]);
+
+        $fakeIncomingOrderNotificationData = $this->fakeIncomingOrderNotificationData($transaction, PaymentStatus::CANCELED);
+        $this
+            ->withHeaders($fakeIncomingOrderNotificationData['headers'])
+            ->json('post', $fakeIncomingOrderNotificationData['uri'], $fakeIncomingOrderNotificationData['payload'])
+            ->assertStatus(200);
+
+        $this->assertDatabaseHas('payu_transactions', [
+            'id' => $transaction->id,
+            'status' => PaymentStatus::CANCELED,
+        ]);
+    }
+
+    public function test_refund_status_updated_after_notification_received()
+    {
+        $transaction = $this->createFakeTransaction(PaymentStatus::INITIALIZED);
+
+        $this->assertDatabaseHas('payu_transactions', [
+            'id' => $transaction->id,
+            'status' => PaymentStatus::INITIALIZED,
+        ]);
+
+        $fakeIncomingRefundNotificationData = $this->fakeIncomingRefundNotificationData($transaction, RefundStatus::ERROR);
+        $this
+            ->withHeaders($fakeIncomingRefundNotificationData['headers'])
+            ->json('post', $fakeIncomingRefundNotificationData['uri'], $fakeIncomingRefundNotificationData['payload'])
+            ->assertStatus(200);
+
+        $this->assertDatabaseHas('payu_refunds', [
+            'transaction_id' => $transaction->id,
+            'status' => RefundStatus::ERROR,
+        ]);
+    }
 }
 
 
