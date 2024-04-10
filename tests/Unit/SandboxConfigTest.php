@@ -1,6 +1,5 @@
 <?php
 
-
 use Tests\TestCase;
 use xGrz\PayU\Facades\Config as PayUConfigFacade;
 
@@ -17,7 +16,7 @@ class SandboxConfigTest extends TestCase
     public function test_config_facade_returns_sandbox_mode()
     {
         $this->assertTrue(PayUConfigFacade::isSandboxMode());
-        if(!PayUConfigFacade::isSandboxMode()) die('Config not in sandbox mode');
+        if (!PayUConfigFacade::isSandboxMode()) die('Config not in sandbox mode');
     }
 
 
