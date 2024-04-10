@@ -8,7 +8,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use xGrz\PayU\Models\Transaction;
 
-class PendingTransaction
+class TransactionPending
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
