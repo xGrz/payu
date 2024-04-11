@@ -4,6 +4,7 @@ namespace Traits;
 
 use xGrz\PayU\Enums\PaymentStatus;
 use xGrz\PayU\Enums\RefundStatus;
+use xGrz\PayU\Models\Refund;
 use xGrz\PayU\Models\Transaction;
 
 trait WithTransactionModel
@@ -25,9 +26,9 @@ trait WithTransactionModel
         return $transaction;
     }
 
-    private function addRefund(Transaction $transaction, RefundStatus $refundStatus = RefundStatus::INITIALIZED, string $error = ''): Transaction
+    private function addRefund(Transaction $transaction, RefundStatus $refundStatus = RefundStatus::INITIALIZED, string $error = '', bool $createEventSilenced = false): Refund
     {
-        $transaction->refunds()->create([
+        $payload = [
             'status' => $refundStatus,
             'description' => 'RMA',
             'bank_description' => 'RMA',
@@ -36,7 +37,11 @@ trait WithTransactionModel
             'refund_id' => 'AOADODIAODIAODIA',
             'ext_order_id' => 'AOADSOPDKSPDK',
             'error' => $refundStatus === RefundStatus::ERROR ? $error : null,
-        ]);
-        return $transaction;
+        ];
+        $createEventSilenced
+            ? $transaction->refunds()->createQuietly($payload)
+            : $transaction->refunds()->create($payload);
+
+        return $transaction->refunds()->latest()->first();
     }
 }
