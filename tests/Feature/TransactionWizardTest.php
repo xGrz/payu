@@ -1,15 +1,15 @@
 <?php
 
-require_once(__DIR__ . '/../Traits/WithTransaction.php');
+require_once(__DIR__ . '/../Traits/WithTransactionWizard.php');
 
 use Tests\TestCase;
-use Traits\WithTransaction;
+use Traits\WithTransactionWizard;
 use xGrz\PayU\Facades\TransactionWizard;
 use xGrz\PayU\Facades\TransactionWizard\Product;
 
 class TransactionWizardTest extends TestCase
 {
-    use WithTransaction;
+    use WithTransactionWizard;
 
     public TransactionWizard $transaction;
 
