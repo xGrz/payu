@@ -12,7 +12,7 @@ class RefundFailed
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public Refund $payout)
+    public function __construct(public Refund $refund)
     {
     }
 
