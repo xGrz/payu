@@ -3,17 +3,18 @@
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Traits\WithTransactionModel;
 use xGrz\PayU\Enums\PaymentStatus;
 use xGrz\PayU\Events\TransactionCanceled;
 use xGrz\PayU\Events\TransactionCompleted;
 use xGrz\PayU\Events\TransactionCreated;
 use xGrz\PayU\Events\TransactionPaid;
 use xGrz\PayU\Events\TransactionPending;
-use xGrz\PayU\Models\Transaction;
 
 class TransactionStatusChangeEventTest extends TestCase
 {
     use RefreshDatabase;
+    use WithTransactionModel;
 
     protected function setUp(): void
     {
@@ -25,24 +26,6 @@ class TransactionStatusChangeEventTest extends TestCase
             TransactionCompleted::class,
             TransactionCanceled::class
         ]);
-
-    }
-
-    private function createTransaction(PaymentStatus $paymentStatus = PaymentStatus::INITIALIZED, bool $createEventSilenced = true): Transaction
-    {
-        $transaction = new Transaction([
-            'payu_order_id' => 'AIDJAODJAODJAOIJD',
-            'link' => 'https://payu.com',
-            'payload' => [],
-            'status' => PaymentStatus::INITIALIZED
-        ]);
-        $transaction
-            ->when(
-                $createEventSilenced,
-                fn() => $transaction->saveQuietly(),
-                fn() => $transaction->save()
-            );
-        return $transaction;
     }
 
     public function test_is_transaction_event_dispatched_after_created_new_transaction()
