@@ -8,7 +8,7 @@ use xGrz\PayU\Facades\TransactionWizard\Delivery\PostalBox;
 use xGrz\PayU\Facades\TransactionWizard\Product;
 use xGrz\PayU\Facades\TransactionWizard\Products;
 
-trait WithTransaction
+trait WithTransactionWizard
 {
     private function getProducts()
     {

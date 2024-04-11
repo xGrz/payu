@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . '/../Traits/WithTransaction.php');
+require_once(__DIR__ . '/../Traits/WithTransactionWizard.php');
 
 use Tests\TestCase;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;

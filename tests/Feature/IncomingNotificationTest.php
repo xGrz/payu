@@ -1,6 +1,6 @@
 <?php
 
-require_once(__DIR__ . '/../Traits/WithTransaction.php');
+require_once(__DIR__ . '/../Traits/WithTransactionWizard.php');
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
