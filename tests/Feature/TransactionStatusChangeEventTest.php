@@ -16,16 +16,18 @@ class TransactionStatusChangeEventTest extends TestCase
     use RefreshDatabase;
     use WithTransactionModel;
 
+    public array $events = [
+        TransactionCreated::class,
+        TransactionPending::class,
+        TransactionPaid::class,
+        TransactionCompleted::class,
+        TransactionCanceled::class
+    ];
+
     protected function setUp(): void
     {
         parent::setUp();
-        Event::fake([
-            TransactionCreated::class,
-            TransactionPending::class,
-            TransactionPaid::class,
-            TransactionCompleted::class,
-            TransactionCanceled::class
-        ]);
+        Event::fake($this->events);
     }
 
     public function test_is_transaction_event_dispatched_after_created_new_transaction()
