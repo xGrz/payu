@@ -24,7 +24,8 @@ trait PayURefunds
 
     public static function retryRefund(Refund $refund, int $delay = null): bool
     {
-        // todo: add protection
+        if(!$refund->status->hasAction('retry')) return false;
+
         SendRefundJob::dispatch($refund)
             ->delay(is_null($delay) ? Config::getRefundRetryDelay() : $delay);
 
