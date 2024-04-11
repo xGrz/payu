@@ -47,14 +47,15 @@
                 @if (empty($transaction->payMethod))
                     No transaction details received yet.
                     @if($transaction->status->hasAction('payMethod'))
-                        <x-payu::link href="{{ route('payu.payments.method', $transaction->id) }}">Get pay method now.</x-payu::link>
+                        <x-payu::link href="{{ route('payu.payments.method', $transaction->id) }}">Get pay method now.
+                        </x-payu::link>
                     @endif
                 @else
                     {{ $transaction->payMethod->name }}
                     <img
-                        src="{!! $transaction->payMethod->image !!}"
-                        alt="{{ $transaction->payMethod->name }}"
-                        class="max-h-10 max-w-16 fill bg-white p-2"
+                            src="{!! $transaction->payMethod->image !!}"
+                            alt="{{ $transaction->payMethod->name }}"
+                            class="max-h-10 max-w-16 fill bg-white p-2"
                     />
                 @endif
             </x-payu::table.cell>
@@ -66,7 +67,7 @@
         <x-payu::table.row>
             <x-payu::table.header class="text-left">Refunded</x-payu::table.header>
             <x-payu::table.cell>
-                {{ humanAmount($transaction->refunded(), $transaction->payload['currencyCode']) }}
+                {{ humanAmount($transaction->refundedAmount(), $transaction->payload['currencyCode']) }}
             </x-payu::table.cell>
         </x-payu::table.row>
         <x-payu::table.row>

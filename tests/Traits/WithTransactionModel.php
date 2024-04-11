@@ -14,6 +14,7 @@ trait WithTransactionModel
         $transaction = new Transaction([
             'payu_order_id' => 'AIDJAODJAODJAOIJD',
             'link' => 'https://payu.com',
+            'amount' => 100000,
             'payload' => [],
             'status' => $paymentStatus
         ]);
@@ -32,7 +33,7 @@ trait WithTransactionModel
             'status' => $refundStatus,
             'description' => 'RMA',
             'bank_description' => 'RMA',
-            'amount' => 1000,
+            'amount' => 100,
             'currency_code' => 'PLN',
             'refund_id' => 'AOADODIAODIAODIA',
             'ext_order_id' => 'AOADSOPDKSPDK',

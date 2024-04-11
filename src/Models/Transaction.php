@@ -38,7 +38,7 @@ class Transaction extends Model
         return $this->hasMany(Refund::class, 'transaction_id')->latest();
     }
 
-    public function refunded(): int
+    public function refundedAmount(): int
     {
         return $this
             ->refunds
@@ -46,12 +46,21 @@ class Transaction extends Model
             ->sum('amount');
     }
 
-    public function hasRefunds(): bool
+    public function hasSuccessfulRefunds(): bool
     {
-        return (bool)$this->refunded();
+        return (bool)$this->refundedAmount();
     }
 
-    public function hasDefinedRefunds()
+    public function hasDefinedRefunds(): bool
+    {
+        return $this
+            ->refunds
+            ->whereNotIn('status', RefundStatus::withAction('success'))
+            ->whereNotIn('status', RefundStatus::withAction('failed'))
+            ->count();
+    }
+
+    public function getDefinedRefundsTotalAmount(): int|float
     {
         return $this
             ->refunds
@@ -60,7 +69,15 @@ class Transaction extends Model
             ->sum('amount');
     }
 
-    public function hasFailedRefunds()
+    public function hasFailedRefunds(): bool
+    {
+        return $this
+            ->refunds
+            ->whereIn('status', RefundStatus::withAction('failed'))
+            ->count();
+    }
+
+    public function getFailedRefundsTotalAmount(): int|float
     {
         return $this
             ->refunds
@@ -70,12 +87,13 @@ class Transaction extends Model
 
     public function maxRefundAmount(): float|int
     {
-        return ($this->amount / 100) - $this->refunded();
+        return ($this->amount / 100) - $this->refundedAmount();
     }
 
     public function isRefundAvailable(): bool
     {
-        return ($this->amount / 100) - $this->refunded() > 0;
+        if (!$this->status->hasAction('refund')) return false;
+        return self::maxRefundAmount() > 0;
     }
 
     public function payuable(): MorphTo
