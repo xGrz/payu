@@ -147,7 +147,7 @@ class TransactionWizard
     private function setNotifyUrl(): void
     {
         $this->data['notifyUrl'] = route(
-            config('payu.routing.notification.route_name', 'payu.notification'),
+            config('payu.routing.notifications.route_name', 'payu.notification'),
             $this->data['extOrderId']
         );
     }

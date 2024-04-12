@@ -10,7 +10,7 @@ class WebPanelTest extends TestCase
 
     public function test_web_panel_is_accessable()
     {
-        dd(Config::get('payu.routing.web'), Route::getRoutes());
+//        dd(Config::get('payu.routing.web'), Route::getRoutes());
 //        $routeName = 'openpayu.payments.index';
 //        $this
 //            ->get(route($routeName))

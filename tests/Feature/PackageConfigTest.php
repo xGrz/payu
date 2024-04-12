@@ -14,7 +14,7 @@ class PackageConfigTest extends TestCase
 
     public function test_get_admin_panel_route_naming()
     {
-        $this->assertEquals('openpayu.', Cfg::getRouteRootNaming());
+        $this->assertEquals('openpayu.', Cfg::getRouteName());
     }
 
     public function test_get_admin_panel_root_uri()
