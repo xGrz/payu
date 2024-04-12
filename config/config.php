@@ -1,8 +1,6 @@
 <?php
 
 return [
-    'use_sandbox' => true,
-
     'job_delay' => [
         'refund' => [
             'send' => 120,
@@ -19,23 +17,25 @@ return [
     ],
 
     'routing' => [
-        'notification' => [
-            'route_name' => 'payu.notification',
-            'endpoint_name' => 'payu-payment-notification'
+        'notifications' => [
+            'route_name' => env('PAYU_NOTIFICATION_ROUTE_NAME', 'payu.notification'),
+            'endpoint_name' => env('PAYU_NOTIFICATION_ENDPOINT','payu-payment-notification')
         ],
+        'expose_web_panel' => env('PAYU_EXPOSE_ADMIN_PANEL', false),
+        'web' => [
+            'group_name' => env('PAYU_ADMIN_PANEL_ROUTE_GROUP_NAME', 'payu'),
+            'uri_prefix' => env('PAYU_ADMIN_PANEL_URL_PREFIX', 'payu'),
+        ],
+        'controllers' => [
+            'payment' => xGrz\PayU\Http\Controllers\PaymentController::class,
+            'refund' => xGrz\PayU\Http\Controllers\RefundController::class,
+            'payout' => xGrz\PayU\Http\Controllers\PayoutController::class,
+            'methods' => xGrz\PayU\Http\Controllers\MethodsController::class,
+        ]
     ],
 
-    'expose_admin_panel' => [
-        'expose' => false,
-        'route_naming' => 'payu',
-        'url_prefix' => 'payu',
-        'paymentController' => xGrz\PayU\Http\Controllers\PaymentController::class,
-        'refundController' => xGrz\PayU\Http\Controllers\RefundController::class,
-        'payoutController' => xGrz\PayU\Http\Controllers\PayoutController::class,
-        'methodsController' => xGrz\PayU\Http\Controllers\MethodsController::class,
-    ],
-
-    // Do not pass any credential here. Please use your .env file to add keys and values
+    // Do not pass any credential here.
+    // Please use your .env file to add keys and values
     'api' => [
         'use_sandbox' => env('PAYU_USE_SANDBOX', false),
         'shopId' => env('PAYU_SHOP_ID', null),
