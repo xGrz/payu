@@ -1,19 +1,21 @@
 <?php
 
 return [
-    'job_delay' => [
-        'refund' => [
-            'send' => 120,
-            'retry' => 60
+    'jobs' => [
+        'delay' => [
+            'refund' => [
+                'send' => 90,
+                'retry' => 60
+            ],
+            'payout' => [
+                'send' => 90,
+                'retry' => 60
+            ],
+            'transaction_method_check' => 60
         ],
-        'payout' => [
-            'send' => 120,
-            'retry' => 60
+        'interval' => [
+            'payout_status_check' => 60,
         ],
-        'transaction_method_check' => 60
-    ],
-    'interval' => [
-        'payout_status_check' => 60,
     ],
 
     'routing' => [
@@ -45,4 +47,3 @@ return [
         'oAuthClientSecret' => env('PAYU_O_AUTH_CLIENT_SECRET', null),
     ]
 ];
-

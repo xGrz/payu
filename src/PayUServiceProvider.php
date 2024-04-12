@@ -65,7 +65,7 @@ class PayUServiceProvider extends ServiceProvider
 
     private function setupWebRouting(): void
     {
-        if (!config('payu.expose_admin_panel.expose', false)) return;
+        if (!config('payu.routing.expose_web_panel', false)) return;
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'payu');
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');

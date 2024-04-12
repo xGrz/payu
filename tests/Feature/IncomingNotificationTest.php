@@ -46,7 +46,7 @@ class IncomingNotificationTest extends TestCase
             'Content-Type' => 'application/json',
             'openpayu-signature' => 'sender=checkout;signature=' . $hash . ';algorithm=MD5;content=DOCUMENT'
         ];
-        $uri = route(config('payu.routing.notification.route_name'), $transaction->id);
+        $uri = route(config('payu.routing.notifications.route_name'), $transaction->id);
         return [
             'transaction' => $transaction,
             'payload' => $payload,
@@ -76,7 +76,7 @@ class IncomingNotificationTest extends TestCase
             'Content-Type' => 'application/json',
             'openpayu-signature' => 'sender=checkout;signature=' . $hash . ';algorithm=MD5;content=DOCUMENT'
         ];
-        $uri = route(config('payu.routing.notification.route_name'), $transaction->id);
+        $uri = route(config('payu.routing.notifications.route_name'), $transaction->id);
         return [
             'transaction' => $transaction,
             'payload' => $payload,

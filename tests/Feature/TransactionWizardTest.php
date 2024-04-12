@@ -73,7 +73,7 @@ class TransactionWizardTest extends TestCase
     public function test_notify_url_generator()
     {
         $this->assertEquals(
-            route(config('payu.routing.notification.route_name'), $this->transaction->toArray()['extOrderId']),
+            route(config('payu.routing.notifications.route_name'), $this->transaction->toArray()['extOrderId']),
             $this->transaction->toArray()['notifyUrl']
         );
     }

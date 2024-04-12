@@ -99,32 +99,32 @@ class ConfigService
 
     public function getPayoutInterval(): int
     {
-        return config('payu.interval.payout_status_check', 60);
+        return config('payu.jobs.interval.payout_status_check', 120);
     }
 
     public function getPayoutSendDelay(): int
     {
-        return config('payu.job_delay.payout.send', 60);
+        return config('payu.jobs.delay.payout.send', 120);
     }
 
     public function getPayoutRetryDelay(): int
     {
-        return config('payu.job_delay.payout.retry', 60);
+        return config('payu.jobs.delay.payout.retry', 120);
     }
 
     public function getRefundSendDelay(): int
     {
-        return config('payu.job_delay.refund.send', 60);
+        return config('payu.jobs.delay.refund.send', 120);
     }
 
     public function getRefundRetryDelay(): int
     {
-        return config('payu.job_delay.refund.retry', 60);
+        return config('payu.jobs.delay.refund.retry', 120);
     }
 
     public function getTransactionMethodCheckDelay(): int
     {
-        return config('payu.job_delay.transaction_method_check', 60);
+        return config('payu.jobs.delay.transaction_method_check', 120);
     }
 
     public function hasPayMethods(): bool
@@ -159,21 +159,21 @@ class ConfigService
     public function getMethodsController()
     {
         return config(
-            'payu.expose_admin_panel.methodsController',
+            'payu.routing.controllers.methods',
             \xGrz\PayU\Http\Controllers\MethodsController::class
         );
     }
 
     public function getRouteRootNaming(): string
     {
-        $routeNaming = str(config('payu.expose_admin_panel.route_naming', 'payu'));
+        $routeNaming = str(config('payu.routing.web.group_name', 'payu'));
         return $routeNaming->endsWith('.') ? $routeNaming : $routeNaming->append('.');
     }
 
     public function getUri(string $suffix): string
     {
         return join('/', [
-            config('payu.expose_admin_panel.uri', 'payu'),
+            config('payu.routing.web.uri_prefix', 'payu'),
             $suffix
         ]);
     }
