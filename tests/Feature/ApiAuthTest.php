@@ -25,9 +25,13 @@ class ApiAuthTest extends TestCase
 
     public function test_cache_key_builder_for_production()
     {
-        Config::set('payu.api.use_sandbox', false);
+        $environment = app()->environment();
+        app()->detectEnvironment(fn() => 'production');
+
         $productionCacheKey = (new ConfigService())->getCacheKey();
         $this->assertStringContainsString('payu:access_token_production', $productionCacheKey);
+
+        app()->detectEnvironment(fn() => $environment); // back to original environment
     }
 
     public function test_get_api_authentication_token()

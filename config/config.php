@@ -20,13 +20,13 @@ return [
 
     'routing' => [
         'notifications' => [
-            'route_name' => env('PAYU_NOTIFICATION_ROUTE_NAME', 'payu.notification'),
-            'endpoint_name' => env('PAYU_NOTIFICATION_ENDPOINT','payu-payment-notification')
+            'route_name' => 'payu.notification',
+            'endpoint_name' => 'payu-payment-notification',
         ],
-        'expose_web_panel' => env('PAYU_EXPOSE_ADMIN_PANEL', false),
+        'expose_web_panel' => false,
         'web' => [
-            'group_name' => env('PAYU_ADMIN_PANEL_ROUTE_GROUP_NAME', 'payu'),
-            'uri_prefix' => env('PAYU_ADMIN_PANEL_URL_PREFIX', 'payu'),
+            'group_name' => 'payu',
+            'uri_prefix' => 'payu',
         ],
         'controllers' => [
             'payment' => xGrz\PayU\Http\Controllers\PaymentController::class,

@@ -187,7 +187,7 @@ class ConfigService
 
     public function isSandboxMode(): bool
     {
-        return (bool)config('payu.api.use_sandbox');
+        return !app()->environment('production');
     }
 
 }
