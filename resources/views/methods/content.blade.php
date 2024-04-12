@@ -1,6 +1,7 @@
+@php use \xGrz\PayU\Facades\Config; @endphp
 <x-payu::paper class="bg-slate-800">
     <x-payu::paper-title title="Payment methods">
-        <x-payu::buttonlink href="{{ route('payu.methods.synchronize') }}">
+        <x-payu::buttonlink href="{{ route(Config::getRouteName('methods.synchronize')) }}">
             Synchronize now
         </x-payu::buttonlink>
     </x-payu::paper-title>
@@ -44,13 +45,13 @@
                     <x-payu::table.cell class="text-center">
                         @if($method->available)
                             @if($method->active)
-                                <form action="{{ route('payu.methods.deactivate', $method) }}" method="POST">
+                                <form action="{{ route(Config::getRouteName('methods.deactivate'), $method) }}" method="POST">
                                     @csrf @method('DELETE')
                                     <x-payu::button type="submit" size="small" color="success">ACTIVE
                                     </x-payu::button>
                                 </form>
                             @else
-                                <form action="{{ route('payu.methods.activate', $method) }}" method="POST">
+                                <form action="{{ route(Config::getRouteName('methods.activate'), $method) }}" method="POST">
                                     @csrf
                                     <x-payu::button type="submit" size="small" color="danger">DISABLED
                                     </x-payu::button>
