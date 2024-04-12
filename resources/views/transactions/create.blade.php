@@ -1,3 +1,4 @@
+@php use \xGrz\PayU\Facades\Config; @endphp
 @extends('payu::app')
 
 @section('css')
@@ -5,7 +6,7 @@
 
 @section('content')
     <div class="max-w-[800px] m-auto">
-        <form action="{{route('payu.payments.store')}}" method="POST" class="grid gap-2">
+        <form action="{{route(Config::getRouteName('.payments.store'))}}" method="POST" class="grid gap-2">
             @csrf
             <x-payu::paper class="bg-slate-800">
                 <x-payu::paper-title title="Customer"/>

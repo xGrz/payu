@@ -1,4 +1,4 @@
-@php use Illuminate\Support\Number;use xGrz\PayU\Enums\PaymentStatus; @endphp
+@php use Illuminate\Support\Number;use xGrz\PayU\Enums\PaymentStatus; use xGrz\PayU\Facades\Config @endphp
 @extends('payu::app')
 
 @section('breadcrumbs')
@@ -10,7 +10,7 @@
             </div>
             <a
                 class="bg-green-700 hover:bg-green-800 cursor-pointer px-3 py-1 shrink rounded-r-md shadow-md text-white align-self-center"
-                href="{{ route('payu.payouts.index') }}"
+                href="{{ route(Config::getRouteName('payouts.index')) }}"
             >
                 <small>Payout</small>
             </a>
@@ -22,8 +22,8 @@
     <x-payu::pagination.info :source="$transactions"/>
     <x-payu::paper class="bg-slate-800">
         <x-payu::paper-title title="Transactions listing">
-            <x-payu::buttonlink href="{{route('payu.payments.create')}}">Wizard</x-payu::buttonlink>
-            <form action="{{route('payu.payments.storeFake')}}" method="POST" id="createTransaction" class="hidden">
+            <x-payu::buttonlink href="{{route(Config::getRouteName('payments.create'))}}">Wizard</x-payu::buttonlink>
+            <form action="{{route(Config::getRouteName('.payments.storeFake'))}}" method="POST" id="createTransaction" class="hidden">
                 @csrf
             </form>
             <x-payu::button type="submit" form="createTransaction" color="success">
@@ -54,7 +54,7 @@
                             @if($transaction->status === PaymentStatus::INITIALIZED)
                                 <span class="text-gray-300">{{ $transaction->payload['description']  }}</span>
                             @else
-                                <x-payu::link href="{{ route('payu.payments.show', $transaction->id )}}">
+                                <x-payu::link href="{{ route(Config::getRouteName('payments.show'), $transaction->id )}}">
                                     {{ $transaction->payload['description']  }}
                                 </x-payu::link>
                             @endif

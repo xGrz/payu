@@ -164,10 +164,17 @@ class ConfigService
         );
     }
 
-    public function getRouteRootNaming(): string
+    public function getRouteName(string $routeExtension = null): string
     {
-        $routeNaming = str(config('payu.routing.web.group_name', 'payu'));
-        return $routeNaming->endsWith('.') ? $routeNaming : $routeNaming->append('.');
+        $rootName = str(config('payu.routing.web.group_name', 'payu'))
+            ->whenStartsWith('.', fn($rootName) => str($rootName)->replaceFirst('.', ''))
+            ->whenEndsWith('.', fn($rootName) => str($rootName)->replaceLast('.', ''));
+
+        $routeExtension = str($routeExtension)
+            ->whenStartsWith('.', fn($routeExt) => str($routeExt)->replaceFirst('.', ''))
+            ->whenEndsWith('.', fn($routeExt) => str($routeExt)->replaceLast('.', ''));
+
+        return join('.', [$rootName, $routeExtension]);
     }
 
     public function getUri(string $suffix): string
@@ -180,7 +187,7 @@ class ConfigService
 
     public function isSandboxMode(): bool
     {
-        return (bool) config('payu.api.use_sandbox');
+        return (bool)config('payu.api.use_sandbox');
     }
 
 }

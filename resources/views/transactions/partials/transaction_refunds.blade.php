@@ -1,3 +1,4 @@
+@php use \xGrz\PayU\Facades\Config; @endphp
 @props(['tableTitle' => '[tableTitle] not set', 'shouldRenderAction' => false])
 
 @if ($transaction->status->hasAction('refund'))
@@ -38,7 +39,7 @@
                         <x-payu::table.cell class="text-right">{{ $refund->created_at }}</x-payu::table.cell>
                         <x-payu::table.cell class="text-right">
                             @if($refund->status->hasAction('delete'))
-                                <form action="{{ route('payu.refunds.destroy', $refund->id) }}" method="POST"
+                                <form action="{{ route(Config::getRouteName('refunds.destroy'), $refund->id) }}" method="POST"
                                       id="delete_refund_{{$refund->id}}">
                                     @csrf @method('DELETE')
                                 </form>
@@ -47,7 +48,7 @@
                                 </x-payu::button>
                             @endif
                             @if($refund->status->hasAction('retry'))
-                                <x-payu::buttonlink href="{{route('payu.refunds.retry', $refund->id)}}">
+                                <x-payu::buttonlink href="{{route(Config::getRouteName('refunds.retry'), $refund->id)}}">
                                     Retry
                                 </x-payu::buttonlink>
                             @endif

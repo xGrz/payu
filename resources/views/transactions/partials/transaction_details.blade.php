@@ -1,10 +1,11 @@
+@php use \xGrz\PayU\Facades\Config; @endphp
 <x-payu::paper class="bg-slate-800">
     <x-payu::paper-title title="Transaction details">
-        <form action="{{route('payu.payments.accept', $transaction->id)}}" method="POST" id="accept">
+        <form action="{{route(Config::getRouteName('payments.accept'), $transaction->id)}}" method="POST" id="accept">
             @method('PATCH')
             @csrf
         </form>
-        <form action="{{route('payu.payments.reject', $transaction->id)}}" method="POST" id="reject">
+        <form action="{{route(Config::getRouteName('.payments.reject'), $transaction->id)}}" method="POST" id="reject">
             @method('DELETE')
             @csrf
         </form>

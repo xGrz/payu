@@ -29,8 +29,8 @@ use xGrz\PayU\Services\ConfigService;
  * @method static getPayoutController()
  * @method static getMethodsController()
  * @method static getUri(string $string): string
- * @method static getRouteRootNaming()
  * @method static isSandboxMode()
+ * @method static getRouteName(string $routeExtension = null)
  */
 class Config extends Facade
 {

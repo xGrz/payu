@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use xGrz\PayU\Facades\Config;
 
 
-Route::name(Config::getRouteRootNaming())
+Route::name(Config::getRouteName())
     ->middleware(['web'])
     ->controller(Config::getPaymentController())
     ->group(function () {

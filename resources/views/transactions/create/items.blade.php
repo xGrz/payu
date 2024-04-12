@@ -28,33 +28,3 @@
         </div>
     @endforeach
 </div>
-{{--<x-payu::table>--}}
-{{--    @foreach($products as $key => $product)--}}
-{{--        <x-payu::table.row>--}}
-{{--            <x-payu::table.cell>--}}
-{{--                <x-payu::input--}}
-{{--                    type="text"--}}
-{{--                    name="item[{{$key}}][name]"--}}
-{{--                    value="{{ $products[$key]['name'] }}"--}}
-{{--                />--}}
-{{--            </x-payu::table.cell>--}}
-{{--            <x-payu::table.cell>--}}
-{{--                <x-payu::input--}}
-{{--                    type="number"--}}
-{{--                    step="1"--}}
-{{--                    name="item[{{$key}}][quantity]"--}}
-{{--                    value="{{ $products[$key]['quantity'] }}"--}}
-{{--                />--}}
-{{--            </x-payu::table.cell>--}}
-{{--            <x-payu::table.cell>--}}
-{{--                <x-payu::input--}}
-{{--                    type="number"--}}
-{{--                    step="0.01"--}}
-{{--                    name="item[{{$key}}][price]"--}}
-{{--                    value="{{ $products[$key]['price'] }}"--}}
-{{--                />--}}
-{{--            </x-payu::table.cell>--}}
-{{--        </x-payu::table.row>--}}
-{{--    @endforeach--}}
-{{--</x-payu::table>--}}
-{{--</div>--}}

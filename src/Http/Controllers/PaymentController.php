@@ -88,7 +88,7 @@ class PaymentController extends Controller
 
         PayU::createPayment($transaction);
 
-        return to_route('payu.payments.index')->with('success', __('payu::transactions.created'));
+        return to_route(Config::getRouteName('payments.index'))->with('success', __('payu::transactions.created'));
     }
 
     public function storeFake()
