@@ -5,6 +5,7 @@ namespace xGrz\PayU\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use xGrz\PayU\Facades\Config;
 use xGrz\PayU\Facades\PayU;
 use xGrz\PayU\Http\Requests\PayoutRequest;
 use xGrz\PayU\Models\Payout;
@@ -25,8 +26,8 @@ class PayoutController extends Controller
     public function store(PayoutRequest $request): RedirectResponse
     {
         return PayU::payout($request->validated('payoutAmount'))
-            ? to_route('payu.payouts.index')->with('success', __('payu::payouts.create.success'))
-            : to_route('payu.payouts.index')->with('error', __('payu::payouts.create.failed'));
+            ? to_route(Config::getRouteName('payouts.index'))->with('success', __('payu::payouts.create.success'))
+            : to_route(Config::getRouteName('payouts.index'))->with('error', __('payu::payouts.create.failed'));
     }
 
     public function update(Payout $payout)

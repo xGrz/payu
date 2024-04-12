@@ -1,6 +1,7 @@
+@php use \xGrz\PayU\Facades\Config; @endphp
 @if($payout->status->hasAction('refresh-status') && $payout->updated_at < now()->subHour())
     <form
-        action="{{ route('payu.payouts.retry', $payout->id) }}"
+        action="{{ route(Config::getRouteName('payouts.retry'), $payout->id) }}"
         method="POST"
         id="payout_refresh_{{$payout->id}}"
         class="hidden"
@@ -20,7 +21,7 @@
 
 @if($payout->status->hasAction('delete'))
     <form
-        action="{{route('payu.payouts.destroy', $payout->id)}}"
+        action="{{route(Config::getRouteName('payouts.destroy'), $payout->id)}}"
         method="POST"
         id="payout_delete_{{$payout->id}}"
         class="hidden"
@@ -40,7 +41,7 @@
 
 @if($payout->status->hasAction('retry'))
     <form
-        action="{{route('payu.payouts.retry', $payout->id)}}"
+        action="{{route(Config::getRouteName('payouts.retry'), $payout->id)}}"
         method="POST"
         id="payout_retry_{{$payout->id}}"
         class="hidden"
