@@ -39,6 +39,11 @@ class Buyer
         }
     }
 
+    public function setCustomerId(string|int $customerId): static
+    {
+        $this->data['extCustomerId'] = $customerId;
+        return $this;
+    }
     public function __set($key, $value)
     {
         $this->data[$key] = $value;
