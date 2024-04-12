@@ -1,20 +1,18 @@
 <?php
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
 class WebPanelTest extends TestCase
 {
 
-    use RefreshDatabase;
+    use DatabaseMigrations;
 
     public function test_web_panel_is_accessable()
     {
-//        dd(Config::get('payu.routing.web'), Route::getRoutes());
-//        $routeName = 'openpayu.payments.index';
-//        $this
-//            ->get(route($routeName))
-//            ->assertStatus(200);
+        $this->get(route(\xGrz\PayU\Facades\Config::getRouteName('payments.index')))
+            ->assertStatus(200);
+        ;
     }
 
 }
