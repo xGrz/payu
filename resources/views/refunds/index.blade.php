@@ -1,3 +1,4 @@
+@php use \xGrz\PayU\Facades\Config; @endphp
 @extends('payu::app')
 
 @section('content')
@@ -19,7 +20,7 @@
                 @foreach($refunds as $refund)
                     <x-payu::table.row>
                         <x-payu::table.cell>
-                            <x-payu::link href="{{route('payu.payments.show', $refund->transaction->id)}}">
+                            <x-payu::link href="{{route(Config::getRouteName('payments.show'), $refund->transaction->id)}}">
                                 {{$refund->transaction->payload['description']}}
                             </x-payu::link>
                         </x-payu::table.cell>
