@@ -138,8 +138,8 @@ class TransactionWizardTest extends TestCase
             '1234567891',
             'Max',
             'Verstappen',
-            'nl',
             22,
+            'nl',
         );
         $buyerArr = $buyer->toArray();
 

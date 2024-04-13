@@ -44,7 +44,14 @@ trait WithTransactionWizard
 
     private function getBuyer(): Buyer
     {
-        return new Buyer('example@example.com', '987567192', 'John', 'Travolta', 'en', 199);
+        return new Buyer(
+            'example@example.com',
+            '987567192',
+            'John',
+            'Travolta',
+            199,
+            'en',
+        );
     }
 
 }

@@ -10,8 +10,7 @@ use xGrz\PayU\Traits\Arrayable;
  * @method setEmail(string $email)
  * @method setLastName(string $lastName)
  * @method setLanguage(mixed $language)
- * @method setExtCustomerId(int|string $customerId)
- */
+  */
 class Buyer
 {
     use Arrayable;
@@ -25,7 +24,7 @@ class Buyer
         'language' => null,
     ];
 
-    public function __construct(string $email = null, string|int $phone = null, string $firstName = null, string $lastName = null, $language = null, string|int $customerId = null)
+    public function __construct(string $email = null, string|int $phone = null, string $firstName = null, string $lastName = null, string|int $customerId = null, $language = null)
     {
         if (!empty($email)) $this->setEmail($email);
         if (!empty($phone)) $this->setPhone($phone);
@@ -35,7 +34,7 @@ class Buyer
             ? $this->setLanguage(app()->getLocale())
             : $this->setLanguage($language);
         if (!empty($customerId)) {
-            $this->setExtCustomerId($customerId);
+            $this->setCustomerId($customerId);
         }
     }
 
@@ -61,9 +60,9 @@ class Buyer
         throw new \TypeError('Method ' . $name . ' not found');
     }
 
-    public static function make(string $email = null, string|int $phone = null, string $firstName = null, string $lastName = null, $language = null, string|int $customerId = null): static
+    public static function make(string $email = null, string|int $phone = null, string $firstName = null, string $lastName = null, string|int $customerId = null, string $language = null): static
     {
-        return new static($email, $phone, $firstName, $lastName, $language, $customerId);
+        return new static($email, $phone, $firstName, $lastName, $customerId, $language);
     }
 
 }
