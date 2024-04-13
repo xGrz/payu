@@ -3,6 +3,7 @@
 namespace xGrz\PayU\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use xGrz\PayU\Facades\Config;
 use xGrz\PayU\Facades\PayU;
@@ -49,7 +50,7 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function store(StorePaymentRequest $request)
+    public function store(StorePaymentRequest $request): RedirectResponse
     {
         $transaction = new TransactionWizard('Order number ' . rand(1, 2000) . '/2024');
         $items = new TransactionWizard\Products();
@@ -69,13 +70,13 @@ class PaymentController extends Controller
         $transaction->setDelivery(TransactionWizard\Delivery\Address::make(
             $request->validated('customer.postalCode'),
             $request->validated('customer.city'),
-            join('/', [
+            str(join('/', [
                 join(' ', [
                     $request->validated('customer.street'),
                     $request->validated('customer.house_number')
                 ]),
-                $request->validated('customer.apartment_number')
-            ]),
+                str($request->validated('customer.apartment_number'))->trim()
+            ]))->whenEndsWith('/', fn($street) => str($street)->replaceLast('/', '')),
             'PL',
             $request->validated('customer.email'),
             $request->validated('customer.name'),
@@ -91,14 +92,14 @@ class PaymentController extends Controller
         return to_route(Config::getRouteName('payments.index'))->with('success', __('payu::transactions.created'));
     }
 
-    public function storeFake()
+    public function storeFake(): RedirectResponse
     {
         $transaction = TransactionWizard::fake();
         PayU::createPayment($transaction);
         return back()->with('success', __('payu::transactions.created'));
     }
 
-    public function show(Transaction $transaction)
+    public function show(Transaction $transaction): View
     {
         return view('payu::transactions.show', [
             'title' => 'Transaction',
@@ -106,28 +107,28 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function accept(Transaction $transaction)
+    public function accept(Transaction $transaction): RedirectResponse
     {
         return PayU::accept($transaction)
             ? back()->with('success', __('payu::transactions.accept.success'))
             : back()->with('error', __('payu::transactions.accept.failed'));
     }
 
-    public function reject(Transaction $transaction)
+    public function reject(Transaction $transaction): RedirectResponse
     {
         return PayU::reject($transaction)
             ? back()->with('success', __('payu::transactions.reject.success'))
             : back()->with('error', __('payu::transactions.reject.failed'));
     }
 
-    public function destroy(Transaction $transaction)
+    public function destroy(Transaction $transaction): RedirectResponse
     {
         return PayU::cancelTransaction($transaction)
             ? back()->with('success', 'Payment successfully canceled')
             : back()->with('error', 'Payment was not deleted.');
     }
 
-    public function requestPayMethod(Transaction $transaction)
+    public function requestPayMethod(Transaction $transaction): RedirectResponse
     {
         RetrieveTransactionPayMethodJob::dispatch($transaction)
             ->delay(Config::getTransactionMethodCheckDelay());
