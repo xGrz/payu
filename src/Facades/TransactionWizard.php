@@ -28,7 +28,14 @@ class TransactionWizard
         'products' => [],
     ];
 
-    public function __construct(string $description = null, ?Products $products = null, ?Buyer $buyer = null, ?DeliveryTypeInterface $delivery = null, string $redirectAfterTransaction = null, ?PayMethod $method = null)
+    public function __construct(
+        string                 $description = null,
+        ?Products              $products = null,
+        ?Buyer                 $buyer = null,
+        ?DeliveryTypeInterface $delivery = null,
+        string                 $redirectAfterTransaction = null,
+        ?PayMethod             $method = null
+    )
     {
         self::fillTransaction();
         if (!empty($description)) self::setDescription($description);
