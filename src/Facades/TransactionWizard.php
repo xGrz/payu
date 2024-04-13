@@ -5,6 +5,7 @@ namespace xGrz\PayU\Facades;
 use Illuminate\Support\Str;
 use xGrz\PayU\Api\Exceptions\PayUGeneralException;
 use xGrz\PayU\Facades\TransactionWizard\Buyer;
+use xGrz\PayU\Facades\TransactionWizard\Delivery\Address;
 use xGrz\PayU\Facades\TransactionWizard\Delivery\PostalBox;
 use xGrz\PayU\Facades\TransactionWizard\PayMethod;
 use xGrz\PayU\Facades\TransactionWizard\Product;
@@ -126,8 +127,26 @@ class TransactionWizard
      * @param string|null $redirectAfterTransaction
      * @throws PayUGeneralException
      */
-    public static function fake(string $redirectAfterTransaction = null): static
+    public static function fake(string $redirectAfterTransaction = null, bool $shouldBeDeliveredToAddress = false): static
     {
+        $delivery = [
+            PostalBox::make(
+                'WA101',
+                'test@example.com',
+                'John Kovalsky',
+                '909765456',
+            ),
+            Address::make(
+                '03-029',
+                'Krakow',
+                'Poznanska 201',
+                'PL',
+                'test@example.com',
+                'John Kovalsky',
+                '909765456',
+            )
+
+        ];
         return new static(
             'Order no ' . rand(1, 5000) . '/' . date('Y'),
             Products::make([
@@ -136,12 +155,7 @@ class TransactionWizard
                 Product::make('Product C', rand(1, 300), rand(2, 3)),
             ]),
             Buyer::make(auth()->user()->email ?? 'test@example.com', '909765456', 'John', 'Kovalsky'),
-            PostalBox::make(
-                'WA101',
-                'test@example.com',
-                'John Kovalsky',
-                '909765456',
-            ),
+            $shouldBeDeliveredToAddress ? $delivery[1] : $delivery[rand(0,1)],
             $redirectAfterTransaction ?? route('home'),
             Config::hasPayMethods()
                 ? PayMethod::make('P')
