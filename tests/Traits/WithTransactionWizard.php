@@ -10,7 +10,7 @@ use xGrz\PayU\Facades\TransactionWizard\Products;
 
 trait WithTransactionWizard
 {
-    private function getProducts()
+    private function getProducts(): Products
     {
         return Products::make([
             Product::make('Product 1', 100, 2),
@@ -22,29 +22,36 @@ trait WithTransactionWizard
     private function getAddressDelivery(): Address
     {
         return Address::make(
+            '91-200',
+            'Krakow',
+            'Zakopianska 200/2',
+            'PL',
             'test@example.com',
             'Jonathan Kovalsky',
             '198765432',
-            'Krakow',
-            'Zakopianska 200/2',
-            '91-200',
-            'PL',
         );
     }
 
     private function getPostalBoxDelivery(): PostalBox
     {
         return PostalBox::make(
+            'WA101',
             'test2@example.com',
             'Michael Novak',
             '600500200',
-            'WA101',
         );
     }
 
     private function getBuyer(): Buyer
     {
-        return new Buyer('example@example.com', '987567192', 'John', 'Travolta', 'en', 199);
+        return new Buyer(
+            'example@example.com',
+            '987567192',
+            'John',
+            'Travolta',
+            199,
+            'en',
+        );
     }
 
 }

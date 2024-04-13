@@ -17,28 +17,53 @@ use xGrz\PayU\Interfaces\DeliveryTypeInterface;
 class Address extends Delivery implements DeliveryTypeInterface
 {
 
+    public function __construct(
+        string|int $postalCode = null,
+        string     $city = null,
+        string     $streetWithNumber = null,
+        string     $countryCode = 'PL',
+        string     $recipientEmail = null,
+        string     $recipientFullName = null,
+        string|int $recipientPhone = null
+    )
+    {
+        parent::__construct();
+        if (!empty($recipientEmail)) $this->setRecipientEmail($recipientEmail);
+        if (!empty($recipientPhone)) $this->setRecipientPhone($recipientPhone);
+        if (!empty($recipientFullName)) $this->setRecipientName($recipientFullName);
+        if (!empty($postalBox)) $this->setPostalBox($postalBox);
+        if (!empty($city)) $this->setCity($city);
+        if (!empty($streetWithNumber)) $this->setStreet($streetWithNumber);
+        if (!empty($postalCode)) $this->setPostalCode($postalCode);
+        if (!empty($countryCode)) $this->setCountryCode($countryCode);
+    }
+
     protected array $data = [
         'street' => null,
         'postalCode' => null,
         'city' => null,
         'countryCode' => null
     ];
-    public function __construct(string $email = null, string $name = null, string|int $phone = null, string $city = null, string $street = null, string|int $postalCode = null, string $countryCode = 'PL')
-    {
-        parent::__construct();
-        if (!empty($email)) $this->setRecipientEmail($email);
-        if (!empty($phone)) $this->setRecipientPhone($phone);
-        if (!empty($name)) $this->setRecipientName($name);
-        if (!empty($postalBox)) $this->setPostalBox($postalBox);
-        if (!empty($city)) $this->setCity($city);
-        if (!empty($street)) $this->setStreet($street);
-        if (!empty($postalCode)) $this->setPostalCode($postalCode);
-        if (!empty($countryCode)) $this->setCountryCode($countryCode);
-    }
 
-    public static function make(string $email = null, string $name = null, string|int $phone = null, string $city = null, string $street = null, string|int $postalCode = null, string $countryCode = null): static
+    public static function make(
+        string|int $postalCode = null,
+        string     $city = null,
+        string     $streetWithNumber = null,
+        string     $countryCode = 'PL',
+        string     $recipientEmail = null,
+        string     $recipientFullName = null,
+        string|int $recipientPhone = null
+    ): static
     {
-        return new static($email, $name, $phone, $city, $street, $postalCode, $countryCode);
+        return new static(
+            $postalCode,
+            $city,
+            $streetWithNumber,
+            $countryCode,
+            $recipientEmail,
+            $recipientFullName,
+            $recipientPhone
+        );
     }
 
 

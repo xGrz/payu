@@ -16,17 +16,22 @@ class PostalBox extends Delivery implements DeliveryTypeInterface
     protected array $data = [
         'postalBox' => null
     ];
-    public function __construct(string $email = null, string $name = null, string|int $phone = null, string $postalBox = null)
+
+    public function __construct(
+        string     $postalBox = null,
+        string     $recipientEmail = null,
+        string     $recipientFullName = null,
+        string|int $recipientPhone = null)
     {
         parent::__construct();
-        if (!empty($email)) $this->setRecipientEmail($email);
-        if (!empty($phone)) $this->setRecipientPhone($phone);
-        if (!empty($name)) $this->setRecipientName($name);
+        if (!empty($recipientEmail)) $this->setRecipientEmail($recipientEmail);
+        if (!empty($recipientPhone)) $this->setRecipientPhone($recipientPhone);
+        if (!empty($recipientFullName)) $this->setRecipientName($recipientFullName);
         if (!empty($postalBox)) $this->setPostalBox($postalBox);
     }
 
-    public static function make(string $email = null, string $name = null, string|int $phone = null, string $postalBox = null): static
+    public static function make(string $postalBox = null, string $recipientEmail = null, string $recipientFullName = null, string|int $recipientPhone = null): static
     {
-        return new static($email, $name, $phone, $postalBox);
+        return new static($postalBox, $recipientEmail, $recipientFullName, $recipientPhone,);
     }
 }

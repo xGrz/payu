@@ -27,15 +27,15 @@ abstract class Delivery implements DeliveryTypeInterface
         ];
     }
 
-    public function getBuyer()
+    public function getBuyer(): Buyer
     {
         return Buyer::make(
             $this->data['recipientEmail'],
             $this->data['recipientPhone'],
             self::guessBuyerName()['firstName'],
             self::guessBuyerName()['lastName'],
+            auth()->id(),
             app()->getLocale(),
-            auth()->id()
         );
     }
 
@@ -45,7 +45,7 @@ abstract class Delivery implements DeliveryTypeInterface
 
         return (count($names) === 2)
             ? ['firstName' => $names[0], 'lastName' => $names[1]]
-            : ['firstName' => '', 'lastName' => $this->data['recipientName']];
+            : ['firstName' => $this->data['recipientName'], 'lastName' => $this->data['recipientName']];
     }
 
     public function __set($key, $value)
