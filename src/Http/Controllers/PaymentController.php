@@ -67,9 +67,7 @@ class PaymentController extends Controller
         $transaction->addProducts($items);
         $transaction->setBuyer($buyer);
         $transaction->setDelivery(TransactionWizard\Delivery\Address::make(
-            $request->validated('customer.email'),
-            $request->validated('customer.name'),
-            $request->validated('customer.phone'),
+            $request->validated('customer.postalCode'),
             $request->validated('customer.city'),
             join('/', [
                 join(' ', [
@@ -78,8 +76,10 @@ class PaymentController extends Controller
                 ]),
                 $request->validated('customer.apartment_number')
             ]),
-            $request->validated('customer.postalCode'),
             'PL',
+            $request->validated('customer.email'),
+            $request->validated('customer.name'),
+            $request->validated('customer.phone'),
         ));
 
         if ($request->validated('method')) {
