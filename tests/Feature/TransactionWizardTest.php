@@ -192,13 +192,13 @@ class TransactionWizardTest extends TestCase
     public function test_address_delivery_created_by_static_make()
     {
         $address = TransactionWizard\Delivery\Address::make(
+            '23-302',
+            'Poznan',
+            'Warszawska 120/1',
+            'PL',
             'mv@example.com',
             'Max Verstappen',
             '1234567891',
-            'Poznan',
-            'Warszawska 120/1',
-            '23-302',
-            'PL',
         );
         $addressArr = $address->toArray();
         $this->assertIsArray($addressArr);
@@ -232,10 +232,10 @@ class TransactionWizardTest extends TestCase
     public function test_postal_box_delivery_created_by_static_make()
     {
         $postalBox = TransactionWizard\Delivery\PostalBox::make(
+            'KR203',
             'jv@example.com',
             'Jost Verstappen',
             '1234567891',
-            'KR203'
         );
 
         $postalBoxArr = $postalBox->toArray();
