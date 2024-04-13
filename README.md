@@ -70,18 +70,30 @@ Prepare transaction with TransactionWizard:
 use xGrz\PayU\Facades\TransactionWizard;
 use xGrz\PayU\Facades\TransactionWizard\Product;
 use xGrz\PayU\Facades\TransactionWizard\Products;
+xGrz\PayU\Facades\TransactionWizard\Delivery\Address;
 
 $transaction = TransactionWizard(
+    // Required - visible in PayU system (admin panel) 
     $description,
+    
+    // Required
     Products::make([
+        // Product is required. 
+        // Default value for quantity=1, isVirtual is set default to false.
         Product::make(name: 'First Product', unitPrice: 100, quantity: 2),
         Product::make(name: 'Second Product', unitPrice: 99.99, quantity: 1),
         Product::make(name: 'DHL Delivery', unitPrice: 19.99, quantity: 1, isVirtual: true);
-    ]),
-    Buyer::make('example@example.com', '500 600 700', 'John', 'Kovalsky', 'pl', 120),
+    ]), 
+    // Optional, but recommended. If you do not provide Buyer PayU payment site will ask for data from Buyer object.
+    // For better user experience you shoud send Buyer object in transaction.
+    Buyer::make('example@example.com', '500 600 700', 'John', 'Kovalsky', 'pl', 120), 
+    
+    // Delivery is optional. You can send Address delivery object of PostalBox delivery object depends on user choice.
+    Address::make();
+    
 );
 ```
-Optional:
+Optional (visible at PayU payment site):
 ```
 $transaction->setVisibleDescription('You are paying for order XXXX/XX');
 ```
