@@ -25,6 +25,9 @@ trait PayUTransaction
         ;
     }
 
+    /**
+     * @throws PayUGeneralException
+     */
     public static function createPayment(TransactionWizard $transaction): ?Transaction
     {
         return CreatePaymentAction::callApi($transaction);

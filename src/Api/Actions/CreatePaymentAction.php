@@ -3,6 +3,7 @@
 namespace xGrz\PayU\Api\Actions;
 
 use xGrz\PayU\Api\BaseApiCall;
+use xGrz\PayU\Api\Exceptions\PayUGeneralException;
 use xGrz\PayU\Api\Responses\CreatePaymentResult;
 use xGrz\PayU\Facades\TransactionWizard;
 use xGrz\PayU\Models\Transaction;
@@ -14,6 +15,7 @@ class CreatePaymentAction extends BaseApiCall
 
     /**
      * Sends payment request for provided Payment asObject. If created returns PayUTransaction model from local DB
+     * @throws PayUGeneralException
      */
     public static function callApi(TransactionWizard $payment): Transaction
     {
