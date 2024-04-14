@@ -1,5 +1,7 @@
 # Laravel PayU plugin by xGrz
 
+This package handles: `Payments`, `Refunds` and `Payouts`. 
+
 ## Requirements
 This package requires queue, scheduler and cache configured in your Laravel project.
 
@@ -10,7 +12,7 @@ Install package via composer, publish config and run migrations:
 ```
 composer require xgrz/payu
 
-php artisan payu:config
+php artisan payu:publish-config
 php artisan migrate
 ```
 
@@ -71,8 +73,9 @@ use xGrz\PayU\Facades\TransactionWizard;
 use xGrz\PayU\Facades\TransactionWizard\Product;
 use xGrz\PayU\Facades\TransactionWizard\Products;
 xGrz\PayU\Facades\TransactionWizard\Delivery\Address;
+xGrz\PayU\Facades\TransactionWizard\Delivery\PostalBox;
 
-$transaction = TransactionWizard(
+$transactionWizard = TransactionWizard(
     // Required - visible in PayU system (admin panel) 
     $description,
     
@@ -89,13 +92,37 @@ $transaction = TransactionWizard(
     Buyer::make('example@example.com', '500 600 700', 'John', 'Kovalsky', 'pl', 120), 
     
     // Delivery is optional. You can send Address delivery object of PostalBox delivery object depends on user choice.
-    Address::make();
+    Address::make(
+        postalCode: '02-020', 
+        city: 'Katowice', 
+        streetWithNumber: 'Wolska 201/21', 
+        countryCode: 'PL', 
+        recipientEmail: 're@example.com', 
+        recipientFullName: 'Karol Novak',
+        recipientPhone: '999666444'
+    ),
+    
+    // or when your delivery is to postal boxes: 
+    // PostalBox::make(postalBox: 'WA201',recipientEmail: 're@example.com', recipientFullName: 'Karol Novak', recipientPhone: '999666444'),
+    
+    // Optional, but strongly recommended is redirect url address after transaction
+    // Redirect is individual for every transaction. When transaction fails payu will add ?error parameter to your url.
+    redirectAfterTransaction: 'https://yoursite.com/order/summary'
+    
+    // Optional, only when you allow users to chose payment method on your site (not at PayU site)
+    // You have to provide method code selected by customer. This is not working in public sandbox api.
+    PayMethod::make(method: 'P'),
     
 );
 ```
-Optional (visible at PayU payment site):
+Optional you can add visible description (visible at PayU payment site):
 ```
 $transaction->setVisibleDescription('You are paying for order XXXX/XX');
+```
+
+Once your transaction wizard is completed you can send it to PayU:
+```
+PayU::createPayment($transactionWizard);
 ```
 
 
