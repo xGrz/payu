@@ -41,15 +41,15 @@ Using personal sandbox for testing is recommended. See what features are limited
 | Account balance                                  | No*            | Available        | Available  |
 | Select payment method while creating transaction | No*            | Available        | Available  |
 
-All unavailable features are limited by PayU API.
+(*) All unavailable features are limited by PayU API, not by package.
 
-If you are running in personal sandbox or production environment you should run:
+If you are running in personal sandbox or production environment you should manually run:
 
 ```
 php artisan payu:update-methods
 ```
 
-This method will run in Laravel scheduler (every day) for payment methods synchronizing with local database (performance
+This method will run automatically in Laravel scheduler (every day) for payment methods synchronizing with local database (performance
 reason).
 
 ## Create payment
@@ -122,10 +122,16 @@ $transaction->setVisibleDescription('You are paying for order XXXX/XX');
 
 Once your transaction wizard is completed you can send it to PayU:
 ```
-PayU::createPayment($transactionWizard);
+$transaction = PayU::createPayment($transactionWizard);
 ```
 
+If payment method fail PayUGeneralException will be thrown, otherwise Transaction model will be returned.
 
+From transaction model you can get payment link (`$transaction->link`) to PayU payment site. If you are not redirecting user automatically to PayU and 
+you want to give link for user please notice to display it in blade as unescaped data `{!! $transaction->link !!}`. Displaying link as escaped will broke link parameters and transaction will not work.
+
+Transaction model stores current status in `$transaction->status` enum. It is updated in background when notification webhook is received from PayU system.
+Notifications are signed with secure keys. Any data manipulations are not allowed by webhook controller.
 
 
 
