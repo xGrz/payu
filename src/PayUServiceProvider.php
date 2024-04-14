@@ -7,6 +7,9 @@ use Illuminate\Support\ServiceProvider;
 use xGrz\PayU\Actions\LongProcessingTransactionsStatusRetriever;
 use xGrz\PayU\Actions\SyncPaymentMethods;
 use xGrz\PayU\Commands\PayMethodsUpdateCommand;
+use xGrz\PayU\Commands\PublishCommand;
+use xGrz\PayU\Commands\PublishConfigCommand;
+use xGrz\PayU\Commands\PublishLangCommand;
 use xGrz\PayU\Models\Payout;
 use xGrz\PayU\Models\Refund;
 use xGrz\PayU\Models\Transaction;
@@ -57,8 +60,10 @@ class PayUServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/../config/config.php' => config_path('payu.php'),
+            ], 'payu-config');
+            $this->publishes([
                 __DIR__ . '/../lang' => $this->app->langPath('vendor/payu')
-            ], 'payu');
+            ], 'payu-lang');
         }
 
     }
@@ -79,7 +84,10 @@ class PayUServiceProvider extends ServiceProvider
     private function setupCommands(): void
     {
         $this->commands([
-            PayMethodsUpdateCommand::class
+            PublishCommand::class,
+            PublishLangCommand::class,
+            PublishConfigCommand::class,
+            PayMethodsUpdateCommand::class,
         ]);
     }
 
