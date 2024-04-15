@@ -131,8 +131,68 @@ From transaction model you can get payment link (`$transaction->link`) to PayU p
 you want to give link for user please notice to display it in blade as unescaped data `{!! $transaction->link !!}`. Displaying link as escaped will broke link parameters and transaction will not work.
 
 Transaction model stores current status in `$transaction->status` enum. It is updated in background when notification webhook is received from PayU system.
-Notifications are signed with secure keys. Any data manipulations are not allowed by webhook controller.
+Notifications are signed with secure keys. Any data manipulations are not allowed by webhook controller. Incoming notifications has middleware that checks is request ip is on whitelist too.
 
 
+## Handling payment
+
+Payment status is updated by notification webhook. 
+PayU allows you to get manual or auto-accept payments for each payment method individually. You can set it in PayU panel (sandbox panel too).
+
+When automatic accept is turned on you should get COMPLETED or CANCELED status depends on user transaction status.
+In case of manual accepting you will get WAITING_FOR_CONFIRMATION status. In that case you can ACCEPT or REJECT payment.
+
+```
+use xGrz\PayU\Facades\PayU;
+
+// accept
+PayU::accept($transaction);
+
+// reject
+PayU::reject($transaction);
+```
+
+`$transaction` is eloquent model returned from `PayU::createPayment($transactionWizard);` method.
+
+## Refunds
+
+When transaction is completed you can make a refund to this transaction.
+
+To start new refund you can write: 
+```
+use xGrz\PayU\Facades\PayU;
+
+PayU::refund($transaction, $amount, $description, $bankDescription);
+```
+
+* `$transaction` is a payment with status COMPLETED  - required
+* `$amount` is amount to refund (for ex. 100.99) - required
+* `$description` is a reason of refund (for ex. 'RMA') - required
+* `$bankDescription` is part of bank account refund title given by PayU bank account transfer (optional)
+
+If you accidentally refunded wrong amount you have some time to cancel refund (see Config section).
+While refund has status INITIALIZED or SCHEDULED you can delete it by calling:
+
+```
+use xGrz\PayU\Facades\PayU;
+
+PayU::cancelRefund($refund);
+```
+
+Refund status is automatically updated by notification webhook.
+Important! If someone defines refund in PayU panel it will appear on list when is completed. 
+
+## Configuration
+
+In installation section we have published config.
+You can find it in config directory (Laravel default path is /config) - please search payu.php.
+
+Default configuration is given in this config file. 
+In jobs section you can configure delays for sending/retrying refunds and payouts (values are in seconds).
+It is recommended to give at least 60 seconds delay on sending refunds/payouts. This time is given to admin in case of wrong amount given in form.
+
+`transaction_method_check` is retrieving payment method of transaction (not available for public sandbox api).
+
+As payouts are not notified by webhook our plugin will periodically check status od payouts. Fill free to set your on status check interval much longer then default. 
 
 
