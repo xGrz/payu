@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use xGrz\PayU\Http\Controllers\NotificationWebhookController;
+use xGrz\PayU\Http\Middleware\PayUWhitelist;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +16,7 @@ use xGrz\PayU\Http\Controllers\NotificationWebhookController;
 */
 
 
-Route::middleware('api')
+Route::middleware(['api', PayUWhitelist::class])
     ->prefix(config('payu.routing.notifications.endpoint_name', 'payu-payment-notification'))
     ->name(config('payu.routing.notifications.route_name', 'payu.notification'))
     ->group(function () {
