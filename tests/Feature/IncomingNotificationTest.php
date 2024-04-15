@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use xGrz\PayU\Enums\PaymentStatus;
 use xGrz\PayU\Enums\RefundStatus;
+use xGrz\PayU\Http\Middleware\PayUWhitelist;
 use xGrz\PayU\Models\Transaction;
 use xGrz\PayU\Services\ConfigService;
 
@@ -97,6 +98,7 @@ class IncomingNotificationTest extends TestCase
     {
         $fakeIncomingOrderNotificationData = $this->fakeIncomingOrderNotificationData();
         $response = $this
+            ->withoutMiddleware(PayUWhitelist::class)
             ->withHeaders($fakeIncomingOrderNotificationData['headers'])
             ->json('post', $fakeIncomingOrderNotificationData['uri'], $fakeIncomingOrderNotificationData['payload']);
 
@@ -108,6 +110,7 @@ class IncomingNotificationTest extends TestCase
         $fakeIncomingOrderNotificationData = $this->fakeIncomingOrderNotificationData();
         $fakeIncomingOrderNotificationData['payload']['order']['status'] = 'COMPLETED';
         $response = $this
+            ->withoutMiddleware(PayUWhitelist::class)
             ->withHeaders($fakeIncomingOrderNotificationData['headers'])
             ->json('post', $fakeIncomingOrderNotificationData['uri'], $fakeIncomingOrderNotificationData['payload']);
 
@@ -118,6 +121,7 @@ class IncomingNotificationTest extends TestCase
     {
         $fakeIncomingRefundNotificationData = $this->fakeIncomingRefundNotificationData();
         $response = $this
+            ->withoutMiddleware(PayUWhitelist::class)
             ->withHeaders($fakeIncomingRefundNotificationData['headers'])
             ->json('post', $fakeIncomingRefundNotificationData['uri'], $fakeIncomingRefundNotificationData['payload']);
 
@@ -129,6 +133,7 @@ class IncomingNotificationTest extends TestCase
         $fakeIncomingRefundNotificationData = $this->fakeIncomingRefundNotificationData();
         $fakeIncomingRefundNotificationData['payload']['refund']['status'] = 'COMPLETED';
         $response = $this
+            ->withoutMiddleware(PayUWhitelist::class)
             ->withHeaders($fakeIncomingRefundNotificationData['headers'])
             ->json('post', $fakeIncomingRefundNotificationData['uri'], $fakeIncomingRefundNotificationData['payload']);
 
@@ -139,6 +144,7 @@ class IncomingNotificationTest extends TestCase
     {
         $fakeIncomingOrderNotificationData = $this->fakeIncomingOrderNotificationData();
         $response = $this
+            ->withoutMiddleware(PayUWhitelist::class)
             ->withHeaders($fakeIncomingOrderNotificationData['headers'])
             ->json('post', $fakeIncomingOrderNotificationData['uri'] . 'fake', $fakeIncomingOrderNotificationData['payload']);
 
@@ -156,6 +162,7 @@ class IncomingNotificationTest extends TestCase
 
         $fakeIncomingOrderNotificationData = $this->fakeIncomingOrderNotificationData($transaction, PaymentStatus::CANCELED);
         $this
+            ->withoutMiddleware(PayUWhitelist::class)
             ->withHeaders($fakeIncomingOrderNotificationData['headers'])
             ->json('post', $fakeIncomingOrderNotificationData['uri'], $fakeIncomingOrderNotificationData['payload'])
             ->assertStatus(200);
@@ -177,6 +184,7 @@ class IncomingNotificationTest extends TestCase
 
         $fakeIncomingRefundNotificationData = $this->fakeIncomingRefundNotificationData($transaction, RefundStatus::ERROR);
         $this
+            ->withoutMiddleware(PayUWhitelist::class)
             ->withHeaders($fakeIncomingRefundNotificationData['headers'])
             ->json('post', $fakeIncomingRefundNotificationData['uri'], $fakeIncomingRefundNotificationData['payload'])
             ->assertStatus(200);
@@ -185,6 +193,17 @@ class IncomingNotificationTest extends TestCase
             'transaction_id' => $transaction->id,
             'status' => RefundStatus::ERROR,
         ]);
+    }
+
+    public function test_incoming_notification_from_non_white_listed_ips_is_blocked()
+    {
+        $fakeIncomingOrderNotificationData = $this->fakeIncomingOrderNotificationData();
+        $response = $this
+            ->withHeaders($fakeIncomingOrderNotificationData['headers'])
+            ->json('post', $fakeIncomingOrderNotificationData['uri'], $fakeIncomingOrderNotificationData['payload']);
+
+        // when non 403 is returned PayUWhitelist middleware is not working (protecting route).
+        $response->assertForbidden();
     }
 }
 
