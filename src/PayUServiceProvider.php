@@ -3,6 +3,7 @@
 namespace xGrz\PayU;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use xGrz\PayU\Actions\LongProcessingTransactionsStatusRetriever;
 use xGrz\PayU\Actions\SyncPaymentMethods;
@@ -74,6 +75,13 @@ class PayUServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'payu');
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+
+        View::share('qbp_appName', 'xGrz/PayU');
+        View::share('qbp_useTailwind', true);
+        View::share('qbp_useAlpine', true);
+        View::share('qbp_navigationTemplate', 'p::navigation.container');
+        View::share('qbp_navigationItems', '');
+        View::share('qbp_footerTemplate', 'p::footer.content');
     }
 
     private function setupNotificationRouting(): void
