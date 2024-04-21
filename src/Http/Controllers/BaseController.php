@@ -13,7 +13,7 @@ class BaseController extends Controller
         View::share('qbp_useTailwind', true);
         View::share('qbp_useAlpine', true);
         View::share('qbp_navigationTemplate', 'p::navigation.container');
-        View::share('qbp_navigationItems', '');
-        View::share('qbp_footerTemplate', 'p::footer.content');
+        View::share('qbp_navigationItems', 'payu::layout.navigation-items');
+        View::share('qbp_footerTemplate', 'payu::layout.footer-content');
     }
 }

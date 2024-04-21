@@ -33,14 +33,14 @@
 
         @if($payouts->count())
             <x-p::table class="w-full">
-                <x-p::table.thead>
+                <x-p::table.head>
                     <x-p::table.row>
                         <x-p::table.th class="text-left">Payout ordered at</x-p::table.th>
                         <x-p::table.th class="text-right">Amount</x-p::table.th>
                         <x-p::table.th class="text-right">Status</x-p::table.th>
                         <x-p::table.th class="text-right"></x-p::table.th>
                     </x-p::table.row>
-                </x-p::table.thead>
+                </x-p::table.head>
                 <tbody>
                 @foreach($payouts as $payout)
                     <x-p::table.row>

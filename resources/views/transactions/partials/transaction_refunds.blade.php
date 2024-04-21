@@ -11,7 +11,7 @@
 
         @if ($transaction->refunds->count())
             <x-p::table>
-                <x-p::table.thead>
+                <x-p::table.head>
                     <x-p::table.row>
                         <x-p::table.th class="text-left">Description</x-p::table.th>
                         <x-p::table.th>RefundId</x-p::table.th>
@@ -21,7 +21,7 @@
                         <x-p::table.th class="text-right">Date</x-p::table.th>
                         <td></td>
                     </x-p::table.row>
-                </x-p::table.thead>
+                </x-p::table.head>
                 <tbody>
                 @foreach($transaction->refunds as $refund)
                     <x-p::table.row>

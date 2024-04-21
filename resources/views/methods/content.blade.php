@@ -13,7 +13,7 @@
             <x-p::table.th class="text-center">Symbol</x-p::table.th>
             <x-p::table.th class="text-center">Used</x-p::table.th>
             <x-p::table.th class="text-center">Active</x-p::table.th>
-            <tbody>
+            <x-p::table.body>
             @foreach($methods as $method)
                 <x-p::table.row>
                     <x-p::table.cell class="text-center">
@@ -61,7 +61,7 @@
                     </x-p::table.cell>
                 </x-p::table.row>
             @endforeach
-            </tbody>
+            </x-p::table.body>
         </x-p::table>
     @else
         <x-p::not-found message="Please synchronize payment methods"/>

@@ -21,7 +21,6 @@ class PayoutController extends BaseController
         ]);
     }
 
-
     public function store(PayoutRequest $request): RedirectResponse
     {
         return PayU::payout($request->validated('payoutAmount'))
