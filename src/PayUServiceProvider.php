@@ -74,6 +74,7 @@ class PayUServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'payu');
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+
     }
 
     private function setupNotificationRouting(): void

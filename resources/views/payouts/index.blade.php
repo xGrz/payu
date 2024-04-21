@@ -1,5 +1,5 @@
 @php use Illuminate\Support\Number; @endphp
-@extends('payu::app')
+@extends('p::app')
 
 @section('breadcrumbs')
     @if($balance)

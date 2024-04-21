@@ -1,5 +1,5 @@
 @php use \xGrz\PayU\Facades\Config; @endphp
-@extends('payu::app')
+@extends('p::app')
 
 
 @section('content')

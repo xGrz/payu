@@ -1,13 +1,13 @@
-<x-payu::modal title="Create refund" :watchErrors="['amount', 'description', 'bankDescription']">
+<x-p::modal title="Create refund" :watchErrors="['amount', 'description', 'bankDescription']">
     <x-slot:trigger>
-        <x-payu::button @click="modelOpen =!modelOpen">
+        <x-p::button @click="modelOpen =!modelOpen">
             Create refund
-        </x-payu::button>
+        </x-p::button>
     </x-slot:trigger>
     <x-slot:modalContent>
         <form action="{{route('payu.refunds.store', $transaction->id)}}" method="POST" class="px-2">
             @csrf
-            <x-payu::input
+            <x-p::input
                     type="number"
                     name="amount"
                     step="0.01"
@@ -15,21 +15,21 @@
                     value="{{$transaction->maxRefundAmount()}}"
                 label="Amount"
             />
-            <x-payu::input
+            <x-p::input
                 label="Description (reason)"
                 name="description"
             />
 
-            <x-payu::input
+            <x-p::input
                 label="Bank description"
                 name="bankDescription"
             />
 
             <div class="flex justify-end mt-6">
-                <x-payu::button color="success" type="submit">
+                <x-p::button color="success" type="submit">
                     Send refund request
-                </x-payu::button>
+                </x-p::button>
             </div>
         </form>
     </x-slot:modalContent>
-</x-payu::modal>
+</x-p::modal>

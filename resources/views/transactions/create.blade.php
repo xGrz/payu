@@ -1,5 +1,5 @@
 @php use \xGrz\PayU\Facades\Config; @endphp
-@extends('payu::app')
+@extends('p::app')
 
 @section('css')
 @endsection
@@ -8,27 +8,27 @@
     <div class="max-w-[800px] m-auto">
         <form action="{{route(Config::getRouteName('.payments.store'))}}" method="POST" class="grid gap-2">
             @csrf
-            <x-payu::paper class="bg-slate-800">
-                <x-payu::paper-title title="Customer"/>
+            <x-p::paper class="bg-slate-800">
+                <x-p::paper-title title="Customer"/>
                 @include('payu::transactions.create.customer')
-            </x-payu::paper>
+            </x-p::paper>
 
-            <x-payu::paper class="bg-slate-800">
-                <x-payu::paper-title title="Order items"/>
+            <x-p::paper class="bg-slate-800">
+                <x-p::paper-title title="Order items"/>
                 @include('payu::transactions.create.items')
-            </x-payu::paper>
+            </x-p::paper>
 
             @if($methods->count())
-            <x-payu::paper class="bg-slate-800">
-                <x-payu::paper-title title="Payment method"/>
+            <x-p::paper class="bg-slate-800">
+                <x-p::paper-title title="Payment method"/>
                 @include('payu::transactions.create.paymethod')
-            </x-payu::paper>
+            </x-p::paper>
             @endif
 
             <div class="text-center">
-                <x-payu::button type="submit" size="large">
+                <x-p::button type="submit" size="large">
                     Create order
-                </x-payu::button>
+                </x-p::button>
             </div>
         </form>
     </div>
