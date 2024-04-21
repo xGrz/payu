@@ -1,45 +1,45 @@
 @php use \xGrz\PayU\Facades\Config; @endphp
-@extends('payu::app')
+@extends('p::app')
 
 @section('content')
-    <x-payu::pagination.info :source="$refunds"/>
-    <x-payu::paper class="bg-slate-800">
-        <x-payu::paper-title title="Created refunds"/>
+    <x-p::pagination.info :source="$refunds"/>
+    <x-p::paper class="bg-slate-800">
+        <x-p::paper-title title="Created refunds"/>
         @if($refunds->count())
-            <x-payu::table class="w-full">
-                <x-payu::table.thead>
-                    <x-payu::table.row>
-                        <x-payu::table.header class="text-left">Transaction</x-payu::table.header>
-                        <x-payu::table.header class="text-left">Description</x-payu::table.header>
-                        <x-payu::table.header class="text-left">Bank description</x-payu::table.header>
-                        <x-payu::table.header class="text-right">Amount</x-payu::table.header>
-                        <x-payu::table.header class="text-right">Status</x-payu::table.header>
-                    </x-payu::table.row>
-                </x-payu::table.thead>
+            <x-p::table class="w-full">
+                <x-p::table.thead>
+                    <x-p::table.row>
+                        <x-p::table.thead class="text-left">Transaction</x-p::table.th>
+                        <x-p::table.th class="text-left">Description</x-p::table.th>
+                        <x-p::table.th class="text-left">Bank description</x-p::table.th>
+                        <x-p::table.th class="text-right">Amount</x-p::table.th>
+                        <x-p::table.th class="text-right">Status</x-p::table.th>
+                    </x-p::table.row>
+                </x-p::table.thead>
                 <tbody>
                 @foreach($refunds as $refund)
-                    <x-payu::table.row>
-                        <x-payu::table.cell>
-                            <x-payu::link href="{{route(Config::getRouteName('payments.show'), $refund->transaction->id)}}">
+                    <x-p::table.row>
+                        <x-p::table.cell>
+                            <x-p::link href="{{route(Config::getRouteName('payments.show'), $refund->transaction->id)}}">
                                 {{$refund->transaction->payload['description']}}
-                            </x-payu::link>
-                        </x-payu::table.cell>
-                        <x-payu::table.cell>{{$refund->description}}</x-payu::table.cell>
-                        <x-payu::table.cell>{{$refund->bankDescription}}</x-payu::table.cell>
-                        <x-payu::table.cell class="text-right">{{ humanAmount($refund->amount)}}</x-payu::table.cell>
-                        <x-payu::table.cell class="text-right">
-                            <x-payu::status :status="$refund->status"/>
-                        </x-payu::table.cell>
-                    </x-payu::table.row>
+                            </x-p::link>
+                        </x-p::table.cell>
+                        <x-p::table.cell>{{$refund->description}}</x-p::table.cell>
+                        <x-p::table.cell>{{$refund->bankDescription}}</x-p::table.cell>
+                        <x-p::table.cell class="text-right">{{ humanAmount($refund->amount)}}</x-p::table.cell>
+                        <x-p::table.cell class="text-right">
+                            <x-p::status :status="$refund->status"/>
+                        </x-p::table.cell>
+                    </x-p::table.row>
                 @endforeach
                 </tbody>
-            </x-payu::table>
+            </x-p::table>
             <div class="py-2">
-                <x-payu::pagination :source="$refunds"/>
+                <x-p::pagination :source="$refunds"/>
             </div>
         @else
-            <x-payu::not-found message="Refunds not found"/>
+            <x-p::not-found message="Refunds not found"/>
         @endif
 
-    </x-payu::paper>
+    </x-p::paper>
 @endsection

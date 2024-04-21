@@ -1,5 +1,5 @@
 @php use Illuminate\Support\Number;use xGrz\PayU\Enums\PaymentStatus; use xGrz\PayU\Facades\Config @endphp
-@extends('payu::app')
+@extends('p::app')
 
 @section('breadcrumbs')
     @if(!empty($shop))
@@ -19,55 +19,55 @@
 @endsection
 
 @section('content')
-    <x-payu::pagination.info :source="$transactions"/>
-    <x-payu::paper class="bg-slate-800">
-        <x-payu::paper-title title="Transactions listing">
-            <x-payu::buttonlink href="{{route(Config::getRouteName('payments.create'))}}">Wizard</x-payu::buttonlink>
+    <x-p::pagination.info :source="$transactions"/>
+    <x-p::paper class="bg-slate-800">
+        <x-p::paper-title title="Transactions listing">
+            <x-p::buttonlink href="{{route(Config::getRouteName('payments.create'))}}">Wizard</x-p::buttonlink>
             <form action="{{route(Config::getRouteName('.payments.storeFake'))}}" method="POST" id="createTransaction" class="hidden">
                 @csrf
             </form>
-            <x-payu::button type="submit" form="createTransaction" color="success">
+            <x-p::button type="submit" form="createTransaction" color="success">
                 Fake payment
-            </x-payu::button>
-            <x-payu::buttonlink href="https://merch-prod.snd.payu.com/user/login?lang=pl" target="new" color="warning">
+            </x-p::button>
+            <x-p::buttonlink href="https://merch-prod.snd.payu.com/user/login?lang=pl" target="new" color="warning">
                 PayU-Panel
-            </x-payu::buttonlink>
-        </x-payu::paper-title>
+            </x-p::buttonlink>
+        </x-p::paper-title>
 
         @if($transactions->count())
-            <x-payu::table>
-                <x-payu::table.thead class="text-left text-white leading-8">
-                    <x-payu::table.row>
-                        <x-payu::table.header>Description</x-payu::table.header>
-                        <x-payu::table.header>Value</x-payu::table.header>
-                        <x-payu::table.header class="text-right">Refunded</x-payu::table.header>
-                        <x-payu::table.header class="text-center">Status</x-payu::table.header>
-                        <x-payu::table.header class="text-right">Created</x-payu::table.header>
-                        <x-payu::table.header class="text-right">Updated</x-payu::table.header>
-                        <x-payu::table.header class="text-right">Actions</x-payu::table.header>
-                    </x-payu::table.row>
-                </x-payu::table.thead>
+            <x-p::table>
+                <x-p::table.head class="text-left text-white leading-8">
+                    <x-p::table.row>
+                        <x-p::table.th>Description</x-p::table.th>
+                        <x-p::table.th>Value</x-p::table.th>
+                        <x-p::table.th class="text-right">Refunded</x-p::table.th>
+                        <x-p::table.th class="text-center">Status</x-p::table.th>
+                        <x-p::table.th class="text-right">Created</x-p::table.th>
+                        <x-p::table.th class="text-right">Updated</x-p::table.th>
+                        <x-p::table.th class="text-right">Actions</x-p::table.th>
+                    </x-p::table.row>
+                </x-p::table.head>
                 <tbody class="leading-tight">
                 @foreach($transactions as $transaction)
-                    <x-payu::table.row class="hover:bg-gray-100">
-                        <x-payu::table.cell>
+                    <x-p::table.row class="hover:bg-gray-100">
+                        <x-p::table.cell>
                             @if($transaction->status === PaymentStatus::INITIALIZED)
                                 <span class="text-gray-300">{{ $transaction->payload['description']  }}</span>
                             @else
-                                <x-payu::link href="{{ route(Config::getRouteName('payments.show'), $transaction->id )}}">
+                                <x-p::link href="{{ route(Config::getRouteName('payments.show'), $transaction->id )}}">
                                     {{ $transaction->payload['description']  }}
-                                </x-payu::link>
+                                </x-p::link>
                             @endif
-                        </x-payu::table.cell>
-                        <x-payu::table.cell class="text-right">
+                        </x-p::table.cell>
+                        <x-p::table.cell class="text-right">
                             {{ Number::currency($transaction->payload['totalAmount'] / 100, $transaction->payload['currencyCode'], 'pl') }}
                             @if($transaction->payMethod)
                                 <small class="block">
                                     {{$transaction->payMethod->name}}
                                 </small>
                             @endif
-                        </x-payu::table.cell>
-                        <x-payu::table.cell class="text-right">
+                        </x-p::table.cell>
+                        <x-p::table.cell class="text-right">
                             @if($transaction->hasSuccessfulRefunds())
                                 <small
                                     class="block text-green-500">{{ humanAmount($transaction->refundedAmount()) }}</small>
@@ -80,30 +80,30 @@
                                 <small
                                     class="block text-red-500">{{ humanAmount($transaction->getFailedRefundsTotalAmount()) }}</small>
                             @endif
-                        </x-payu::table.cell>
-                        <x-payu::table.cell>
-                            <x-payu::status :status="$transaction->status" class="text-sm mx-2"/>
-                        </x-payu::table.cell>
-                        <x-payu::table.cell class="text-right">{{ $transaction->created_at }}</x-payu::table.cell>
-                        <x-payu::table.cell
-                            class="text-right">{{ $transaction->created_at == $transaction->updated_at ? '' : $transaction->updated_at}}</x-payu::table.cell>
-                        <x-payu::table.cell class="text-nowrap text-right">
+                        </x-p::table.cell>
+                        <x-p::table.cell>
+                            <x-p::status :status="$transaction->status" class="text-sm mx-2"/>
+                        </x-p::table.cell>
+                        <x-p::table.cell class="text-right">{{ $transaction->created_at }}</x-p::table.cell>
+                        <x-p::table.cell
+                            class="text-right">{{ $transaction->created_at == $transaction->updated_at ? '' : $transaction->updated_at}}</x-p::table.cell>
+                        <x-p::table.cell class="text-nowrap text-right">
                             @include('payu::transactions.partials.transaction_actions')
-                        </x-payu::table.cell>
-                    </x-payu::table.row>
+                        </x-p::table.cell>
+                    </x-p::table.row>
                 @endforeach
                 </tbody>
-            </x-payu::table>
+            </x-p::table>
 
             <div class="py-3">
-                <x-payu::pagination :source="$transactions"/>
+                <x-p::pagination :source="$transactions"/>
             </div>
         @else
-            <x-payu::not-found message="Transactions for found."/>
+            <x-p::not-found message="Transactions for found."/>
         @endif
 
 
-    </x-payu::paper>
-    <x-payu::pagination.info :source="$transactions"/>
+    </x-p::paper>
+    <x-p::pagination.info :source="$transactions"/>
 @endsection
 
