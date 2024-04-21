@@ -2,11 +2,10 @@
 
 namespace xGrz\PayU\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use xGrz\PayU\Facades\PayU;
 use xGrz\PayU\Models\Method;
 
-class MethodsController extends Controller
+class MethodsController extends BaseController
 {
     public function index()
     {

@@ -2,7 +2,6 @@
 
 namespace xGrz\PayU\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use xGrz\PayU\Facades\Config;
@@ -10,7 +9,7 @@ use xGrz\PayU\Facades\PayU;
 use xGrz\PayU\Http\Requests\PayoutRequest;
 use xGrz\PayU\Models\Payout;
 
-class PayoutController extends Controller
+class PayoutController extends BaseController
 {
 
     public function index(): View
