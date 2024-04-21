@@ -1,6 +1,6 @@
 @php use \xGrz\PayU\Facades\Config; @endphp
 <div>
-    <x-payu::paper-title title="Create new payout"/>
+    <x-p::paper-title title="Create new payout"/>
 
     <form method="POST" action="{{ route(Config::getRouteName('payouts.store')) }}">
         @csrf

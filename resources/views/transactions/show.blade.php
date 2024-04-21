@@ -1,4 +1,4 @@
-@extends('payu::app')
+@extends('p::app')
 
 @section('content')
 
