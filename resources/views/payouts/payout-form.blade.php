@@ -1,6 +1,6 @@
 @php use \xGrz\PayU\Facades\Config; @endphp
-<div>
-    <x-p::paper-title title="Create new payout"/>
+<x-p-paper>
+    <x-slot:title>Create new payout</x-slot:title>
 
     <form method="POST" action="{{ route(Config::getRouteName('payouts.store')) }}">
         @csrf
@@ -23,4 +23,4 @@
         </label>
 
     </form>
-</div>
+</x-p-paper>

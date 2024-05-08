@@ -9,14 +9,14 @@
         @csrf
         @method('PATCH')
     </form>
-    <x-p::button
+    <x-p-button
         type="submit"
         form="payout_refresh_{{$payout->id}}"
         color="info"
         size="small"
     >
         Refresh
-    </x-p::button>
+    </x-p-button>
 @endif
 
 @if($payout->status->hasAction('delete'))
@@ -29,14 +29,14 @@
         @csrf
         @method('DELETE')
     </form>
-    <x-p::button
+    <x-p-button
         type="submit"
         color="danger"
         form="payout_delete_{{$payout->id}}"
         size="small"
     >
         Delete
-    </x-p::button>
+    </x-p-button>
 @endif
 
 @if($payout->status->hasAction('retry'))
@@ -49,12 +49,12 @@
         @csrf
         @method('PATCH')
     </form>
-    <x-p::button
+    <x-p-button
         type="submit"
         color="warning"
         form="payout_retry_{{$payout->id}}"
         size="small"
     >
         Retry
-    </x-p::button>
+    </x-p-button>
 @endif
