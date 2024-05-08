@@ -1,4 +1,4 @@
-<x-p::paper class="bg-slate-800">
+<x-p-paper>
     <section class="bg-red-700 text-white p-2">
         <h1 class="text-xl font-semibold mb-1">[PAYU_SHOP_ID] key configuration missing</h1>
     </section>
@@ -37,4 +37,4 @@
             <li>In first tab (Shop data) you will find your Shop ID</li>
         </ul>
     </div>
-</x-p::paper>
+</x-p-paper>
