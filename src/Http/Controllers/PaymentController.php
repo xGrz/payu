@@ -21,7 +21,6 @@ class PaymentController extends BaseController
     {
         return view('payu::transactions.index', [
             'title' => 'Transactions',
-            'transactions' => Transaction::latest()->paginate(),
         ]);
     }
 
