@@ -105,26 +105,6 @@ class PaymentController extends BaseController
         ]);
     }
 
-    public function accept(Transaction $transaction): RedirectResponse
-    {
-        return PayU::accept($transaction)
-            ? back()->with('success', __('payu::transactions.accept.success'))
-            : back()->with('error', __('payu::transactions.accept.failed'));
-    }
-
-    public function reject(Transaction $transaction): RedirectResponse
-    {
-        return PayU::reject($transaction)
-            ? back()->with('success', __('payu::transactions.reject.success'))
-            : back()->with('error', __('payu::transactions.reject.failed'));
-    }
-
-    public function destroy(Transaction $transaction): RedirectResponse
-    {
-        return PayU::cancelTransaction($transaction)
-            ? back()->with('success', 'Payment successfully canceled')
-            : back()->with('error', 'Payment was not deleted.');
-    }
 
     public function requestPayMethod(Transaction $transaction): RedirectResponse
     {

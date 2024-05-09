@@ -9,35 +9,24 @@
 
 {{--Delete transction --}}
 @if($transaction->status->hasAction('delete'))
-    <x-p-button type="submit" form="delete_{{$transaction->id}}" size="small" color="danger">
+    <x-p-button color="danger" size="small" wire:click="deleteTransaction('{{$transaction->id}}')">
         Delete
     </x-p-button>
-    <form action="{{route(Config::getRouteName('payments.destroy'), $transaction->id)}}" method="POST"
-          id="delete_{{$transaction->id}}" class="hidden">
-        @csrf @method('DELETE')
-    </form>
 @endif
 
 
 {{--Accept transaction--}}
 @if($transaction->status->hasAction('accept'))
-    <x-p-button type="submit" color="success" size="small" form="accept_{{$transaction->id}}">Accept
+    <x-p-button color="success" size="small" wire:click="acceptTransaction('{{$transaction->id}}')">
+        Accept
     </x-p-button>
-    <form action="{{route(Config::getRouteName('payments.accept'), $transaction->id)}}" method="POST"
-          id="accept_{{$transaction->id}}" class="hidden">
-        @method('PATCH')
-        @csrf
-    </form>
 @endif
 
 {{--Reject transaction--}}
 @if($transaction->status->hasAction('reject'))
-    <x-p-button type="submit" color="danger" size="small" form="reject_{{$transaction->id}}">Reject</x-p-button>
-    <form action="{{route(Config::getRouteName('.payments.reject'), $transaction->id)}}" method="POST"
-          id="reject_{{$transaction->id}}" class="hidden">
-        @method('DELETE')
-        @csrf
-    </form>
+    <x-p-button type="submit" color="danger" size="small" wire:click="rejectTransaction('{{$transaction->id}}')">
+        Reject
+    </x-p-button>
 @endif
 
 
