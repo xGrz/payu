@@ -1,6 +1,6 @@
 <div wire:poll.10s>
     @php use xGrz\PayU\Enums\PaymentStatus; use xGrz\PayU\Facades\Config; @endphp
-    <x-p-pagination info-only :source="$transactions"/>
+    <x-p-pagination livewire info-only :source="$transactions"/>
     <x-p-paper class="bg-slate-800">
         <x-slot:title>Transactions listing</x-slot:title>
         <x-slot:actions>
@@ -75,11 +75,11 @@
             </x-p-table>
 
             <div class="py-3">
-                <x-p-pagination :source="$transactions" livewire/>
+                <x-p-pagination livewire :source="$transactions" />
             </div>
         @else
             <x-p-not-found message="Transactions for found."/>
         @endif
     </x-p-paper>
-    <x-p-pagination info-only :source="$transactions"/>
+    <x-p-pagination livewire info-only :source="$transactions"/>
 </div>
