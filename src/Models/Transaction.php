@@ -38,7 +38,7 @@ class Transaction extends Model
         return $this->hasMany(Refund::class, 'transaction_id')->latest();
     }
 
-    public function refundedAmount(): int
+    public function refundedAmount(): int|float
     {
         return $this
             ->refunds

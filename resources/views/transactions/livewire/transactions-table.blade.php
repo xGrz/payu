@@ -24,8 +24,7 @@
                         <x-p-th>Value</x-p-th>
                         <x-p-th class="text-right">Refunded</x-p-th>
                         <x-p-th class="text-center">Status</x-p-th>
-                        <x-p-th class="text-right">Created</x-p-th>
-                        <x-p-th class="text-right">Updated</x-p-th>
+                        <x-p-th class="text-right">Date</x-p-th>
                         <x-p-th class="text-right">Actions</x-p-th>
                     </x-p-tr>
                 </x-p-thead>
@@ -67,8 +66,6 @@
                             <x-p-status :status="$transaction->status" class="text-sm mx-2"/>
                         </x-p-td>
                         <x-p-td class="text-right">{{ $transaction->created_at }}</x-p-td>
-                        <x-p-td
-                            class="text-right">{{ $transaction->created_at == $transaction->updated_at ? '' : $transaction->updated_at}}</x-p-td>
                         <x-p-td class="text-nowrap text-right">
                             @include('payu::transactions.partials.transaction_actions')
                         </x-p-td>

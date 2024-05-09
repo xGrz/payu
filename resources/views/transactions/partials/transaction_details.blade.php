@@ -1,5 +1,5 @@
 @php use \xGrz\PayU\Facades\Config; @endphp
-<x-p-paper class="bg-slate-800">
+<x-p-paper>
     <x-slot:title>Transaction details</x-slot:title>
     <x-slot:actions>
         <form action="{{route(Config::getRouteName('payments.accept'), $transaction->id)}}" method="POST" id="accept">
@@ -22,7 +22,7 @@
             <x-p-button form="reject" type="submit" color="danger">Reject</x-p-button>
         @endif
     </x-slot:actions>
-    <x-p-table class="p-2">
+    <x-p-table>
         <x-p-tr>
             <x-p-th class="text-left">Transaction id</x-p-th>
             <x-p-td>{{$transaction->id}}</x-p-td>

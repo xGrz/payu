@@ -1,6 +1,6 @@
 <?php
 
-namespace xGrz\PayU\Livewire;
+namespace xGrz\PayU\Livewire\Transactions;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,7 +12,7 @@ class TransactionsTable extends Component
 
     public function render()
     {
-        return view('payu::transactions.transactions-table', [
+        return view('payu::transactions.livewire.transactions-table', [
             'transactions' => Transaction::latest()->paginate()
         ]);
     }

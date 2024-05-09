@@ -11,7 +11,10 @@ use xGrz\PayU\Commands\PayMethodsUpdateCommand;
 use xGrz\PayU\Commands\PublishCommand;
 use xGrz\PayU\Commands\PublishConfigCommand;
 use xGrz\PayU\Commands\PublishLangCommand;
-use xGrz\PayU\Livewire\TransactionsTable;
+use xGrz\PayU\Livewire\Refunds\RefundCreateForm;
+use xGrz\PayU\Livewire\Refunds\RefundsListing;
+use xGrz\PayU\Livewire\Transactions\TransactionShow;
+use xGrz\PayU\Livewire\Transactions\TransactionsTable;
 use xGrz\PayU\Models\Payout;
 use xGrz\PayU\Models\Refund;
 use xGrz\PayU\Models\Transaction;
@@ -78,6 +81,9 @@ class PayUServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
 
         Livewire::component('payu-transactions-table', TransactionsTable::class);
+        Livewire::component('payu-transaction-show', TransactionShow::class);
+        Livewire::component('payu-refunds-listing', RefundsListing::class);
+        Livewire::component('payu-refund-create-form', RefundCreateForm::class);
 
     }
 

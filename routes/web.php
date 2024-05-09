@@ -24,15 +24,7 @@ Route::name(Config::getRouteName())
             });
 
 
-        Route::name('refunds.')
-            ->prefix(Config::getUri('refunds'))
-            ->controller(Config::getRefundController())
-            ->group(function () {
-                Route::get('', 'index')->name('index');
-                Route::get('{refund}', 'retry')->name('retry');
-                Route::post('{transaction}/create', 'store')->name('store');
-                Route::delete('{refund}', 'destroy')->name('destroy');
-            });
+        Route::get(Config::getUri('refunds'), Config::getRefundController())->name('refunds.index');
 
         Route::name('payouts.')
             ->prefix(Config::getUri('payouts'))
