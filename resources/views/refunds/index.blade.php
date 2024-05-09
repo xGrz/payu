@@ -7,28 +7,29 @@
         <x-slot:title>Created refunds</x-slot:title>
         @if($refunds->count())
             <x-p-table class="w-full">
-                <x-p-table>
+                <x-p-thead>
                     <x-p-tr>
-                        <x-p-th class="text-left">Transaction</x-p-th>
-                        <x-p-th class="text-left">Description</x-p-th>
-                        <x-p-th class="text-left">Bank description</x-p-th>
-                        <x-p-th class="text-right">Amount</x-p-th>
-                        <x-p-th class="text-right">Status</x-p-th>
+                        <x-p-th left>Transaction</x-p-th>
+                        <x-p-th left>Description</x-p-th>
+                        <x-p-th left>Bank description</x-p-th>
+                        <x-p-th right>Amount</x-p-th>
+                        <x-p-th right>Status</x-p-th>
                     </x-p-tr>
-                </x-p-table>
+                </x-p-thead>
                 <x-p-tbody>
                     @foreach($refunds as $refund)
                         <x-p-tr>
                             <x-p-td>
                                 <x-p-link
-                                    href="{{route(Config::getRouteName('payments.show'), $refund->transaction->id)}}">
+                                    href="{{route(Config::getRouteName('payments.show'), $refund->transaction->id)}}"
+                                >
                                     {{$refund->transaction->payload['description']}}
                                 </x-p-link>
                             </x-p-td>
                             <x-p-td>{{$refund->description}}</x-p-td>
-                            <x-p-td>{{$refund->bankDescription}}</x-p-td>
-                            <x-p-td class="text-right">{{ humanAmount($refund->amount)}}</x-p-td>
-                            <x-p-td class="text-right">
+                            <x-p-td>{{$refund->bank_description}}</x-p-td>
+                            <x-p-td right>{{ humanAmount($refund->amount)}}</x-p-td>
+                            <x-p-td right>
                                 <x-p-status :status="$refund->status"/>
                             </x-p-td>
                         </x-p-tr>
