@@ -87,7 +87,7 @@ class Transaction extends Model
 
     public function maxRefundAmount(): float|int
     {
-        return ($this->amount / 100) - $this->refundedAmount();
+        return ($this->amount) - $this->refundedAmount();
     }
 
     public function isRefundAvailable(): bool
