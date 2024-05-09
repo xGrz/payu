@@ -1,6 +1,5 @@
 <div wire:poll.keep-alive.5s>
     @php use \xGrz\PayU\Facades\Config; @endphp
-    @props(['tableTitle' => '[tableTitle] not set', 'shouldRenderAction' => false])
 
     @if ($transaction->status->hasAction('refund'))
         <x-p-paper class="bg-slate-800 mt-4">
