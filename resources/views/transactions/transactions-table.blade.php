@@ -1,4 +1,4 @@
-<div wire:poll.60s>
+<div wire:poll.10s>
     @php use xGrz\PayU\Enums\PaymentStatus; use xGrz\PayU\Facades\Config; @endphp
     <x-p-pagination info-only :source="$transactions"/>
     <x-p-paper class="bg-slate-800">
