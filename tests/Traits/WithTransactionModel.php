@@ -14,7 +14,7 @@ trait WithTransactionModel
         $transaction = new Transaction([
             'payu_order_id' => 'AIDJAODJAODJAOIJD',
             'link' => 'https://payu.com',
-            'amount' => 100000,
+            'amount' => 1000,
             'payload' => [],
             'status' => $paymentStatus
         ]);

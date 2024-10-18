@@ -12,16 +12,6 @@ class PackageConfigTest extends TestCase
         $this->assertTrue(Cfg::isSandboxMode());
     }
 
-    public function test_get_admin_panel_route_naming()
-    {
-        $this->assertEquals('openpayu.', Cfg::getRouteName());
-    }
-
-    public function test_get_admin_panel_root_uri()
-    {
-        $this->assertEquals('pay/testRoute', Cfg::getUri('testRoute'));
-    }
-
     // payment
     public function test_get_payment_controller_class()
     {

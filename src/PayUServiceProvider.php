@@ -4,17 +4,12 @@ namespace xGrz\PayU;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
-use Livewire\Livewire;
 use xGrz\PayU\Actions\LongProcessingTransactionsStatusRetriever;
 use xGrz\PayU\Actions\SyncPaymentMethods;
 use xGrz\PayU\Commands\PayMethodsUpdateCommand;
 use xGrz\PayU\Commands\PublishCommand;
 use xGrz\PayU\Commands\PublishConfigCommand;
 use xGrz\PayU\Commands\PublishLangCommand;
-use xGrz\PayU\Livewire\Refunds\RefundCreateForm;
-use xGrz\PayU\Livewire\Refunds\RefundsListing;
-use xGrz\PayU\Livewire\Transactions\TransactionShow;
-use xGrz\PayU\Livewire\Transactions\TransactionsTable;
 use xGrz\PayU\Models\Payout;
 use xGrz\PayU\Models\Refund;
 use xGrz\PayU\Models\Transaction;
@@ -37,7 +32,6 @@ class PayUServiceProvider extends ServiceProvider
         self::setupMigrations();
         self::setupPackageConfig();
         self::setupNotificationRouting();
-        self::setupWebRouting();
         self::setupCommands();
         self::setupTranslations();
 
@@ -70,21 +64,6 @@ class PayUServiceProvider extends ServiceProvider
                 __DIR__ . '/../lang' => $this->app->langPath('vendor/payu')
             ], 'payu-lang');
         }
-
-    }
-
-    private function setupWebRouting(): void
-    {
-        if (!config('payu.routing.expose_web_panel', false)) return;
-
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'payu');
-        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
-
-        Livewire::component('payu-transactions-table', TransactionsTable::class);
-        Livewire::component('payu-transaction-show', TransactionShow::class);
-        Livewire::component('payu-refunds-listing', RefundsListing::class);
-        Livewire::component('payu-refund-create-form', RefundCreateForm::class);
-
     }
 
     private function setupNotificationRouting(): void
@@ -113,8 +92,7 @@ class PayUServiceProvider extends ServiceProvider
         $schedule
             ->call(fn() => LongProcessingTransactionsStatusRetriever::handle())
             ->name('PayU | Retrieve transaction states for unfinished payments')
-            ->everyMinute();
-        // ->everyTwoHours();
+            ->everyTwoHours();
     }
 
     private function setupTranslations(): void
