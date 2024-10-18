@@ -46,7 +46,7 @@ Using personal sandbox for testing is recommended. See what features are limited
 If you are running in personal sandbox or production environment you should manually run:
 
 ```
-php artisan payu:update-methods
+php artisan payu:sync-methods
 ```
 
 This method will run automatically in Laravel scheduler (every day) for payment methods synchronizing with local database (performance
