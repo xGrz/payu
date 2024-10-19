@@ -29,5 +29,6 @@ return [
     ],
     'errors' => [
         'NOT_ENOUGH_FUNDS' => 'Not enough funds',
+        'INCORRECT_PAYOUT_AMOUNT' => 'Incorrect payout amount .',
     ],
 ];

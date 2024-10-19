@@ -28,6 +28,7 @@ return [
         PayoutStatus::RETRY->name => 'Ponawiam'
     ],
     'errors' => [
-        'NOT_ENOUGH_FUNDS' => 'Saldo zbyt niskie'
+        'NOT_ENOUGH_FUNDS' => 'Saldo zbyt niskie',
+        'INCORRECT_PAYOUT_AMOUNT' => 'Błędna kwota wypłaty.',
     ],
 ];
