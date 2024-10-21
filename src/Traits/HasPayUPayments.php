@@ -51,7 +51,7 @@ trait HasPayUPayments
     public function payuHasActiveTransaction(): bool
     {
         return (bool)$this
-            ->payable
+            ->payuable
             ->filter(function (Transaction $transaction) {
                 if ($transaction->status->hasAction('processing')) return true;
                 if ($transaction->status->hasAction('success')) return true;
@@ -61,7 +61,7 @@ trait HasPayUPayments
 
     public function payuHasTransactions(): bool
     {
-        return $this->payable->count() > 0;
+        return $this->payuable->count() > 0;
     }
 
     public function payuAcceptPayment(): bool
@@ -108,7 +108,7 @@ trait HasPayUPayments
 
     public function payuPaymentHistory(): Collection
     {
-        return $this->payable;
+        return $this->payuable;
     }
 
     public function payuRefunds()
@@ -119,13 +119,13 @@ trait HasPayUPayments
 
     public function payuGetTransaction(): ?Transaction
     {
-        return $this->payable->first();
+        return $this->payuable->first();
     }
 
     public function payuGetPreviousTransaction(): ?Transaction
     {
-        if ($this->payable->count() < 2) return null;
-        return $this->payable[1];
+        if ($this->payuable->count() < 2) return null;
+        return $this->payuable[1];
     }
 
     public function payuHasRefunds(): bool
