@@ -16,7 +16,7 @@ trait HasPayUPayments
      * Relationship for PayU-Transaction
      * @return MorphMany
      */
-    public function payable(): MorphMany
+    public function payuable(): MorphMany
     {
         /* Latest sorting is required. Do not remove/change it */
         return $this
@@ -27,28 +27,28 @@ trait HasPayUPayments
     /**
      * @throws PayUPaymentException
      */
-    public function createTransaction(TransactionWizard $transactionWizard): bool
+    public function payuCreateTransaction(TransactionWizard $transactionWizard): bool
     {
-        if (self::hasActiveTransaction()) return false;
-        return self::setupNewTransaction($transactionWizard);
+        if (self::payuHasActiveTransaction()) return false;
+        return self::payuSetupNewTransaction($transactionWizard);
     }
 
-    public function canResetTransaction(): bool
+    public function payuCanResetTransaction(): bool
     {
-        return (bool)self::getTransaction()?->status->hasAction('reset');
+        return (bool)self::payuGetTransaction()?->status->hasAction('reset');
     }
 
     /**
      * @throws PayUPaymentException
      */
-    public function resetTransaction(TransactionWizard $transactionWizard): bool
+    public function payuResetTransaction(TransactionWizard $transactionWizard): bool
     {
-        if (!self::canResetTransaction()) return false;
-        if (!PayU::resetTransaction(self::getTransaction())) return false;
-        return self::setupNewTransaction($transactionWizard);
+        if (!self::payuCanResetTransaction()) return false;
+        if (!PayU::resetTransaction(self::payuGetTransaction())) return false;
+        return self::payuSetupNewTransaction($transactionWizard);
     }
 
-    public function hasActiveTransaction(): bool
+    public function payuHasActiveTransaction(): bool
     {
         return (bool)$this
             ->payable
@@ -59,30 +59,30 @@ trait HasPayUPayments
             })->count();
     }
 
-    public function hasTransactions(): bool
+    public function payuHasTransactions(): bool
     {
         return $this->payable->count() > 0;
     }
 
-    public function acceptPayment(): bool
+    public function payuAcceptPayment(): bool
     {
-        if (!self::getTransaction()) return false;
-        return PayU::accept(self::getTransaction());
+        if (!self::payuGetTransaction()) return false;
+        return PayU::accept(self::payuGetTransaction());
     }
 
-    public function rejectPayment(): bool
+    public function payuRejectPayment(): bool
     {
-        return self::getTransaction() && PayU::reject(self::getTransaction());
+        return self::payuGetTransaction() && PayU::reject(self::payuGetTransaction());
     }
 
-    public function cancelPayment(): bool
+    public function payuCancelPayment(): bool
     {
-        return self::getTransaction() && PayU::cancelTransaction(self::getTransaction());
+        return self::payuGetTransaction() && PayU::cancelTransaction(self::payuGetTransaction());
     }
 
-    public function paymentStatus(string $key = null): array|string
+    public function payuPaymentStatus(string $key = null): array|string
     {
-        $status = self::getTransaction()?->status;
+        $status = self::payuGetTransaction()?->status;
         if (!$status) return $key ? '' : [];
         $statusData = [
             'name' => __('payu::transactions.status.' . $status->name),
@@ -95,60 +95,60 @@ trait HasPayUPayments
             : $statusData;
     }
 
-    public function paymentLink(): ?string
+    public function payuPaymentLink(): ?string
     {
-        if (!self::getTransaction()?->status->hasAction('pay')) return null;
-        return self::getTransaction()?->link;
+        if (!self::payuGetTransaction()?->status->hasAction('pay')) return null;
+        return self::payuGetTransaction()?->link;
     }
 
-    public function hasPaymentAction($actionName): bool
+    public function payuHasPaymentAction($actionName): bool
     {
-        return (bool)self::getTransaction()?->status->hasAction($actionName);
+        return (bool)self::payuGetTransaction()?->status->hasAction($actionName);
     }
 
-    public function paymentHistory(): Collection
+    public function payuPaymentHistory(): Collection
     {
         return $this->payable;
     }
 
-    public function refunds()
+    public function payuRefunds()
     {
         // if (!self::getTransaction()?->status->hasAction('refund')) return [];
-        return self::getTransaction()?->refunds ?? [];
+        return self::payuGetTransaction()?->refunds ?? [];
     }
 
-    public function getTransaction(): ?Transaction
+    public function payuGetTransaction(): ?Transaction
     {
         return $this->payable->first();
     }
 
-    public function getPreviousTransaction(): ?Transaction
+    public function payuGetPreviousTransaction(): ?Transaction
     {
         if ($this->payable->count() < 2) return null;
         return $this->payable[1];
     }
 
-    public function hasRefunds(): bool
+    public function payuHasRefunds(): bool
     {
-        if(!self::hasTransactions()) return false;
-        return (bool) self::getTransaction()->refunds->count();
+        if(!self::payuHasTransactions()) return false;
+        return (bool) self::payuGetTransaction()->refunds->count();
     }
 
-    public function createRefund(int|float $amount, string $description, string $bankDescription = ''): bool
+    public function payuCreateRefund(int|float $amount, string $description, string $bankDescription = ''): bool
     {
-        $transaction = self::getTransaction();
+        $transaction = self::payuGetTransaction();
         if (!$transaction) return false;
-        return PayU::refund(self::getTransaction(), $amount, $description, $bankDescription);
+        return PayU::refund(self::payuGetTransaction(), $amount, $description, $bankDescription);
     }
 
-    private function cancelRefund(int $refundId): bool
+    private function payuCancelRefund(int $refundId): bool
     {
         $refund = Refund::find($refundId);
         if (!$refund->status->hasAction('delete')) return false;
         return PayU::cancelRefund($refund);
     }
 
-    private function setupNewTransaction(TransactionWizard $transactionWizard): bool
+    private function payuSetupNewTransaction(TransactionWizard $transactionWizard): bool
     {
         if ($payment = PayU::createPayment($transactionWizard)) {
             $payment->payuable()->associate($this);
