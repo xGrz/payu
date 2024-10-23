@@ -24,13 +24,18 @@ trait HasPayUPayments
             ->latest();
     }
 
+    public function payuGetTransactionWiard(): TransactionWizard
+    {
+        return new TransactionWizard();
+    }
+
     /**
      * @throws PayUPaymentException
      */
-    public function payuCreateTransaction(TransactionWizard $transactionWizard): bool
+    public function payuCreateTransaction(?TransactionWizard $transactionWizard = null): bool
     {
         if (self::payuHasActiveTransaction()) return false;
-        return self::payuSetupNewTransaction($transactionWizard);
+        return self::payuSetupNewTransaction($transactionWizard ?? self::payuGetTransactionWiard());
     }
 
     public function payuCanResetTransaction(): bool
@@ -41,11 +46,11 @@ trait HasPayUPayments
     /**
      * @throws PayUPaymentException
      */
-    public function payuResetTransaction(TransactionWizard $transactionWizard): bool
+    public function payuResetTransaction(?TransactionWizard $transactionWizard = null): bool
     {
         if (!self::payuCanResetTransaction()) return false;
         if (!PayU::resetTransaction(self::payuGetTransaction())) return false;
-        return self::payuSetupNewTransaction($transactionWizard);
+        return self::payuSetupNewTransaction($transactionWizard ?? self::payuGetTransactionWiard());
     }
 
     public function payuHasActiveTransaction(): bool
@@ -148,9 +153,9 @@ trait HasPayUPayments
         return PayU::cancelRefund($refund);
     }
 
-    private function payuSetupNewTransaction(TransactionWizard $transactionWizard): bool
+    private function payuSetupNewTransaction(?TransactionWizard $transactionWizard = null): bool
     {
-        if ($payment = PayU::createPayment($transactionWizard)) {
+        if ($payment = PayU::createPayment($transactionWizard ?? self::payuGetTransactionWiard())) {
             $payment->payuable()->associate($this);
             $payment->save();
             return true;
