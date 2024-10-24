@@ -17,7 +17,10 @@ use xGrz\PayU\Services\LoggerService;
 
 class SendPayoutJob implements ShouldQueue, ShouldBeUnique
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public int $tries = 2;
 
@@ -39,12 +42,12 @@ class SendPayoutJob implements ShouldQueue, ShouldBeUnique
             throw new PayUGeneralException('Payout dispatching failed. [Send] action unavailable');
         }
         try {
-            $response = SendPayoutRequest::callApi($this->payout->amount * 100)?->asObject();
+          $response = SendPayoutRequest::callApi($this->payout->amount * 100)?->asObject();
             $this->payout->update([
                 'payout_id' => $response->payout_id,
                 'status' => $response->status,
             ]);
-            PayU::forceUpdatePayoutStatus($this->payout);
+            // PayU::forceUpdatePayoutStatus($this->payout);
 
         } catch (PayUGeneralException $e) {
             $this->payout->update([
