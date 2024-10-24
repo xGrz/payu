@@ -3,39 +3,46 @@
 namespace xGrz\PayU\Services;
 
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use xGrz\PayU\Api\Exceptions\PayUPaymentException;
 use xGrz\PayU\Enums\PaymentStatus;
 use xGrz\PayU\Facades\PayU;
 use xGrz\PayU\Facades\TransactionWizard;
+use xGrz\PayU\Interfaces\PayUPaymentsInterface;
 use xGrz\PayU\Models\Refund;
 use xGrz\PayU\Models\Transaction;
 
 class PayUPaymentService
 {
-    private Model $model;
+    private PayUPaymentsInterface $model;
 
-    public function __construct(Model $model)
+    public function __construct(PayUPaymentsInterface $model)
     {
         $this->model = $model;
     }
 
     public function hasActiveTransaction(): bool
     {
-        return (bool)$this
+        return $this
             ->model
             ->payuable
             ->filter(function (Transaction $transaction) {
                 if ($transaction->status->hasAction('processing')) return true;
                 if ($transaction->status->hasAction('success')) return true;
                 return false;
-            })->count();
+            })
+            ->isNotEmpty();
+    }
+
+    public function createTransaction(?TransactionWizard $transactionWizard = null): bool
+    {
+        if ($this->hasActiveTransaction()) return false;
+        return self::setupNewTransaction($transactionWizard ?? $this->model->payuTransactionWizard());
     }
 
     private function setupNewTransaction(?TransactionWizard $transactionWizard = null): bool
     {
         if ($payment = PayU::createPayment($transactionWizard ?? $this->model->payuTransactionWizard())) {
-            $payment->payuable()->associate($this);
+            $payment->payuable()->associate($this->model);
             $payment->save();
             return true;
         }
@@ -105,7 +112,7 @@ class PayUPaymentService
     public function link(): ?string
     {
         if (!self::currentTransaction()?->status->hasAction('pay')) return null;
-        return self::currentTransaction()?->link;
+        return self::currentTransaction()?->link ?? null;
     }
 
     public function hasAction($actionName): bool

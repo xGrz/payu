@@ -17,7 +17,6 @@ class TransactionWizard
     private ?Products $products = null;
     private ?Buyer $buyer = null;
     private ?DeliveryTypeInterface $delivery = null;
-
     private ?PayMethod $method = null;
     private array $data = [
         /* REQUIRED */
@@ -105,6 +104,12 @@ class TransactionWizard
         return $this;
     }
 
+    public function setRedirectAfterTransactionToRoute(string $route, string $parameter = 'transaction'): static
+    {
+        $this->setRedirectAfterTransaction(route($route, ['transaction' => $this->getOrderId()]));
+        return $this;
+    }
+
     public function toArray(): array
     {
         $transaction = $this->data;
@@ -155,7 +160,7 @@ class TransactionWizard
                 Product::make('Product C', rand(1, 300), rand(2, 3)),
             ]),
             Buyer::make(auth()->user()->email ?? 'test@example.com', '909765456', 'John', 'Kovalsky'),
-            $shouldBeDeliveredToAddress ? $delivery[1] : $delivery[rand(0,1)],
+            $shouldBeDeliveredToAddress ? $delivery[1] : $delivery[rand(0, 1)],
             $redirectAfterTransaction ?? route('home'),
             Config::hasPayMethods()
                 ? PayMethod::make('P')
@@ -185,8 +190,17 @@ class TransactionWizard
 
     private function buildOrderId(string|int $uuid = null): void
     {
+        if (!empty($this->data['uuid'])) return;
         $this->data['extOrderId'] = $uuid ?? (string)Str::orderedUuid();
         $this->setNotifyUrl();
+    }
+
+    private function getOrderId(): string
+    {
+        if (empty($this->data['extOrderId'])) {
+            self::buildOrderId();
+        }
+        return $this->data['extOrderId'];
     }
 
 
