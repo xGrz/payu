@@ -47,7 +47,7 @@ class SendPayoutJob implements ShouldQueue, ShouldBeUnique
                 'payout_id' => $response->payout_id,
                 'status' => $response->status,
             ]);
-            // PayU::forceUpdatePayoutStatus($this->payout);
+            PayU::forceUpdatePayoutStatus($this->payout);
 
         } catch (PayUGeneralException $e) {
             $this->payout->update([

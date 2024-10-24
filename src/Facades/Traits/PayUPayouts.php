@@ -10,22 +10,11 @@ use xGrz\PayU\Models\Payout;
 
 trait PayUPayouts
 {
-    /**
-     * Store payout data in database.
-     * Dispatches PayoutCreated event
-     *
-     * @param int|float $amount
-     * @return bool
-     */
-    public static function payout(int|float $amount): bool
-    {
-        if (!Config::getShopId()) return false;
 
-        try {
-            return (bool) Payout::create(['amount' => $amount]);
-        } catch (\Exception $e) {
-            return false;
-        }
+    public static function payout(int|float $amount): void
+    {
+        if (!Config::getShopId()) return;
+        Payout::create(['amount' => $amount]);
     }
 
     public static function forceUpdatePayoutStatus(Payout $payout, int $delay = null): bool
@@ -34,7 +23,7 @@ trait PayUPayouts
         if (!$payout->status->hasAction('processing')) return false;
 
         UpdatePayoutStatusJob::dispatch($payout)
-            ->delay(is_null($delay) ? Config::getPayoutInterval() : $delay);
+            ->delay(now()->addSeconds(is_null($delay) ? Config::getPayoutInterval() : $delay));
 
         return true;
     }
@@ -48,8 +37,7 @@ trait PayUPayouts
             ->update(['status' => PayoutStatus::RETRY]);
 
         SendPayoutJob::dispatch($payout)
-            ->delay(is_null($delay) ? Config::getPayoutRetryDelay() : $delay);
-
+            ->delay(now()->addSeconds(is_null($delay) ? Config::getPayoutRetryDelay() : $delay));
 
         return true;
     }

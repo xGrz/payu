@@ -16,6 +16,6 @@ class DispatchPayoutRequest
             ->updateQuietly(['status' => PayoutStatus::SCHEDULED]);
 
         SendPayoutJob::dispatch($event->payout)
-            ->delay(Config::getPayoutSendDelay());
+            ->delay(now()->addSeconds(Config::getPayoutSendDelay()));
     }
 }
